@@ -17,6 +17,7 @@
 #endif
 
 #include <util/setbaud.h>
+#include <avr/wdt.h>
 
 void uart_init(void) {
     UBRR0H = UBRRH_VALUE;
@@ -40,9 +41,11 @@ Blinker blinker;
 void setup() {
 	uart_init();
 	pinMode(13, OUTPUT);
+	wdt_enable(WDTO_15MS);
 }
 
 void loop() {
 	application.schedule();
 	blinker.schedule();
+	wdt_reset();
 }
