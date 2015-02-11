@@ -7,7 +7,7 @@
 
 #include <Arduino.h>
 
-#include "PingPong.h"
+#include <PingPong.h>
 
 #define N 128
 

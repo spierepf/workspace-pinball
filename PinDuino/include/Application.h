@@ -11,15 +11,14 @@
 #include <pt.h>
 
 #include <PinDuinoDataLink.h>
-#include <Timer.h>
 #include <PingPong.h>
 
 class Application {
-	PinDuinoDataLink& datalink;
 	struct pt pt;
-	PingPong pingPong;
-
 	PT_THREAD(run());
+
+	PinDuinoDataLink& datalink;
+	PingPong pingPong;
 
 public:
 	Application(PinDuinoDataLink&);

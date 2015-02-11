@@ -10,8 +10,6 @@
 
 #include <avr/io.h>
 
-#include <stdint.h>
-
 class Pin {
 public:
     virtual void dirIn() = 0;

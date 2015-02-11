@@ -5,8 +5,6 @@
  *      Author: peter
  */
 
-#include <Arduino.h>
-
 #include <Application.h>
 
 Application::Application(PinDuinoDataLink &datalink) : datalink(datalink), pingPong(datalink) {

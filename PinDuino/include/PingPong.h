@@ -10,12 +10,13 @@
 
 #include <pt.h>
 
-#include <Pins.h>
 #include <PinDuinoDataLink.h>
 #include <Timer.h>
 
 class PingPong {
 	struct pt pt;
+	PT_THREAD(run());
+
 	PinDuinoDataLink& datalink;
 
 	Timer<unsigned long> timer;
@@ -25,8 +26,6 @@ class PingPong {
 	bool pongAccepted;
 
 	void sendPing();
-
-	PT_THREAD(run());
 
 public:
 	PingPong(PinDuinoDataLink&);

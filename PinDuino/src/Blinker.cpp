@@ -5,7 +5,7 @@
  *      Author: peter
  */
 
-#include "Blinker.h"
+#include <Blinker.h>
 
 Blinker::Blinker() : count(0) {
 	led.dataLow();

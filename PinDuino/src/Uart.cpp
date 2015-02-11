@@ -11,7 +11,6 @@
 
 Uart::Uart() {
 	// TODO Auto-generated constructor stub
-
 }
 
 Uart::~Uart() {
