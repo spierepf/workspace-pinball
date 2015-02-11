@@ -16,7 +16,7 @@ class Blinker {
 	struct pt pt;
 	PT_THREAD(run());
 
-	Pin13 led;
+	Pin led;
 	uint16_t count;
 
 public:

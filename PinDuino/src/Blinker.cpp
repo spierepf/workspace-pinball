@@ -7,7 +7,7 @@
 
 #include <Blinker.h>
 
-Blinker::Blinker() : count(0) {
+Blinker::Blinker() : led(&PINB, _BV(5)), count(0) {
 	led.dataLow();
 	led.dirOut();
 	PT_INIT(&pt);
