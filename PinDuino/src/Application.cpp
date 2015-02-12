@@ -7,7 +7,7 @@
 
 #include <Application.h>
 
-Application::Application(PinDuinoDataLink &datalink) : datalink(datalink), pingPong(datalink) {
+Application::Application(PinDuinoDataLink &datalink, PingPong &pingPong) : datalink(datalink), pingPong(pingPong) {
 	PT_INIT(&pt);
 }
 
@@ -16,9 +16,7 @@ Application::~Application() {
 }
 
 void Application::schedule() {
-	datalink.schedule();
 	PT_SCHEDULE(run());
-	pingPong.schedule();
 }
 
 PT_THREAD(Application::run()) {

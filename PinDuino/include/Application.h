@@ -18,10 +18,10 @@ class Application {
 	PT_THREAD(run());
 
 	PinDuinoDataLink& datalink;
-	PingPong pingPong;
+	PingPong& pingPong;
 
 public:
-	Application(PinDuinoDataLink&);
+	Application(PinDuinoDataLink&, PingPong&);
 	virtual ~Application();
 
 	void schedule();

@@ -35,7 +35,8 @@ void uart_init(void) {
 
 Uart hardware;
 PinDuinoDataLink datalink(hardware);
-Application application(datalink);
+PingPong pingPong(datalink);
+Application application(datalink, pingPong);
 Blinker blinker;
 
 void setup() {
@@ -45,7 +46,9 @@ void setup() {
 }
 
 void loop() {
+	datalink.schedule();
 	application.schedule();
+	pingPong.schedule();
 	blinker.schedule();
 	wdt_reset();
 }
