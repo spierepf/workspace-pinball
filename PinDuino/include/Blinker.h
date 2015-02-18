@@ -10,13 +10,13 @@
 
 #include <pt.h>
 
-#include <Pins.h>
+#include <PinBank.h>
 
 class Blinker {
 	struct pt pt;
 	PT_THREAD(run());
 
-	Pin led;
+	PinBank led;
 	uint16_t count;
 
 public:
