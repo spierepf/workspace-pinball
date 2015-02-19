@@ -11,6 +11,7 @@
 #include <DataLink.h>
 #include <Application.h>
 #include <Blinker.h>
+#include <InputPin.h>
 
 #ifndef BAUD
 #define BAUD 115200
@@ -39,10 +40,18 @@ PingPong pingPong(datalink);
 Application application(datalink, pingPong);
 Blinker blinker;
 
+PinBank pinBankC(PinBank::C, 0b00111111);
+PinBank pinBankD(PinBank::D, 0b11111100);
+
+InputPin d7(application, pinBankD, 7);
+
 void setup() {
 	uart_init();
 	pinMode(13, OUTPUT);
 	wdt_enable(WDTO_15MS);
+	pinBankD.dataLow();
+	pinBankD.dirIn();
+	pinBankD.dataHigh();
 }
 
 void loop() {
@@ -50,5 +59,6 @@ void loop() {
 	application.schedule();
 	pingPong.schedule();
 	blinker.schedule();
+	d7.schedule();
 	wdt_reset();
 }

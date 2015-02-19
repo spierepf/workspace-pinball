@@ -10,6 +10,7 @@
 #include <Application.h>
 
 Tty hardware1("/dev/ttyACM0");
+//Tty hardware1("/dev/ttyUSB0");
 //Tty hardware2("/dev/ttyUSB0");
 
 DataLink datalink1(hardware1);

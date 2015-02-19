@@ -38,6 +38,10 @@ PT_THREAD(Application::run()) {
 				cout << (char)datalink.peek(i);
 			}
 			cout << endl;
+		} else if(datalink.peek(0) == 0x10) {
+			cout << "Pin Low" << endl;
+		} else if(datalink.peek(0) == 0x11) {
+			cout << "Pin High" << endl;
 		}
 
 		datalink.next_incoming_frame();

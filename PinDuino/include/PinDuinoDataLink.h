@@ -10,6 +10,13 @@
 
 #include <DataLink.h>
 
+namespace OpCode {
+	enum {
+		PIN_LOW = 0x10,
+		PIN_HIGH
+	};
+}
+
 class PinDuinoDataLink: public DataLink {
 public:
 	PinDuinoDataLink(Hardware&);

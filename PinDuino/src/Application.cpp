@@ -32,3 +32,14 @@ PT_THREAD(Application::run()) {
 	}
 	PT_END(&pt);
 }
+
+void Application::pin_low() {
+	datalink.begin_outgoing_frame(OpCode::PIN_LOW);
+	datalink.end_outgoing_frame();
+}
+
+
+void Application::pin_high() {
+	datalink.begin_outgoing_frame(OpCode::PIN_HIGH);
+	datalink.end_outgoing_frame();
+}

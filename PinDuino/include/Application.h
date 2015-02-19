@@ -25,6 +25,9 @@ public:
 	virtual ~Application();
 
 	void schedule();
+
+	void pin_low();
+	void pin_high();
 };
 
 #endif /* APPLICATION_H_ */
