@@ -11,7 +11,7 @@
 
 using namespace std;
 
-Application::Application(DataLink &datalink) : datalink(datalink) {
+Application::Application(const char* device) : hardware(device), datalink(hardware) {
 	PT_INIT(&pt);
 }
 

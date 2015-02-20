@@ -10,16 +10,18 @@
 
 #include <pt.h>
 
+#include <Tty.h>
 #include <DataLink.h>
 
 class Application {
+	Tty hardware;
 	DataLink datalink;
 	struct pt pt;
 
 	PT_THREAD(run());
 
 public:
-	Application(DataLink&);
+	Application(const char* device);
 	virtual ~Application();
 
 	void schedule();
