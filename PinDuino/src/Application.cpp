@@ -33,13 +33,15 @@ PT_THREAD(Application::run()) {
 	PT_END(&pt);
 }
 
-void Application::pin_low() {
+void Application::pin_low(uint8_t id) {
 	datalink.begin_outgoing_frame(OpCode::PIN_LOW);
+	datalink.append_payload(id);
 	datalink.end_outgoing_frame();
 }
 
 
-void Application::pin_high() {
+void Application::pin_high(uint8_t id) {
 	datalink.begin_outgoing_frame(OpCode::PIN_HIGH);
+	datalink.append_payload(id);
 	datalink.end_outgoing_frame();
 }

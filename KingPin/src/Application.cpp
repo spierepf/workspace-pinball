@@ -39,9 +39,9 @@ PT_THREAD(Application::run()) {
 			}
 			cout << endl;
 		} else if(datalink.peek(0) == 0x10) {
-			cout << "Pin Low" << endl;
+			cout << "Pin Low: " << (int)datalink.peek(1) << endl;
 		} else if(datalink.peek(0) == 0x11) {
-			cout << "Pin High" << endl;
+			cout << "Pin High: " << (int)datalink.peek(1) << endl;
 		}
 
 		datalink.next_incoming_frame();

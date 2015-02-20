@@ -21,10 +21,10 @@ class InputPin {
 	Application& application;
 	PinBank& bank;
 	uint8_t mask;
-	Timer<unsigned long> t;
+	uint8_t id;
 
 public:
-	InputPin(Application&, PinBank&, uint8_t);
+	InputPin(Application&, PinBank&, uint8_t, uint8_t);
 	virtual ~InputPin();
 
 	void schedule();

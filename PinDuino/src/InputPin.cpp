@@ -7,7 +7,7 @@
 
 #include "InputPin.h"
 
-InputPin::InputPin(Application& application, PinBank& bank, uint8_t index) : application(application), bank(bank), mask(_BV(index)) {
+InputPin::InputPin(Application& application, PinBank& bank, uint8_t index, uint8_t id) : application(application), bank(bank), mask(_BV(index)), id(id) {
 	PT_INIT(&pt);
 }
 
@@ -23,9 +23,9 @@ PT_THREAD(InputPin::run()) {
 	PT_BEGIN(&pt);
 	for(;;) {
 		PT_WAIT_UNTIL(&pt, (bank.read() & mask) == 0);
-		application.pin_low();
+		application.pin_low(id);
 		PT_WAIT_UNTIL(&pt, (bank.read() & mask) != 0);
-		application.pin_high();
+		application.pin_high(id);
 	}
 	PT_END(&pt);
 }
