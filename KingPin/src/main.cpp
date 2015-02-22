@@ -23,35 +23,30 @@ using namespace std;
 #define FIFO_NAME "/tmp/american_maid"
 
 list<Application*> applications;
+FILE* fifo;
 
 void setup() {
+    mknod(FIFO_NAME, S_IFIFO | 0666, 0);
+	fifo = fopen(FIFO_NAME, "r");
 }
 
 void loop() {
 	char s[300];
-	int num, fd;
 
 	for(list<Application*>::iterator i=applications.begin(); i != applications.end(); ++i)
 		(*i) -> schedule();
 
-	if((num = access(FIFO_NAME, R_OK)) != -1) {
-		fd = open(FIFO_NAME, O_RDONLY);
-		if(fd != -1) {
-			if ((num = read(fd, s, sizeof(s))) != -1) {
-				if(num != 0) {
-					s[num] = '\0';
-					printf("%s\n", s);
-					try {
-						Hardware* hardware = new Tty(s);
-						applications.push_back(new Application(hardware));
-					} catch(SerialPort::OpenFailed e) {
-						printf("message: %s\n", e.what());
-					}
-				}
-			} else {
-				perror("read");
-			}
-			close(fd);
+	if(fgets(s, sizeof(s), fifo) != NULL) {
+		char *end = s + strlen(s) - 1;
+		while(end > s && isspace(*end)) end--;
+		*(end+1) = 0;
+
+		printf("%s\n", s);
+		try {
+			Hardware* hardware = new Tty(s);
+			applications.push_back(new Application(hardware));
+		} catch(SerialPort::OpenFailed& e) {
+			printf("message: %s\n", e.what());
 		}
 	}
 }
