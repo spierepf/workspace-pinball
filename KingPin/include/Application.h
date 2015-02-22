@@ -16,6 +16,7 @@
 class Application {
 	Hardware* hardware;
 	DataLink datalink;
+	uint8_t id;
 	struct pt pt;
 
 	PT_THREAD(run());

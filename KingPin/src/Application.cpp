@@ -11,7 +11,7 @@
 
 using namespace std;
 
-Application::Application(Hardware* hardware) : hardware(hardware), datalink(*hardware) {
+Application::Application(Hardware* hardware) : hardware(hardware), datalink(*hardware), id(255) {
 	PT_INIT(&pt);
 }
 
@@ -38,6 +38,9 @@ PT_THREAD(Application::run()) {
 				cout << (char)datalink.peek(i);
 			}
 			cout << endl;
+		} else if(datalink.peek(0) == OpCode::MY_ID) {
+			id = datalink.peek(1);
+			cout << "ID: " << (int)id << endl;
 		} else if(datalink.peek(0) == 0x10) {
 			cout << "Pin Low: " << (int)datalink.peek(1) << endl;
 		} else if(datalink.peek(0) == 0x11) {

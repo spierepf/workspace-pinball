@@ -15,6 +15,7 @@
 
 namespace OpCode {
 	enum {
+		MY_ID,
 		PING,
 		PONG,
 		LOG
