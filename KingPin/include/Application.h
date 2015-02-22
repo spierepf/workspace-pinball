@@ -14,14 +14,14 @@
 #include <DataLink.h>
 
 class Application {
-	Tty hardware;
+	Hardware* hardware;
 	DataLink datalink;
 	struct pt pt;
 
 	PT_THREAD(run());
 
 public:
-	Application(const char* device);
+	Application(Hardware*);
 	virtual ~Application();
 
 	void schedule();
