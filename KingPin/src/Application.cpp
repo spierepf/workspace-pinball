@@ -5,11 +5,9 @@
  *      Author: peter
  */
 
-#include <iostream>
-
 #include <Application.h>
 
-using namespace std;
+#include <easylogging++.h>
 
 Application::Application(Hardware* hardware) : hardware(hardware), datalink(*hardware), id(255) {
 	PT_INIT(&pt);
@@ -34,17 +32,19 @@ PT_THREAD(Application::run()) {
 			datalink.append_payload(datalink.peek(1)); // return the payload of the ping
 			datalink.end_outgoing_frame();
 		} else if(datalink.peek(0) == OpCode::LOG) { // log
+			char buf[32];
 			for(int i = 1; i < datalink.incoming_frame_length(); i++) {
-				cout << (char)datalink.peek(i);
+				buf[i-1] = (char)datalink.peek(i);
 			}
-			cout << endl;
+			buf[datalink.incoming_frame_length() - 1] = '\0';
+			LOG(INFO) << buf;
 		} else if(datalink.peek(0) == OpCode::MY_ID) {
 			id = datalink.peek(1);
-			cout << "ID: " << (int)id << endl;
+			LOG(INFO) << "ID: " << (int)id;
 		} else if(datalink.peek(0) == 0x10) {
-			cout << "Pin Low: " << (int)datalink.peek(1) << endl;
+			LOG(INFO) << "Pin Low: " << (int)datalink.peek(1);
 		} else if(datalink.peek(0) == 0x11) {
-			cout << "Pin High: " << (int)datalink.peek(1) << endl;
+			LOG(INFO) << "Pin High: " << (int)datalink.peek(1);
 		}
 
 		datalink.next_incoming_frame();

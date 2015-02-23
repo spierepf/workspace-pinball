@@ -22,6 +22,10 @@ using namespace std;
 
 #define FIFO_NAME "/tmp/american_maid"
 
+#include <easylogging++.h>
+
+INITIALIZE_EASYLOGGINGPP
+
 list<Application*> applications;
 FILE* fifo;
 
@@ -41,17 +45,18 @@ void loop() {
 		while(end > s && isspace(*end)) end--;
 		*(end+1) = 0;
 
-		printf("%s\n", s);
 		try {
 			Hardware* hardware = new Tty(s);
 			applications.push_back(new Application(hardware));
+			LOG(INFO) << "Pending connection to " << s;
 		} catch(SerialPort::OpenFailed& e) {
-			printf("message: %s\n", e.what());
+			LOG(ERROR) << "While opening " << s << " : " << e.what();
 		}
 	}
 }
 
 int main(int argc, char **argv) {
+	START_EASYLOGGINGPP(argc, argv);
 	setup();
 	for(;;) loop();
 }
