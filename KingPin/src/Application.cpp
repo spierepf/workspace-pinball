@@ -9,7 +9,7 @@
 
 #include <easylogging++.h>
 
-Application::Application(Hardware* hardware) : hardware(hardware), datalink(*hardware), id(255) {
+Application::Application(string device, Hardware* hardware) : device(device), hardware(hardware), datalink(*hardware), id(255) {
 	PT_INIT(&pt);
 }
 
@@ -37,14 +37,14 @@ PT_THREAD(Application::run()) {
 				buf[i-1] = (char)datalink.peek(i);
 			}
 			buf[datalink.incoming_frame_length() - 1] = '\0';
-			LOG(INFO) << buf;
+			LOG(INFO) << "From " << id << ": " << buf;
 		} else if(datalink.peek(0) == OpCode::MY_ID) {
 			id = datalink.peek(1);
-			LOG(INFO) << "ID: " << (int)id;
+			LOG(INFO) << "Device " << device << " registered id: " << (int)id;
 		} else if(datalink.peek(0) == 0x10) {
-			LOG(INFO) << "Pin Low: " << (int)datalink.peek(1);
+			LOG(INFO) << "Pin Low: " << id << ":" << (int)datalink.peek(1);
 		} else if(datalink.peek(0) == 0x11) {
-			LOG(INFO) << "Pin High: " << (int)datalink.peek(1);
+			LOG(INFO) << "Pin High: " << id << ":"  << (int)datalink.peek(1);
 		}
 
 		datalink.next_incoming_frame();

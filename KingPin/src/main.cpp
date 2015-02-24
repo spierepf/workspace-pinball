@@ -41,7 +41,7 @@ void loop() {
 
 		try {
 			Hardware* hardware = new Tty(s);
-			applications.push_back(new Application(hardware));
+			applications.push_back(new Application(s, hardware));
 			LOG(INFO) << "Pending connection to " << s;
 		} catch(SerialPort::OpenFailed& e) {
 			LOG(ERROR) << "While opening " << s << " : " << e.what();

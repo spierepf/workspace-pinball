@@ -13,16 +13,20 @@
 #include <Tty.h>
 #include <DataLink.h>
 
+#include <string>
+using namespace std;
+
 class Application {
+	string device;
 	Hardware* hardware;
 	DataLink datalink;
-	uint8_t id;
+	int id;
 	struct pt pt;
 
 	PT_THREAD(run());
 
 public:
-	Application(Hardware*);
+	Application(string, Hardware*);
 	virtual ~Application();
 
 	void schedule();
