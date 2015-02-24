@@ -22,6 +22,7 @@ class InputPin {
 	PinBank& bank;
 	uint8_t mask;
 	uint8_t id;
+	Timer<unsigned int> timer;
 
 public:
 	InputPin(Application&, PinBank&, uint8_t, uint8_t);

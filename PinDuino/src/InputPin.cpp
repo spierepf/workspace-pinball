@@ -5,6 +5,8 @@
  *      Author: peter
  */
 
+#include <Arduino.h>
+
 #include "InputPin.h"
 
 InputPin::InputPin(Application& application, PinBank& bank, uint8_t index, uint8_t id) : application(application), bank(bank), mask(_BV(index)), id(id) {
@@ -24,8 +26,12 @@ PT_THREAD(InputPin::run()) {
 	for(;;) {
 		PT_WAIT_UNTIL(&pt, (bank.read() & mask) == 0);
 		application.pin_low(id);
+		timer.set(micros());
+		PT_WAIT_UNTIL(&pt, timer.elapsed(micros()) > 3000);
 		PT_WAIT_UNTIL(&pt, (bank.read() & mask) != 0);
 		application.pin_high(id);
+		timer.set(micros());
+		PT_WAIT_UNTIL(&pt, timer.elapsed(micros()) > 3000);
 	}
 	PT_END(&pt);
 }
