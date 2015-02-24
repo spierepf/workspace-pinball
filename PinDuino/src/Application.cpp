@@ -9,7 +9,7 @@
 
 #include <Application.h>
 
-Application::Application(PinDuinoDataLink &datalink, PingPong &pingPong) : datalink(datalink), pingPong(pingPong) {
+Application::Application(PinDuinoDataLink &datalink, PingPong &pingPong, Solenoid solenoids[]) : datalink(datalink), pingPong(pingPong), solenoids(solenoids) {
 	PT_INIT(&pt);
 
 	datalink.begin_outgoing_frame(OpCode::MY_ID);
@@ -43,6 +43,7 @@ void Application::pin_low(uint8_t id) {
 	datalink.begin_outgoing_frame(OpCode::PIN_LOW);
 	datalink.append_payload(id);
 	datalink.end_outgoing_frame();
+	solenoids[5].trigger(65000);
 }
 
 

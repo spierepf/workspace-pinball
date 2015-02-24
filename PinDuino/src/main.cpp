@@ -9,6 +9,7 @@
 
 #include <Uart.h>
 #include <DataLink.h>
+#include <Solenoid.h>
 #include <Application.h>
 #include <Blinker.h>
 #include <InputPin.h>
@@ -36,8 +37,26 @@ void uart_init(void) {
 
 Uart hardware;
 PinDuinoDataLink datalink(hardware);
+
+PinBank pinBankB0(PinBank::B, _BV(0));
+PinBank pinBankB1(PinBank::B, _BV(1));
+PinBank pinBankB2(PinBank::B, _BV(2));
+PinBank pinBankB3(PinBank::B, _BV(3));
+PinBank pinBankB4(PinBank::B, _BV(4));
+PinBank pinBankB5(PinBank::B, _BV(5));
+
 PingPong pingPong(datalink);
-Application application(datalink, pingPong);
+
+Solenoid solenoids[6] = {
+		Solenoid(pinBankB0),
+		Solenoid(pinBankB1),
+		Solenoid(pinBankB2),
+		Solenoid(pinBankB3),
+		Solenoid(pinBankB4),
+		Solenoid(pinBankB5)
+};
+
+Application application(datalink, pingPong, solenoids);
 Blinker blinker;
 
 PinBank pinBankC(PinBank::C, 0b00111111);
@@ -78,6 +97,9 @@ void loop() {
 	blinker.schedule();
 	for(size_t i = 0; i < sizeof(inputPins) / sizeof(InputPin); i++) {
 		inputPins[i].schedule();
+	}
+	for(size_t i = 0; i < sizeof(solenoids) / sizeof(Solenoid); i++) {
+		solenoids[i].schedule();
 	}
 	wdt_reset();
 }
