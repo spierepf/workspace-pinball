@@ -17,8 +17,6 @@ class PingPong {
 	struct pt pt;
 	PT_THREAD(run());
 
-	PinDuinoDataLink& datalink;
-
 	Timer<unsigned long> timer;
 	unsigned long total_latency;
 	unsigned long wait_time;
@@ -28,7 +26,7 @@ class PingPong {
 	void sendPing();
 
 public:
-	PingPong(PinDuinoDataLink&);
+	PingPong();
 	virtual ~PingPong();
 
 	void schedule();

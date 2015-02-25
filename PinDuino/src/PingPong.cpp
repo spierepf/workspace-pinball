@@ -11,7 +11,7 @@
 
 #define N 128
 
-PingPong::PingPong(PinDuinoDataLink &datalink) : datalink(datalink), total_latency(0), wait_time(0), counter(0), pongAccepted(false) {
+PingPong::PingPong() : total_latency(0), wait_time(0), counter(0), pongAccepted(false) {
 	PT_INIT(&pt);
 }
 

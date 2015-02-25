@@ -25,4 +25,6 @@ public:
 	void log(const char*, ...);
 };
 
+extern PinDuinoDataLink datalink;
+
 #endif /* PINDUINODATALINK_H_ */

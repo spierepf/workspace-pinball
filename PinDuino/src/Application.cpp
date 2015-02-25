@@ -9,7 +9,7 @@
 
 #include <Application.h>
 
-Application::Application(PinDuinoDataLink &datalink, PingPong &pingPong, StimulusResponse &stimulusResponse) : datalink(datalink), pingPong(pingPong), stimulusResponse(stimulusResponse) {
+Application::Application(PingPong &pingPong, StimulusResponse &stimulusResponse) : pingPong(pingPong), stimulusResponse(stimulusResponse) {
 	PT_INIT(&pt);
 
 	datalink.begin_outgoing_frame(OpCode::MY_ID);

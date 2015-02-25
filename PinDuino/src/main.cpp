@@ -46,7 +46,7 @@ PinBank pinBankB3(PinBank::B, _BV(3));
 PinBank pinBankB4(PinBank::B, _BV(4));
 PinBank pinBankB5(PinBank::B, _BV(5));
 
-PingPong pingPong(datalink);
+PingPong pingPong;
 
 Solenoid solenoids[6] = {
 		Solenoid(pinBankB0),
@@ -59,7 +59,7 @@ Solenoid solenoids[6] = {
 
 StimulusResponse stimulusResponse(solenoids);
 
-Application application(datalink, pingPong, stimulusResponse);
+Application application(pingPong, stimulusResponse);
 Blinker blinker;
 
 PinBank pinBankC(PinBank::C, 0b00111111);

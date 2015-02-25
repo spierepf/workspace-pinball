@@ -18,12 +18,11 @@ class Application {
 	struct pt pt;
 	PT_THREAD(run());
 
-	PinDuinoDataLink& datalink;
 	PingPong& pingPong;
 	StimulusResponse& stimulusResponse;
 
 public:
-	Application(PinDuinoDataLink&, PingPong&, StimulusResponse&);
+	Application(PingPong&, StimulusResponse&);
 	virtual ~Application();
 
 	void schedule();
