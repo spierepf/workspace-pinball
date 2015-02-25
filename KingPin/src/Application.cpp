@@ -6,6 +6,7 @@
  */
 
 #include <Application.h>
+#include <OpCode.h>
 
 #include <easylogging++.h>
 
@@ -41,9 +42,9 @@ PT_THREAD(Application::run()) {
 		} else if(datalink.peek(0) == OpCode::MY_ID) {
 			id = datalink.peek(1);
 			LOG(INFO) << "Device " << device << " registered id: " << (int)id;
-		} else if(datalink.peek(0) == 0x10) {
+		} else if(datalink.peek(0) == OpCode::PIN_LOW) {
 			LOG(INFO) << "Pin Low: " << id << ":" << (int)datalink.peek(1);
-		} else if(datalink.peek(0) == 0x11) {
+		} else if(datalink.peek(0) == OpCode::PIN_HIGH) {
 			LOG(INFO) << "Pin High: " << id << ":"  << (int)datalink.peek(1);
 		}
 

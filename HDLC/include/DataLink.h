@@ -13,15 +13,6 @@
 #include <Hardware.h>
 #include <RingBuffer.h>
 
-namespace OpCode {
-	enum {
-		MY_ID,
-		PING,
-		PONG,
-		LOG
-	};
-}
-
 class DataLink {
 private:
 	enum {

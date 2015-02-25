@@ -8,6 +8,7 @@
 #include <Arduino.h>
 
 #include <PingPong.h>
+#include <OpCode.h>
 
 #define N 128
 

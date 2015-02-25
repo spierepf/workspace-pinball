@@ -10,6 +10,7 @@
 #include <string.h>
 
 #include <PinDuinoDataLink.h>
+#include <OpCode.h>
 
 PinDuinoDataLink::PinDuinoDataLink(Hardware& hardware) : DataLink(hardware) {
 	// TODO Auto-generated constructor stub

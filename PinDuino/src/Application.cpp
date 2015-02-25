@@ -8,6 +8,7 @@
 #include <avr/eeprom.h>
 
 #include <Application.h>
+#include <OpCode.h>
 
 Application::Application(PingPong &pingPong, StimulusResponse &stimulusResponse) : pingPong(pingPong), stimulusResponse(stimulusResponse) {
 	PT_INIT(&pt);
