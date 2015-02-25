@@ -10,7 +10,7 @@
 #include <Application.h>
 #include <OpCode.h>
 
-Application::Application(PingPong &pingPong, StimulusResponse &stimulusResponse) : pingPong(pingPong), stimulusResponse(stimulusResponse) {
+Application::Application(PingPong &pingPong) : pingPong(pingPong) {
 	PT_INIT(&pt);
 
 	datalink.begin_outgoing_frame(OpCode::MY_ID);
@@ -38,11 +38,4 @@ PT_THREAD(Application::run()) {
 		datalink.next_incoming_frame();
 	}
 	PT_END(&pt);
-}
-
-void Application::pinChange(uint8_t id, bool newState) {
-	datalink.begin_outgoing_frame(newState ? OpCode::PIN_HIGH : OpCode::PIN_LOW);
-	datalink.append_payload(id);
-	datalink.end_outgoing_frame();
-	stimulusResponse.trigger(id, newState);
 }

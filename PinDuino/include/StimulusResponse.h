@@ -33,4 +33,6 @@ public:
 	void trigger(uint8_t, bool);
 };
 
+extern StimulusResponse stimulusResponse;
+
 #endif /* STIMULUSRESPONSE_H_ */

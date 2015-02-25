@@ -59,7 +59,7 @@ Solenoid solenoids[6] = {
 
 StimulusResponse stimulusResponse(solenoids);
 
-Application application(pingPong, stimulusResponse);
+Application application(pingPong);
 Blinker blinker;
 
 PinBank pinBankC(PinBank::C, 0b00111111);

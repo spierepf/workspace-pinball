@@ -12,22 +12,18 @@
 
 #include <PinDuinoDataLink.h>
 #include <PingPong.h>
-#include <StimulusResponse.h>
 
 class Application {
 	struct pt pt;
 	PT_THREAD(run());
 
 	PingPong& pingPong;
-	StimulusResponse& stimulusResponse;
 
 public:
-	Application(PingPong&, StimulusResponse&);
+	Application(PingPong&);
 	virtual ~Application();
 
 	void schedule();
-
-	void pinChange(uint8_t, bool);
 };
 
 #endif /* APPLICATION_H_ */
