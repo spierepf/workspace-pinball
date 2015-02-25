@@ -14,8 +14,8 @@ StimulusResponse::~StimulusResponse() {
 	// TODO Auto-generated destructor stub
 }
 
-void StimulusResponse::trigger(uint8_t pin, uint8_t edge) {
-	Entry *entry = &(entries[edge][pin]);
+void StimulusResponse::trigger(uint8_t pin, bool newState) {
+	Entry *entry = &(entries[newState][pin]);
 
 	if(entry->enabled) {
 		if(entry->attack == 0) {

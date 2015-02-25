@@ -40,17 +40,9 @@ PT_THREAD(Application::run()) {
 	PT_END(&pt);
 }
 
-void Application::pin_low(uint8_t id) {
-	datalink.begin_outgoing_frame(OpCode::PIN_LOW);
+void Application::pinChange(uint8_t id, bool newState) {
+	datalink.begin_outgoing_frame(newState ? OpCode::PIN_HIGH : OpCode::PIN_LOW);
 	datalink.append_payload(id);
 	datalink.end_outgoing_frame();
-	stimulusResponse.trigger(id, StimulusResponse::ON_LOW);
-}
-
-
-void Application::pin_high(uint8_t id) {
-	datalink.begin_outgoing_frame(OpCode::PIN_HIGH);
-	datalink.append_payload(id);
-	datalink.end_outgoing_frame();
-	stimulusResponse.trigger(id, StimulusResponse::ON_HIGH);
+	stimulusResponse.trigger(id, newState);
 }

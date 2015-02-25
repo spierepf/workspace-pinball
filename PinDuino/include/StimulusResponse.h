@@ -27,12 +27,10 @@ class StimulusResponse {
 	Entry entries[2][12];
 
 public:
-	enum { ON_LOW, ON_HIGH };
-
 	StimulusResponse(Solenoid*);
 	virtual ~StimulusResponse();
 
-	void trigger(uint8_t, uint8_t);
+	void trigger(uint8_t, bool);
 };
 
 #endif /* STIMULUSRESPONSE_H_ */

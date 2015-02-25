@@ -27,8 +27,7 @@ public:
 
 	void schedule();
 
-	void pin_low(uint8_t);
-	void pin_high(uint8_t);
+	void pinChange(uint8_t, bool);
 };
 
 #endif /* APPLICATION_H_ */

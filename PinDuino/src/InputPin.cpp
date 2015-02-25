@@ -25,11 +25,11 @@ PT_THREAD(InputPin::run()) {
 	PT_BEGIN(&pt);
 	for(;;) {
 		PT_WAIT_UNTIL(&pt, (bank.read() & mask) == 0);
-		application.pin_low(id);
+		application.pinChange(id, false);
 		timer.set(micros());
 		PT_WAIT_UNTIL(&pt, timer.elapsed(micros()) > 3000);
 		PT_WAIT_UNTIL(&pt, (bank.read() & mask) != 0);
-		application.pin_high(id);
+		application.pinChange(id, true);
 		timer.set(micros());
 		PT_WAIT_UNTIL(&pt, timer.elapsed(micros()) > 3000);
 	}
