@@ -12,7 +12,7 @@
 
 #include <PinDuinoDataLink.h>
 #include <PingPong.h>
-#include <Solenoid.h>
+#include <StimulusResponse.h>
 
 class Application {
 	struct pt pt;
@@ -20,10 +20,10 @@ class Application {
 
 	PinDuinoDataLink& datalink;
 	PingPong& pingPong;
-	Solenoid* solenoids;
+	StimulusResponse& stimulusResponse;
 
 public:
-	Application(PinDuinoDataLink&, PingPong&, Solenoid[]);
+	Application(PinDuinoDataLink&, PingPong&, StimulusResponse&);
 	virtual ~Application();
 
 	void schedule();

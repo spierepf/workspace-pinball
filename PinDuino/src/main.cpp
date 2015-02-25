@@ -13,6 +13,7 @@
 #include <Application.h>
 #include <Blinker.h>
 #include <InputPin.h>
+#include <StimulusResponse.h>
 
 #ifndef BAUD
 #define BAUD 115200
@@ -56,7 +57,9 @@ Solenoid solenoids[6] = {
 		Solenoid(pinBankB5)
 };
 
-Application application(datalink, pingPong, solenoids);
+StimulusResponse stimulusResponse(solenoids);
+
+Application application(datalink, pingPong, stimulusResponse);
 Blinker blinker;
 
 PinBank pinBankC(PinBank::C, 0b00111111);
