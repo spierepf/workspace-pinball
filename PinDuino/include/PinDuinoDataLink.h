@@ -10,11 +10,6 @@
 
 #include <DataLink.h>
 
-namespace OpCode {
-	enum {
-	};
-}
-
 class PinDuinoDataLink: public DataLink {
 public:
 	PinDuinoDataLink(Hardware&);
