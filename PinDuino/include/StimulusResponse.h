@@ -23,6 +23,7 @@ struct Entry {
 };
 
 class StimulusResponse {
+	bool enabled;
 	Solenoid *solenoids;
 	Entry entries[2][12];
 
@@ -31,6 +32,9 @@ public:
 	virtual ~StimulusResponse();
 
 	void trigger(uint8_t, bool);
+
+	void inhibit();
+	void enable();
 };
 
 extern StimulusResponse stimulusResponse;

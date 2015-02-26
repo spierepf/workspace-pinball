@@ -15,7 +15,9 @@ namespace OpCode {
 		PONG,
 		LOG,
 		PIN_LOW = 0x10,
-		PIN_HIGH
+		PIN_HIGH,
+		SR_INHIBIT = 0x20,
+		SR_ENABLE
 	};
 }
 

@@ -9,6 +9,7 @@
 
 #include <Application.h>
 #include <OpCode.h>
+#include <StimulusResponse.h>
 
 Application::Application(PingPong &pingPong) : pingPong(pingPong) {
 	PT_INIT(&pt);
@@ -33,6 +34,10 @@ PT_THREAD(Application::run()) {
 
 		if(datalink.peek(0) == OpCode::PONG) {
 			pingPong.acceptPong();
+		} else if(datalink.peek(0) == OpCode::SR_INHIBIT) {
+			stimulusResponse.inhibit();
+		} else if(datalink.peek(0) == OpCode::SR_ENABLE) {
+			stimulusResponse.enable();
 		}
 
 		datalink.next_incoming_frame();
