@@ -17,6 +17,6 @@ int main(int argc, char** argv) {
     mknod(FIFO_NAME, S_IFIFO | 0666, 0);
 
     fifo = fopen(FIFO_NAME, "a");
-    fputs(argv[1], fifo);
+    fprintf(fifo, "%s\n", argv[1]);
     fclose(fifo);
 }
