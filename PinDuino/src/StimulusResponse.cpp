@@ -7,6 +7,10 @@
 
 #include "StimulusResponse.h"
 
+#include <Solenoid.h>
+
+extern Solenoid solenoids[6];
+
 StimulusResponse::StimulusResponse() : enabled(false) {
 }
 
@@ -19,8 +23,13 @@ void StimulusResponse::config(uint8_t pin, bool newState, SolenoidAction action)
 }
 
 void StimulusResponse::trigger(uint8_t pin, bool newState) {
-	if(enabled && entries[newState][pin].enabled) {
-		entries[newState][pin].trigger();
+	SolenoidAction *entry = &(entries[newState][pin]);
+	if (enabled && entry->enabled) {
+		if(entry->attack == 0) {
+			solenoids[entry->solenoidIndex].release();
+		} else {
+			solenoids[entry->solenoidIndex].trigger(entry->attack);
+		}
 	}
 }
 
