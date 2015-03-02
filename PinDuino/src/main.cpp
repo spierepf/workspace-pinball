@@ -57,7 +57,7 @@ Solenoid solenoids[6] = {
 		Solenoid(pinBankB5)
 };
 
-StimulusResponse stimulusResponse(solenoids);
+StimulusResponse stimulusResponse;
 
 Application application(pingPong);
 Blinker blinker;

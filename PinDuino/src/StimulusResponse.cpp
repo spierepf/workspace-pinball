@@ -7,22 +7,20 @@
 
 #include "StimulusResponse.h"
 
-StimulusResponse::StimulusResponse(Solenoid *solenoids) : solenoids(solenoids), enabled(false) {
+StimulusResponse::StimulusResponse() : enabled(false) {
 }
 
 StimulusResponse::~StimulusResponse() {
 	// TODO Auto-generated destructor stub
 }
 
-void StimulusResponse::trigger(uint8_t pin, bool newState) {
-	Entry *entry = &(entries[newState][pin]);
+void StimulusResponse::config(uint8_t pin, bool newState, SolenoidAction action) {
+	entries[newState][pin] = action;
+}
 
-	if(enabled && entry->enabled) {
-		if(entry->attack == 0) {
-			solenoids[entry->solenoidIndex].release();
-		} else {
-			solenoids[entry->solenoidIndex].trigger(entry->attack);
-		}
+void StimulusResponse::trigger(uint8_t pin, bool newState) {
+	if(enabled && entries[newState][pin].enabled) {
+		entries[newState][pin].trigger();
 	}
 }
 

@@ -11,26 +11,17 @@
 #include <stdint.h>
 
 #include <Solenoid.h>
-
-struct Entry {
-	uint8_t enabled : 1;
-	uint8_t solenoidIndex : 7;
-	uint16_t attack;
-	uint8_t sustain;
-
-	Entry() : enabled(1), solenoidIndex(5), attack(65000), sustain(0) {
-	}
-};
+#include <SolenoidAction.h>
 
 class StimulusResponse {
 	bool enabled;
-	Solenoid *solenoids;
-	Entry entries[2][12];
+	SolenoidAction entries[2][12];
 
 public:
-	StimulusResponse(Solenoid*);
+	StimulusResponse();
 	virtual ~StimulusResponse();
 
+	void config(uint8_t, bool, SolenoidAction);
 	void trigger(uint8_t, bool);
 
 	void inhibit();
