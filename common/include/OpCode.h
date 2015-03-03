@@ -17,7 +17,8 @@ namespace OpCode {
 		PIN_LOW = 0x10,
 		PIN_HIGH,
 		SR_INHIBIT = 0x20,
-		SR_ENABLE
+		SR_ENABLE,
+		SR_CONFIG
 	};
 }
 

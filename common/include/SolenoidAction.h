@@ -16,7 +16,7 @@ struct SolenoidAction {
 	uint16_t attack;
 	uint8_t sustain;
 
-	SolenoidAction() : enabled(1), solenoidIndex(5), attack(65000), sustain(0) {
+	SolenoidAction() : enabled(0), solenoidIndex(0), attack(0), sustain(0) {
 	}
 
 	SolenoidAction(bool enabled, uint8_t solenoidIndex, uint16_t attack, uint8_t sustain) : enabled(enabled), solenoidIndex(solenoidIndex), attack(attack), sustain(sustain) {
