@@ -49,7 +49,6 @@ PT_THREAD(Application::run()) {
 			*p++=datalink.peek(i++);
 			*p++=datalink.peek(i++);
 			stimulusResponse.config(pin, newState, action);
-			datalink.log("Received SR_CONFIG: %i", action.solenoidIndex);
 		}
 
 		datalink.next_incoming_frame();
