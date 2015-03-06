@@ -22,12 +22,17 @@ using namespace std;
 
 INITIALIZE_EASYLOGGINGPP
 
+#include <fcntl.h>
+
 list<Application*> applications;
 FILE* fifo;
 
 void setup() {
     mknod(FIFO_NAME, S_IFIFO | 0666, 0);
-	fifo = fopen(FIFO_NAME, "r");
+	fifo = fopen(FIFO_NAME, "w+");
+	int fd = fileno(fifo);
+	int flags = fcntl(fd, F_GETFL, 0) | O_NONBLOCK;
+	fcntl(fd, F_SETFL, flags);
 }
 
 void loop() {
@@ -53,7 +58,6 @@ void loop() {
 
 class Worker {
 public:
-
 	Worker() : thread(0), stop(false) {}
 
 	// Called to start the processing on the thread
