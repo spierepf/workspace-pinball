@@ -8,6 +8,8 @@
 #ifndef APPLICATION_H_
 #define APPLICATION_H_
 
+#include <gtkmm.h>
+
 #include <pt.h>
 
 #include <Tty.h>
@@ -17,6 +19,7 @@
 using namespace std;
 
 class Application {
+	Gtk::Notebook* notebook;
 	string device;
 	Hardware* hardware;
 	DataLink datalink;
@@ -26,7 +29,7 @@ class Application {
 	PT_THREAD(run());
 
 public:
-	Application(string, Hardware*);
+	Application(Gtk::Notebook* notebook, string, Hardware*);
 	virtual ~Application();
 
 	void schedule();

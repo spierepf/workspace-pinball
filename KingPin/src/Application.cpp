@@ -10,8 +10,14 @@
 
 #include <easylogging++.h>
 
-Application::Application(string device, Hardware* hardware) : device(device), hardware(hardware), datalink(*hardware), id(255) {
+Application::Application(Gtk::Notebook* notebook, string device, Hardware* hardware) : notebook(notebook), device(device), hardware(hardware), datalink(*hardware), id(255) {
 	PT_INIT(&pt);
+
+	Gtk::Label *child = new Gtk::Label("child");
+	Gtk::Label *label = new Gtk::Label(device);
+
+	notebook -> append_page(*child, *label);
+	notebook -> show_all();
 }
 
 Application::~Application() {

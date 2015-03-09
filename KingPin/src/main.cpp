@@ -49,7 +49,7 @@ void loop() {
 
 		try {
 			Hardware* hardware = new Tty(s);
-			applications.push_back(new Application(s, hardware));
+			applications.push_back(new Application(notebook, s, hardware));
 			LOG(INFO) << "Pending connection to " << s;
 		} catch(SerialPort::OpenFailed& e) {
 			LOG(ERROR) << "While opening " << s << " : " << e.what();
@@ -60,12 +60,13 @@ void loop() {
 class IdleExample {
 public:
 	IdleExample() {
-		Glib::signal_idle().connect_once( sigc::mem_fun(*this, &IdleExample::on_idle) );
+		Glib::signal_idle().connect( sigc::mem_fun(*this, &IdleExample::on_idle) );
 	}
 
 protected:
-	void on_idle() {
+	bool on_idle() {
 		loop();
+		return true;
 	}
 };
 
