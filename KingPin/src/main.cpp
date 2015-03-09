@@ -26,6 +26,7 @@ INITIALIZE_EASYLOGGINGPP
 
 list<Application*> applications;
 FILE* fifo;
+Gtk::Notebook* notebook;
 
 void setup() {
     mknod(FIFO_NAME, S_IFIFO | 0666, 0);
@@ -56,43 +57,16 @@ void loop() {
 	}
 }
 
-class Worker {
+class IdleExample {
 public:
-	Worker() : thread(0), stop(false) {}
-
-	// Called to start the processing on the thread
-	void start () {
-		thread = Glib::Thread::create(sigc::mem_fun(*this, &Worker::run), true);
+	IdleExample() {
+		Glib::signal_idle().connect_once( sigc::mem_fun(*this, &IdleExample::on_idle) );
 	}
-
-	// When shutting down, we need to stop the thread
-	~Worker() {
-		{
-			Glib::Mutex::Lock lock (mutex);
-			stop = true;
-		}
-		if (thread)
-			thread->join(); // Here we block to truly wait for the thread to complete
-	}
-
-	Glib::Dispatcher sig_done;
 
 protected:
-	// This is where the real work happens
-	void run () {
-		setup();
-		for(;;) {
-			{
-				Glib::Mutex::Lock lock (mutex);
-				if (stop) break;
-			}
-			loop();
-		}
+	void on_idle() {
+		loop();
 	}
-
-	Glib::Thread * thread;
-	Glib::Mutex mutex;
-	bool stop;
 };
 
 int main(int argc, char **argv) {
@@ -102,10 +76,12 @@ int main(int argc, char **argv) {
 	if(!Glib::thread_supported()) Glib::thread_init();
 
 	Gtk::Window window;
-	window.set_default_size(200, 200);
 
-	Worker bee;
-	bee.start();
+	notebook = new Gtk::Notebook();
+	window.add(*notebook);
+
+	setup();
+	IdleExample idleExample;
 
 	return app->run(window);
 }
