@@ -10,6 +10,23 @@
 
 #include <easylogging++.h>
 
+#include <SolenoidActionController.h>
+
+char* labels[] = {
+		"A0",
+		"A1",
+		"A2",
+		"A3",
+		"A4",
+		"A5",
+		"2",
+		"3",
+		"4",
+		"5",
+		"6",
+		"7",
+};
+
 Application::Application(Gtk::Notebook* notebook, string device, Hardware* hardware) : notebook(notebook), device(device), hardware(hardware), datalink(*hardware), id(255) {
 	PT_INIT(&pt);
 
@@ -41,36 +58,13 @@ Application::Application(Gtk::Notebook* notebook, string device, Hardware* hardw
 	Gtk::Label *onHighSustainLabel = new Gtk::Label("Sustain");
 	child->attach_next_to(*onHighSustainLabel, *onHighAttackLabel, Gtk::POS_RIGHT, 1, 1);
 
-	Gtk::Label *rowLabel = new Gtk::Label("A0");
-	child->attach(*rowLabel, 0, 2, 1, 1);
+	for(int i = 0; i < 12; i++) {
+		Gtk::Label *rowLabel = new Gtk::Label(labels[i]);
+		child->attach(*rowLabel, 0, i+2, 1, 1);
 
-	Gtk::CheckButton *enable = new Gtk::CheckButton();
-	child->attach(*enable, 1, 2, 1, 1);
-
-	Gtk::SpinButton *solenoid = new Gtk::SpinButton();
-	solenoid->set_range(8, 13);
-	solenoid->set_increments(1, 1);
-	child->attach_next_to(*solenoid, *enable, Gtk::POS_RIGHT, 1, 1);
-
-	Gtk::SpinButton *attack = new Gtk::SpinButton();
-	attack->set_range(0, 65000);
-	attack->set_increments(100, 1000);
-	child->attach_next_to(*attack, *solenoid, Gtk::POS_RIGHT, 1, 1);
-
-	Gtk::SpinButton *sustain = new Gtk::SpinButton();
-	sustain->set_range(0, 255);
-	sustain->set_increments(1, 10);
-	child->attach_next_to(*sustain, *attack, Gtk::POS_RIGHT, 1, 1);
-
-	Gtk::Button *reset = new Gtk::Button();
-	Gtk::Image *resetImage = new Gtk::Image("sync-16.png");
-	reset->set_image(*resetImage);
-	child->attach_next_to(*reset, *sustain, Gtk::POS_RIGHT, 1, 1);
-
-	Gtk::Button *apply = new Gtk::Button();
-	Gtk::Image *applyImage = new Gtk::Image("write-16.png");
-	apply->set_image(*applyImage);
-	child->attach_next_to(*apply, *reset, Gtk::POS_RIGHT, 1, 1);
+		new SolenoidActionController(child, 1, i+2);
+		new SolenoidActionController(child, 7, i+2);
+	}
 
 	notebook -> append_page(*child, *label);
 	notebook -> show_all();
