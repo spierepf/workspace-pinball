@@ -36,7 +36,7 @@ void setup() {
 	fcntl(fd, F_SETFL, flags);
 }
 
-void loop() {
+bool loop() {
 	char s[300];
 
 	for(list<Application*>::iterator i=applications.begin(); i != applications.end(); ++i)
@@ -55,20 +55,9 @@ void loop() {
 			LOG(ERROR) << "While opening " << s << " : " << e.what();
 		}
 	}
+
+	return true;
 }
-
-class IdleExample {
-public:
-	IdleExample() {
-		Glib::signal_idle().connect( sigc::mem_fun(*this, &IdleExample::on_idle) );
-	}
-
-protected:
-	bool on_idle() {
-		loop();
-		return true;
-	}
-};
 
 int main(int argc, char **argv) {
 	START_EASYLOGGINGPP(argc, argv);
@@ -82,7 +71,7 @@ int main(int argc, char **argv) {
 	window.add(*notebook);
 
 	setup();
-	IdleExample idleExample;
+	Glib::signal_idle().connect( &loop );
 
 	return app->run(window);
 }
