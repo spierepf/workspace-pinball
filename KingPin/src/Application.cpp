@@ -10,8 +10,6 @@
 
 #include <easylogging++.h>
 
-#include <SolenoidActionController.h>
-
 char* labels[] = {
 		"A0",
 		"A1",
@@ -30,48 +28,69 @@ char* labels[] = {
 Application::Application(Gtk::Notebook* notebook, string device, Hardware* hardware) : notebook(notebook), device(device), hardware(hardware), datalink(*hardware), id(255) {
 	PT_INIT(&pt);
 
-	Gtk::Grid *child = new Gtk::Grid();
-	Gtk::Label *label = new Gtk::Label(device);
+	grid = new Gtk::Grid();
+	label = new Gtk::Label(device);
 
-	Gtk::Label *inputLabel = new Gtk::Label("Input");
-	child->attach(*inputLabel, 0, 0, 1, 1);
-	Gtk::Label *onLowLabel = new Gtk::Label("On Low");
-	child->attach_next_to(*onLowLabel, *inputLabel, Gtk::POS_RIGHT, 6, 1);
-	Gtk::Label *onHighLabel = new Gtk::Label("On High");
-	child->attach_next_to(*onHighLabel, *onLowLabel, Gtk::POS_RIGHT, 6, 1);
+	inputLabel = new Gtk::Label("Input");
+	grid->attach(*inputLabel, 0, 0, 1, 1);
+	onLowLabel = new Gtk::Label("On Low");
+	grid->attach_next_to(*onLowLabel, *inputLabel, Gtk::POS_RIGHT, 6, 1);
+	onHighLabel = new Gtk::Label("On High");
+	grid->attach_next_to(*onHighLabel, *onLowLabel, Gtk::POS_RIGHT, 6, 1);
 
-	Gtk::Label *onLowEnableLabel = new Gtk::Label("Enable");
-	child->attach(*onLowEnableLabel, 1, 1, 1, 1);
-	Gtk::Label *onLowSolenoidLabel = new Gtk::Label("Solenoid");
-	child->attach_next_to(*onLowSolenoidLabel, *onLowEnableLabel, Gtk::POS_RIGHT, 1, 1);
-	Gtk::Label *onLowAttackLabel = new Gtk::Label("Attack");
-	child->attach_next_to(*onLowAttackLabel, *onLowSolenoidLabel, Gtk::POS_RIGHT, 1, 1);
-	Gtk::Label *onLowSustainLabel = new Gtk::Label("Sustain");
-	child->attach_next_to(*onLowSustainLabel, *onLowAttackLabel, Gtk::POS_RIGHT, 1, 1);
+	onLowEnableLabel = new Gtk::Label("Enable");
+	grid->attach(*onLowEnableLabel, 1, 1, 1, 1);
+	onLowSolenoidLabel = new Gtk::Label("Solenoid");
+	grid->attach_next_to(*onLowSolenoidLabel, *onLowEnableLabel, Gtk::POS_RIGHT, 1, 1);
+	onLowAttackLabel = new Gtk::Label("Attack");
+	grid->attach_next_to(*onLowAttackLabel, *onLowSolenoidLabel, Gtk::POS_RIGHT, 1, 1);
+	onLowSustainLabel = new Gtk::Label("Sustain");
+	grid->attach_next_to(*onLowSustainLabel, *onLowAttackLabel, Gtk::POS_RIGHT, 1, 1);
 
-	Gtk::Label *onHighEnableLabel = new Gtk::Label("Enable");
-	child->attach(*onHighEnableLabel, 7, 1, 1, 1);
-	Gtk::Label *onHighSolenoidLabel = new Gtk::Label("Solenoid");
-	child->attach_next_to(*onHighSolenoidLabel, *onHighEnableLabel, Gtk::POS_RIGHT, 1, 1);
-	Gtk::Label *onHighAttackLabel = new Gtk::Label("Attack");
-	child->attach_next_to(*onHighAttackLabel, *onHighSolenoidLabel, Gtk::POS_RIGHT, 1, 1);
-	Gtk::Label *onHighSustainLabel = new Gtk::Label("Sustain");
-	child->attach_next_to(*onHighSustainLabel, *onHighAttackLabel, Gtk::POS_RIGHT, 1, 1);
+	onHighEnableLabel = new Gtk::Label("Enable");
+	grid->attach(*onHighEnableLabel, 7, 1, 1, 1);
+	onHighSolenoidLabel = new Gtk::Label("Solenoid");
+	grid->attach_next_to(*onHighSolenoidLabel, *onHighEnableLabel, Gtk::POS_RIGHT, 1, 1);
+	onHighAttackLabel = new Gtk::Label("Attack");
+	grid->attach_next_to(*onHighAttackLabel, *onHighSolenoidLabel, Gtk::POS_RIGHT, 1, 1);
+	onHighSustainLabel = new Gtk::Label("Sustain");
+	grid->attach_next_to(*onHighSustainLabel, *onHighAttackLabel, Gtk::POS_RIGHT, 1, 1);
 
 	for(int i = 0; i < 12; i++) {
-		Gtk::Label *rowLabel = new Gtk::Label(labels[i]);
-		child->attach(*rowLabel, 0, i+2, 1, 1);
-
-		new SolenoidActionController(child, 1, i+2);
-		new SolenoidActionController(child, 7, i+2);
+		rowLabels[i] = new Gtk::Label(labels[i]);
+		grid->attach(*rowLabels[i], 0, i+2, 1, 1);
+		solenoidActionControllers[i][0] = new SolenoidActionController(grid, 1, i+2);
+		solenoidActionControllers[i][1] = new SolenoidActionController(grid, 7, i+2);
 	}
 
-	notebook -> append_page(*child, *label);
+	notebook -> append_page(*grid, *label);
 	notebook -> show_all();
 }
 
 Application::~Application() {
-	// TODO Auto-generated destructor stub
+	delete label;
+
+	delete inputLabel;
+	delete onLowLabel;
+	delete onHighLabel;
+
+	delete onLowEnableLabel;
+	delete onLowSolenoidLabel;
+	delete onLowAttackLabel;
+	delete onLowSustainLabel;
+
+	delete onHighEnableLabel;
+	delete onHighSolenoidLabel;
+	delete onHighAttackLabel;
+	delete onHighSustainLabel;
+
+	for(int i = 0; i < 12; i++) {
+		delete rowLabels[i];
+		delete solenoidActionControllers[i][0];
+		delete solenoidActionControllers[i][1];
+	}
+
+	delete grid;
 }
 
 void Application::schedule() {

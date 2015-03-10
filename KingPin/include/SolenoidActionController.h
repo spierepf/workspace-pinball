@@ -11,6 +11,15 @@
 #include <gtkmm.h>
 
 class SolenoidActionController {
+	Gtk::CheckButton *enable;
+	Gtk::SpinButton *solenoid;
+	Gtk::SpinButton *attack;
+	Gtk::SpinButton *sustain;
+	Gtk::Button *reset;
+	Gtk::Image *resetImage;
+	Gtk::Button *apply;
+	Gtk::Image *applyImage;
+
 public:
 	SolenoidActionController(Gtk::Grid*, int, int);
 	virtual ~SolenoidActionController();

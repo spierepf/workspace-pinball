@@ -18,8 +18,31 @@
 #include <string>
 using namespace std;
 
+#include <SolenoidActionController.h>
+
 class Application {
 	Gtk::Notebook* notebook;
+
+	Gtk::Grid *grid;
+	Gtk::Label *label;
+
+	Gtk::Label *inputLabel;
+	Gtk::Label *onLowLabel;
+	Gtk::Label *onHighLabel;
+
+	Gtk::Label *onLowEnableLabel;
+	Gtk::Label *onLowSolenoidLabel;
+	Gtk::Label *onLowAttackLabel;
+	Gtk::Label *onLowSustainLabel;
+
+	Gtk::Label *onHighEnableLabel;
+	Gtk::Label *onHighSolenoidLabel;
+	Gtk::Label *onHighAttackLabel;
+	Gtk::Label *onHighSustainLabel;
+
+	Gtk::Label *rowLabels[12];
+	SolenoidActionController* solenoidActionControllers[12][2];
+
 	string device;
 	Hardware* hardware;
 	DataLink datalink;
