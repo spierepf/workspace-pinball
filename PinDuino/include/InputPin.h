@@ -24,7 +24,7 @@ class InputPin {
 	uint8_t id;
 	Timer<unsigned int> timer;
 
-	void pinChange(uint8_t, bool);
+	void pinChange(bool);
 
 public:
 	InputPin(Application&, PinBank&, uint8_t, uint8_t);

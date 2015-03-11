@@ -10,19 +10,21 @@
 
 #include <stdint.h>
 
+#include <DataLink.h>
+
+#include <Stimulus.h>
 #include <Solenoid.h>
 #include <SolenoidAction.h>
+#include <StimulusActionMap.h>
 
-class StimulusResponse {
+class StimulusResponse : public StimulusActionMap {
 	bool enabled;
-	SolenoidAction entries[2][12];
 
 public:
 	StimulusResponse();
 	virtual ~StimulusResponse();
 
-	void config(uint8_t, bool, SolenoidAction);
-	void trigger(uint8_t, bool);
+	void trigger(Stimulus);
 
 	void inhibit();
 	void enable();

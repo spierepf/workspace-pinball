@@ -18,17 +18,13 @@ StimulusResponse::~StimulusResponse() {
 	// TODO Auto-generated destructor stub
 }
 
-void StimulusResponse::config(uint8_t pin, bool newState, SolenoidAction action) {
-	entries[newState][pin] = action;
-}
-
-void StimulusResponse::trigger(uint8_t pin, bool newState) {
-	SolenoidAction *entry = &(entries[newState][pin]);
-	if(enabled && entry->enabled && entry->solenoidIndex < 6 && entry->attack <= 65000) {
-		if(entry->attack == 0) {
-			solenoids[entry->solenoidIndex].release();
+void StimulusResponse::trigger(Stimulus stimulus) {
+	SolenoidAction& entry = operator[](stimulus);
+	if(enabled && entry.enabled && entry.solenoidIndex < 6 && entry.attack <= 65000) {
+		if(entry.attack == 0) {
+			solenoids[entry.solenoidIndex].release();
 		} else {
-			solenoids[entry->solenoidIndex].trigger(entry->attack);
+			solenoids[entry.solenoidIndex].trigger(entry.attack);
 		}
 	}
 }

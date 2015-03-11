@@ -25,22 +25,22 @@ void InputPin::schedule() {
 	PT_SCHEDULE(run());
 }
 
-void InputPin::pinChange(uint8_t id, bool newState) {
+void InputPin::pinChange(bool newState) {
 	datalink.begin_outgoing_frame(newState ? OpCode::PIN_HIGH : OpCode::PIN_LOW);
 	datalink.append_payload(id);
 	datalink.end_outgoing_frame();
-	stimulusResponse.trigger(id, newState);
+	stimulusResponse.trigger(Stimulus(id, newState));
 }
 
 PT_THREAD(InputPin::run()) {
 	PT_BEGIN(&pt);
 	for(;;) {
 		PT_WAIT_UNTIL(&pt, (bank.read() & mask) == 0);
-		pinChange(id, false);
+		pinChange(false);
 		timer.set(micros());
 		PT_WAIT_UNTIL(&pt, timer.elapsed(micros()) > 3000);
 		PT_WAIT_UNTIL(&pt, (bank.read() & mask) != 0);
-		pinChange(id, true);
+		pinChange(true);
 		timer.set(micros());
 		PT_WAIT_UNTIL(&pt, timer.elapsed(micros()) > 3000);
 	}

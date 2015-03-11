@@ -39,16 +39,16 @@ PT_THREAD(Application::run()) {
 		} else if(datalink.peek(0) == OpCode::SR_ENABLE) {
 			stimulusResponse.enable();
 		} else if(datalink.peek(0) == OpCode::SR_CONFIG) {
-			SolenoidAction action;
-			uint8_t *p = (uint8_t*)&action;
 			uint8_t i = 1;
-			uint8_t pin = datalink.peek(i++);
-			bool newState = datalink.peek(i++);
-			*p++=datalink.peek(i++);
-			*p++=datalink.peek(i++);
-			*p++=datalink.peek(i++);
-			*p++=datalink.peek(i++);
-			stimulusResponse.config(pin, newState, action);
+			if(datalink.incoming_frame_length() >= i+2) {
+				Stimulus stimulus;
+				stimulus.read_from(datalink, i);
+				if(datalink.incoming_frame_length() >= i+4) {
+					SolenoidAction action;
+					action.read_from(datalink, i);
+					stimulusResponse[stimulus] = action;
+				}
+			}
 		}
 
 		datalink.next_incoming_frame();
