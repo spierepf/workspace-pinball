@@ -11,7 +11,7 @@
 
 extern Solenoid solenoids[6];
 
-StimulusResponse::StimulusResponse() : enabled(false) {
+StimulusResponse::StimulusResponse() : enabled(true) {
 }
 
 StimulusResponse::~StimulusResponse() {
@@ -24,7 +24,7 @@ void StimulusResponse::config(uint8_t pin, bool newState, SolenoidAction action)
 
 void StimulusResponse::trigger(uint8_t pin, bool newState) {
 	SolenoidAction *entry = &(entries[newState][pin]);
-	if(enabled && entry->enabled && entry->solenoidIndex < 6 && entry->attack < 65000) {
+	if(enabled && entry->enabled && entry->solenoidIndex < 6 && entry->attack <= 65000) {
 		if(entry->attack == 0) {
 			solenoids[entry->solenoidIndex].release();
 		} else {
