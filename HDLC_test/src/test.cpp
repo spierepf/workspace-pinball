@@ -13,6 +13,10 @@
 #include <DataLink.h>
 #include <Timer.h>
 
+#include <SolenoidAction.h>
+#include <Stimulus.h>
+#include <StimulusActionMap.h>
+
 BOOST_AUTO_TEST_CASE( ringbuffer_constructor ) {
 	RingBuffer<2> ringbuffer;
 
@@ -337,4 +341,82 @@ BOOST_AUTO_TEST_CASE( timer_wraparound ) {
 	BOOST_CHECK( 1 == t.elapsed(255) );
 	BOOST_CHECK( 2 == t.elapsed(0) );
 	BOOST_CHECK( 3 == t.elapsed(1) );
+}
+
+BOOST_AUTO_TEST_CASE( read_write_solenoid_action_through_datalink ) {
+	BOOST_CHECK( 4 == sizeof(SolenoidAction) );
+	SolenoidAction action(true, 2, 3, 4);
+
+	RingBuffer<16> a_to_b;
+	RingBuffer<16> b_to_a;
+
+	MockHardware hardware_a(b_to_a, a_to_b);
+	MockHardware hardware_b(a_to_b, b_to_a);
+
+	DataLink datalink_a(hardware_a);
+	DataLink datalink_b(hardware_b);
+
+	datalink_a.begin_outgoing_frame(0x00);
+	action.write_to(datalink_a);
+	datalink_a.end_outgoing_frame();
+
+	for(int i = 0; i < 100; i++) {
+		datalink_a.schedule();
+		datalink_b.schedule();
+	}
+
+	SolenoidAction result;
+	uint8_t i = 1;
+	result.read_from(datalink_b, i);
+
+	BOOST_CHECK( action.enabled == result.enabled );
+	BOOST_CHECK( action.solenoidIndex == result.solenoidIndex );
+	BOOST_CHECK( action.attack == result.attack );
+	BOOST_CHECK( action.sustain == result.sustain );
+}
+
+BOOST_AUTO_TEST_CASE( read_write_stimulus_through_datalink ) {
+	BOOST_CHECK( 1 == sizeof(Stimulus) );
+	Stimulus stimulus(4, true);
+
+	RingBuffer<16> a_to_b;
+	RingBuffer<16> b_to_a;
+
+	MockHardware hardware_a(b_to_a, a_to_b);
+	MockHardware hardware_b(a_to_b, b_to_a);
+
+	DataLink datalink_a(hardware_a);
+	DataLink datalink_b(hardware_b);
+
+	datalink_a.begin_outgoing_frame(0x00);
+	stimulus.write_to(datalink_a);
+	datalink_a.end_outgoing_frame();
+
+	for(int i = 0; i < 100; i++) {
+		datalink_a.schedule();
+		datalink_b.schedule();
+	}
+
+	Stimulus result;
+	uint8_t i = 1;
+	result.read_from(datalink_b, i);
+
+	BOOST_CHECK( stimulus.pin == result.pin );
+	BOOST_CHECK( stimulus.newState == result.newState );
+}
+
+BOOST_AUTO_TEST_CASE( stimulus_action_map_test ) {
+	SolenoidAction action(true, 2, 3, 4);
+	Stimulus stimulus(4, true);
+
+	StimulusActionMap map;
+
+	map[stimulus] = action;
+
+	SolenoidAction result = map[stimulus];
+
+	BOOST_CHECK( action.enabled == result.enabled );
+	BOOST_CHECK( action.solenoidIndex == result.solenoidIndex );
+	BOOST_CHECK( action.attack == result.attack );
+	BOOST_CHECK( action.sustain == result.sustain );
 }

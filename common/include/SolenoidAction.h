@@ -10,17 +10,38 @@
 
 #include <stdint.h>
 
+#pragma pack(push)  /* push current alignment to stack */
+#pragma pack(1)     /* set alignment to 1 byte boundary */
+
 struct SolenoidAction {
 	uint8_t enabled : 1;
 	uint8_t solenoidIndex : 7;
-	uint16_t attack;
 	uint8_t sustain;
+	uint16_t attack;
 
 	SolenoidAction() : enabled(1), solenoidIndex(5), attack(65000), sustain(0) {
 	}
 
 	SolenoidAction(bool enabled, uint8_t solenoidIndex, uint16_t attack, uint8_t sustain) : enabled(enabled), solenoidIndex(solenoidIndex), attack(attack), sustain(sustain) {
 	}
+
+	void write_to(DataLink& datalink) {
+		uint8_t *p = (uint8_t*)this;
+		datalink.append_payload(*p++);
+		datalink.append_payload(*p++);
+		datalink.append_payload(*p++);
+		datalink.append_payload(*p++);
+	}
+
+	void read_from(DataLink& datalink, uint8_t& i) {
+		uint8_t *p = (uint8_t*)this;
+		*p++=datalink.peek(i++);
+		*p++=datalink.peek(i++);
+		*p++=datalink.peek(i++);
+		*p++=datalink.peek(i++);
+	}
 };
+
+#pragma pack(pop)   /* restore original alignment from stack */
 
 #endif /* SOLENOIDACTION_H_ */
