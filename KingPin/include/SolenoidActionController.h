@@ -23,6 +23,9 @@ class SolenoidActionController {
 public:
 	SolenoidActionController(Gtk::Grid*, int, int);
 	virtual ~SolenoidActionController();
+
+	void onResetClicked();
+	void onApplyClicked();
 };
 
 #endif /* SOLENOIDACTIONCONTROLLER_H_ */

@@ -7,6 +7,8 @@
 
 #include "SolenoidActionController.h"
 
+#include <easylogging++.h>
+
 SolenoidActionController::SolenoidActionController(Gtk::Grid* child, int left, int top) {
 	enable = new Gtk::CheckButton();
 	child->attach(*enable, left, top, 1, 1);
@@ -29,11 +31,13 @@ SolenoidActionController::SolenoidActionController(Gtk::Grid* child, int left, i
 	reset = new Gtk::Button();
 	resetImage = new Gtk::Image("sync-16.png");
 	reset->set_image(*resetImage);
+	reset->signal_clicked().connect(sigc::mem_fun(this, &SolenoidActionController::onResetClicked));
 	child->attach_next_to(*reset, *sustain, Gtk::POS_RIGHT, 1, 1);
 
 	apply = new Gtk::Button();
 	applyImage = new Gtk::Image("write-16.png");
 	apply->set_image(*applyImage);
+	apply->signal_clicked().connect(sigc::mem_fun(this, &SolenoidActionController::onApplyClicked));
 	child->attach_next_to(*apply, *reset, Gtk::POS_RIGHT, 1, 1);
 }
 
@@ -48,3 +52,10 @@ SolenoidActionController::~SolenoidActionController() {
 	delete applyImage;
 }
 
+void SolenoidActionController::onResetClicked() {
+	LOG(INFO) << "Reset Clicked";
+}
+
+void SolenoidActionController::onApplyClicked() {
+	LOG(INFO) << "Apply Clicked";
+}
