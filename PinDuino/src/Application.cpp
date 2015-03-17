@@ -5,7 +5,7 @@
  *      Author: peter
  */
 
-#include <avr/eeprom.h>
+#include <eeprom.h>
 
 #include <Application.h>
 #include <OpCode.h>
@@ -14,8 +14,9 @@
 Application::Application(PingPong &pingPong) : pingPong(pingPong) {
 	PT_INIT(&pt);
 
+	eeprom_busy_wait();
 	datalink.begin_outgoing_frame(OpCode::MY_ID);
-	datalink.append_payload(eeprom_read_byte(0x0000));
+	datalink.append_payload(eeprom_read_byte(&eeprom_id));
 	datalink.end_outgoing_frame();
 }
 
