@@ -5,7 +5,9 @@
  *      Author: peter
  */
 
-#include <eeprom.h>
+#include <avr/eeprom.h>
+extern uint8_t eeprom_id;
+extern uint32_t eeprom_actions[12][2];
 
 #include <Application.h>
 #include <OpCode.h>
@@ -49,6 +51,8 @@ PT_THREAD(Application::run()) {
 					datalink.log("Received SR_CONFIG: %u:%u->%u:%u", stimulus.pin, stimulus.newState, action.enabled, action.solenoidIndex);
 					action.read_from(datalink, i);
 					stimulusResponse[stimulus] = action;
+					eeprom_busy_wait();
+					eeprom_write_dword(&eeprom_actions[stimulus.pin][stimulus.newState], action);
 				} else {
 					datalink.begin_outgoing_frame(OpCode::SR_CONFIG);
 					stimulus.write_to(datalink);

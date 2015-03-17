@@ -21,6 +21,7 @@
 
 #include <util/setbaud.h>
 #include <avr/wdt.h>
+#include <eeprom.h>
 
 void uart_init(void) {
     UBRR0H = UBRRH_VALUE;
@@ -91,6 +92,13 @@ void setup() {
 	pinBankD.dataLow();
 	pinBankD.dirIn();
 	pinBankD.dataHigh();
+
+	for(int i = 0; i < 12; i++) {
+		eeprom_busy_wait();
+		stimulusResponse[Stimulus(i, false)] = eeprom_read_dword(&eeprom_actions[i][0]);
+		eeprom_busy_wait();
+		stimulusResponse[Stimulus(i, true)] = eeprom_read_dword(&eeprom_actions[i][1]);
+	}
 }
 
 void loop() {

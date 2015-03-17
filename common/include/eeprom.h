@@ -10,6 +10,9 @@
 
 #include <avr/eeprom.h>
 
-EEMEM uint8_t eeprom_id;
+#include <DataLink.h>
+
+uint32_t EEMEM eeprom_actions[12][2];
+uint8_t EEMEM eeprom_id;
 
 #endif /* EEPROM_H_ */

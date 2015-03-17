@@ -25,6 +25,10 @@ struct SolenoidAction {
 	SolenoidAction(bool enabled, uint8_t solenoidIndex, uint16_t attack, uint8_t sustain) : enabled(enabled), solenoidIndex(solenoidIndex), sustain(sustain), attack(attack) {
 	}
 
+	SolenoidAction(uint32_t src) {
+		*((uint32_t*)this) = src;
+	}
+
 	void write_to(DataLink& datalink) {
 		uint8_t *p = (uint8_t*)this;
 		datalink.append_payload(*p++);
@@ -39,6 +43,10 @@ struct SolenoidAction {
 		*p++=datalink.peek(i++);
 		*p++=datalink.peek(i++);
 		*p++=datalink.peek(i++);
+	}
+
+	operator uint32_t() {
+		return *(uint32_t*)this;
 	}
 };
 
