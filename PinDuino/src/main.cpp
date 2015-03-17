@@ -95,6 +95,7 @@ void setup() {
 
 void loop() {
 	while(sizeof(SolenoidAction)!=4);
+	while(sizeof(Stimulus)!=1);
 	datalink.schedule();
 	application.schedule();
 	pingPong.schedule();
