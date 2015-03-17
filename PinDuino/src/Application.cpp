@@ -40,13 +40,18 @@ PT_THREAD(Application::run()) {
 			stimulusResponse.enable();
 		} else if(datalink.peek(0) == OpCode::SR_CONFIG) {
 			uint8_t i = 1;
-			if(datalink.incoming_frame_length() >= i+2) {
+			if(datalink.incoming_frame_length() >= i+sizeof(Stimulus)) {
 				Stimulus stimulus;
 				stimulus.read_from(datalink, i);
-				if(datalink.incoming_frame_length() >= i+4) {
+				if(datalink.incoming_frame_length() >= i+sizeof(SolenoidAction)) {
 					SolenoidAction action;
+					datalink.log("Received SR_CONFIG: %u:%u->%u:%u", stimulus.pin, stimulus.newState, action.enabled, action.solenoidIndex);
 					action.read_from(datalink, i);
 					stimulusResponse[stimulus] = action;
+				} else {
+					datalink.begin_outgoing_frame(OpCode::SR_CONFIG);
+					stimulus.write_to(datalink);
+					stimulusResponse[stimulus].write_to(datalink);
 				}
 			}
 		}

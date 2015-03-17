@@ -9,6 +9,7 @@
 #include <OpCode.h>
 
 #include <easylogging++.h>
+#include <SolenoidAction.h>
 
 char* labels[] = {
 		"A0",
@@ -59,8 +60,8 @@ Application::Application(Gtk::Notebook* notebook, string device, Hardware* hardw
 	for(int i = 0; i < 12; i++) {
 		rowLabels[i] = new Gtk::Label(labels[i]);
 		grid->attach(*rowLabels[i], 0, i+2, 1, 1);
-		solenoidActionControllers[i][0] = new SolenoidActionController(grid, 1, i+2);
-		solenoidActionControllers[i][1] = new SolenoidActionController(grid, 7, i+2);
+		solenoidActionControllers[i][0] = new SolenoidActionController(datalink, Stimulus(i, false), grid, 1, i+2);
+		solenoidActionControllers[i][1] = new SolenoidActionController(datalink, Stimulus(i, true), grid, 7, i+2);
 	}
 
 	notebook -> append_page(*grid, *label);
@@ -123,6 +124,17 @@ PT_THREAD(Application::run()) {
 			LOG(INFO) << "Pin Low: " << id << ":" << (int)datalink.peek(1);
 		} else if(datalink.peek(0) == OpCode::PIN_HIGH) {
 			LOG(INFO) << "Pin High: " << id << ":"  << (int)datalink.peek(1);
+		} else if(datalink.peek(0) == OpCode::SR_CONFIG) {
+			uint8_t i = 1;
+			if(datalink.incoming_frame_length() >= i+sizeof(Stimulus)) {
+				Stimulus stimulus;
+				stimulus.read_from(datalink, i);
+				if(datalink.incoming_frame_length() >= i+sizeof(SolenoidAction)) {
+					SolenoidAction action;
+					action.read_from(datalink, i);
+					solenoidActionControllers[stimulus.pin][stimulus.newState]->set(action);
+				}
+			}
 		}
 
 		datalink.next_incoming_frame();
