@@ -5,7 +5,7 @@
  *      Author: peter
  */
 
-#define BOOST_TEST_MODULE HLDCTest
+#define BOOST_TEST_MODULE test
 #include <boost/test/unit_test.hpp>
 
 #include <RingBuffer.h>
