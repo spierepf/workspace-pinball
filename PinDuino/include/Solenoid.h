@@ -11,8 +11,8 @@
 #include <stdint.h>
 
 #include <pt.h>
-#include <Timer.h>
 #include <PinBank.h>
+#include <Timer.h>
 
 class Solenoid {
 	struct pt pt;

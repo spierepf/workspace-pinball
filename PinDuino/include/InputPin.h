@@ -11,8 +11,8 @@
 #include <pt.h>
 
 #include <Application.h>
-#include <Timer.h>
 #include <PinBank.h>
+#include <Timer.h>
 
 class InputPin {
 	struct pt pt;
