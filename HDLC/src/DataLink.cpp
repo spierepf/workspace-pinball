@@ -17,9 +17,9 @@ DataLink::~DataLink() {
 }
 
 void DataLink::put(uint8_t b) {
-	if(b == 0x11 || b == 0x13 || b == 0x7d || b == 0x7e) {
-		outgoing_bytes.put(0x7d);
-		outgoing_bytes.put(b ^ 0x20);
+	if(b == XON || b == XOFF || b == ESC || b == FLAG) {
+		outgoing_bytes.put(ESC);
+		outgoing_bytes.put(b ^ MASK);
 	} else {
 		outgoing_bytes.put(b);
 	}
