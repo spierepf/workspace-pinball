@@ -48,7 +48,6 @@ PT_THREAD(Application::run()) {
 				stimulus.read_from(datalink, i);
 				if(datalink.incoming_frame_length() >= i+sizeof(SolenoidAction)) {
 					SolenoidAction action;
-					datalink.log("Received SR_CONFIG: %u:%u->%u:%u", stimulus.pin, stimulus.newState, action.enabled, action.solenoidIndex);
 					action.read_from(datalink, i);
 					stimulusResponse[stimulus] = action;
 					eeprom_busy_wait();
