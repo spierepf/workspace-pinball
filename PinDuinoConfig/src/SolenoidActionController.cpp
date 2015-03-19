@@ -97,6 +97,8 @@ void SolenoidActionController::onApplyClicked() {
 	stimulus.write_to(datalink);
 	action.write_to(datalink);
 	datalink.end_outgoing_frame();
+
+	update();
 }
 
 void SolenoidActionController::set(SolenoidAction action) {
