@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>PinDuinoConfig</name>
+	<name>Pin</name>
 	<comment></comment>
 	<projects>
-		<project>HDLC</project>
-		<project>Pin</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
