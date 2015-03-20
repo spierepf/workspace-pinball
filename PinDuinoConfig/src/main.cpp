@@ -5,9 +5,8 @@
  *      Author: peter
  */
 
+#include <EndPoint.h>
 #include <gtkmm.h>
-
-#include <Application.h>
 
 #include <stdio.h>
 #include <sys/stat.h>
@@ -24,7 +23,7 @@ INITIALIZE_EASYLOGGINGPP
 
 #include <fcntl.h>
 
-list<Application*> applications;
+list<EndPoint*> endPoints;
 FILE* fifo;
 Gtk::Notebook* notebook;
 
@@ -39,7 +38,7 @@ void setup() {
 bool loop() {
 	char s[300];
 
-	for(list<Application*>::iterator i=applications.begin(); i != applications.end(); ++i)
+	for(list<EndPoint*>::iterator i=endPoints.begin(); i != endPoints.end(); ++i)
 		(*i) -> schedule();
 
 	if(fgets(s, sizeof(s), fifo) != NULL) {
@@ -49,7 +48,7 @@ bool loop() {
 
 		try {
 			Hardware* hardware = new Tty(s);
-			applications.push_back(new Application(notebook, s, hardware));
+			endPoints.push_back(new EndPoint(notebook, s, hardware));
 			LOG(INFO) << "Pending connection to " << s;
 		} catch(SerialPort::OpenFailed& e) {
 			LOG(ERROR) << "While opening " << s << " : " << e.what();

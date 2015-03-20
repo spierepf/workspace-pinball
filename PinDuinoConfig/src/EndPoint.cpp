@@ -1,14 +1,14 @@
 /*
- * Application.cpp
+ * EndPoint.cpp
  *
  *  Created on: Feb 3, 2015
  *      Author: peter
  */
 
-#include <Application.h>
 #include <OpCode.h>
 
 #include <easylogging++.h>
+#include <EndPoint.h>
 #include <SolenoidAction.h>
 
 char* labels[] = {
@@ -26,7 +26,7 @@ char* labels[] = {
 		"7",
 };
 
-Application::Application(Gtk::Notebook* notebook, string device, Hardware* hardware) : notebook(notebook), device(device), hardware(hardware), datalink(*hardware), id(255) {
+EndPoint::EndPoint(Gtk::Notebook* notebook, string device, Hardware* hardware) : notebook(notebook), device(device), hardware(hardware), datalink(*hardware), id(255) {
 	PT_INIT(&pt);
 
 	grid = new Gtk::Grid();
@@ -68,7 +68,7 @@ Application::Application(Gtk::Notebook* notebook, string device, Hardware* hardw
 	notebook -> show_all();
 }
 
-Application::~Application() {
+EndPoint::~EndPoint() {
 	delete label;
 
 	delete inputLabel;
@@ -94,12 +94,12 @@ Application::~Application() {
 	delete grid;
 }
 
-void Application::schedule() {
+void EndPoint::schedule() {
 	datalink.schedule();
 	PT_SCHEDULE(run());
 }
 
-PT_THREAD(Application::run()) {
+PT_THREAD(EndPoint::run()) {
 	PT_BEGIN(&pt);
 	for(;;) {
 		PT_WAIT_UNTIL(&pt, datalink.have_incoming_frame());

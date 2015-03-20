@@ -1,12 +1,12 @@
 /*
- * Application.h
+ * EndPoint.h
  *
  *  Created on: Feb 3, 2015
  *      Author: peter
  */
 
-#ifndef APPLICATION_H_
-#define APPLICATION_H_
+#ifndef ENDPOINT_H_
+#define ENDPOINT_H_
 
 #include <gtkmm.h>
 
@@ -20,7 +20,7 @@ using namespace std;
 
 #include <SolenoidActionController.h>
 
-class Application {
+class EndPoint {
 	Gtk::Notebook* notebook;
 
 	Gtk::Grid *grid;
@@ -52,10 +52,10 @@ class Application {
 	PT_THREAD(run());
 
 public:
-	Application(Gtk::Notebook* notebook, string, Hardware*);
-	virtual ~Application();
+	EndPoint(Gtk::Notebook* notebook, string, Hardware*);
+	virtual ~EndPoint();
 
 	void schedule();
 };
 
-#endif /* APPLICATION_H_ */
+#endif /* ENDPOINT_H_ */
