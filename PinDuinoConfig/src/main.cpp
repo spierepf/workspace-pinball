@@ -5,58 +5,17 @@
  *      Author: peter
  */
 
-#include <EndPoint.h>
 #include <gtkmm.h>
-
-#include <stdio.h>
-#include <sys/stat.h>
-
-#include <list>
-
-using namespace std;
-
-#define FIFO_NAME "/tmp/american_maid"
 
 #include <easylogging++.h>
 
 INITIALIZE_EASYLOGGINGPP
 
-#include <fcntl.h>
+#include <EndPointManager.h>
 
-list<EndPoint*> endPoints;
-FILE* fifo;
+EndPointManager endPointManager;
+
 Gtk::Notebook* notebook;
-
-void setup() {
-    mknod(FIFO_NAME, S_IFIFO | 0666, 0);
-	fifo = fopen(FIFO_NAME, "w+");
-	int fd = fileno(fifo);
-	int flags = fcntl(fd, F_GETFL, 0) | O_NONBLOCK;
-	fcntl(fd, F_SETFL, flags);
-}
-
-bool loop() {
-	char s[300];
-
-	for(list<EndPoint*>::iterator i=endPoints.begin(); i != endPoints.end(); ++i)
-		(*i) -> schedule();
-
-	if(fgets(s, sizeof(s), fifo) != NULL) {
-		char *end = s + strlen(s) - 1;
-		while(end > s && isspace(*end)) end--;
-		*(end+1) = 0;
-
-		try {
-			Hardware* hardware = new Tty(s);
-			endPoints.push_back(new EndPoint(notebook, s, hardware));
-			LOG(INFO) << "Pending connection to " << s;
-		} catch(SerialPort::OpenFailed& e) {
-			LOG(ERROR) << "While opening " << s << " : " << e.what();
-		}
-	}
-
-	return true;
-}
 
 int main(int argc, char **argv) {
 	START_EASYLOGGINGPP(argc, argv);
@@ -69,8 +28,8 @@ int main(int argc, char **argv) {
 	notebook = new Gtk::Notebook();
 	window.add(*notebook);
 
-	setup();
-	Glib::signal_idle().connect( &loop );
+	endPointManager.setup();
+	Glib::signal_idle().connect( sigc::mem_fun(&endPointManager, &EndPointManager::loop) );
 
 	return app->run(window);
 }
