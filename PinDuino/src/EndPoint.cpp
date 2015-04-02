@@ -1,5 +1,5 @@
 /*
- * Application.cpp
+ * EndPoint.cpp
  *
  *  Created on: Feb 3, 2015
  *      Author: peter
@@ -9,11 +9,11 @@
 extern uint8_t eeprom_id;
 extern uint32_t eeprom_actions[12][2];
 
-#include <Application.h>
+#include <EndPoint.h>
 #include <OpCode.h>
 #include <StimulusResponse.h>
 
-Application::Application(PingPong &pingPong) : pingPong(pingPong) {
+EndPoint::EndPoint(PingPong &pingPong) : pingPong(pingPong) {
 	PT_INIT(&pt);
 
 	eeprom_busy_wait();
@@ -22,15 +22,15 @@ Application::Application(PingPong &pingPong) : pingPong(pingPong) {
 	datalink.end_outgoing_frame();
 }
 
-Application::~Application() {
+EndPoint::~EndPoint() {
 	// TODO Auto-generated destructor stub
 }
 
-void Application::schedule() {
+void EndPoint::schedule() {
 	PT_SCHEDULE(run());
 }
 
-PT_THREAD(Application::run()) {
+PT_THREAD(EndPoint::run()) {
 	PT_BEGIN(&pt);
 	for(;;) {
 		PT_WAIT_UNTIL(&pt, datalink.have_incoming_frame());

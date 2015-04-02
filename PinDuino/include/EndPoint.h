@@ -1,29 +1,29 @@
 /*
- * Application.h
+ * EndPoint.h
  *
  *  Created on: Feb 3, 2015
  *      Author: peter
  */
 
-#ifndef APPLICATION_H_
-#define APPLICATION_H_
+#ifndef ENDPOINT_H_
+#define ENDPOINT_H_
 
 #include <pt.h>
 
 #include <PinDuinoDataLink.h>
 #include <PingPong.h>
 
-class Application {
+class EndPoint {
 	struct pt pt;
 	PT_THREAD(run());
 
 	PingPong& pingPong;
 
 public:
-	Application(PingPong&);
-	virtual ~Application();
+	EndPoint(PingPong&);
+	virtual ~EndPoint();
 
 	void schedule();
 };
 
-#endif /* APPLICATION_H_ */
+#endif /* ENDPOINT_H_ */

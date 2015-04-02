@@ -10,8 +10,8 @@
 #include <Uart.h>
 #include <DataLink.h>
 #include <Solenoid.h>
-#include <Application.h>
 #include <Blinker.h>
+#include <EndPoint.h>
 #include <InputPin.h>
 #include <StimulusResponse.h>
 
@@ -60,26 +60,26 @@ Solenoid solenoids[6] = {
 
 StimulusResponse stimulusResponse;
 
-Application application(pingPong);
+EndPoint endPoint(pingPong);
 Blinker blinker;
 
 PinBank pinBankC(PinBank::C, 0b00111111);
 PinBank pinBankD(PinBank::D, 0b11111100);
 
 InputPin inputPins[12] = {
-		InputPin(application, pinBankC, 0, 0),
-		InputPin(application, pinBankC, 1, 1),
-		InputPin(application, pinBankC, 2, 2),
-		InputPin(application, pinBankC, 3, 3),
-		InputPin(application, pinBankC, 4, 4),
-		InputPin(application, pinBankC, 5, 5),
+		InputPin(endPoint, pinBankC, 0, 0),
+		InputPin(endPoint, pinBankC, 1, 1),
+		InputPin(endPoint, pinBankC, 2, 2),
+		InputPin(endPoint, pinBankC, 3, 3),
+		InputPin(endPoint, pinBankC, 4, 4),
+		InputPin(endPoint, pinBankC, 5, 5),
 
-		InputPin(application, pinBankD, 2, 6),
-		InputPin(application, pinBankD, 3, 7),
-		InputPin(application, pinBankD, 4, 8),
-		InputPin(application, pinBankD, 5, 9),
-		InputPin(application, pinBankD, 6, 10),
-		InputPin(application, pinBankD, 7, 11)
+		InputPin(endPoint, pinBankD, 2, 6),
+		InputPin(endPoint, pinBankD, 3, 7),
+		InputPin(endPoint, pinBankD, 4, 8),
+		InputPin(endPoint, pinBankD, 5, 9),
+		InputPin(endPoint, pinBankD, 6, 10),
+		InputPin(endPoint, pinBankD, 7, 11)
 };
 
 void setup() {
@@ -105,7 +105,7 @@ void loop() {
 	while(sizeof(SolenoidAction)!=4);
 	while(sizeof(Stimulus)!=1);
 	datalink.schedule();
-	application.schedule();
+	endPoint.schedule();
 	pingPong.schedule();
 	blinker.schedule();
 	for(size_t i = 0; i < sizeof(inputPins) / sizeof(InputPin); i++) {

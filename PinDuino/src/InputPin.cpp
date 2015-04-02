@@ -13,7 +13,7 @@
 
 #include "InputPin.h"
 
-InputPin::InputPin(Application& application, PinBank& bank, uint8_t index, uint8_t id) : application(application), bank(bank), mask(_BV(index)), id(id) {
+InputPin::InputPin(EndPoint& endPoint, PinBank& bank, uint8_t index, uint8_t id) : endPoint(endPoint), bank(bank), mask(_BV(index)), id(id) {
 	PT_INIT(&pt);
 }
 
