@@ -10,8 +10,6 @@
 
 #include "Tty.h"
 
-namespace Pin {
-
 Tty::Tty(const char* device) : serial(device) {
 	serial.Open(SerialPort::BAUD_115200);
 }
@@ -44,5 +42,3 @@ void Tty::put(uint8_t b) {
 		}
 	} while(retry);
 }
-
-} /* namespace Pin */

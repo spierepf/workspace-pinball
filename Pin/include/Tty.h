@@ -12,8 +12,6 @@
 
 #include <Hardware.h>
 
-namespace Pin {
-
 class Tty : public Hardware {
 	SerialPort serial;
 
@@ -26,7 +24,5 @@ public:
 	virtual uint8_t get();
 	virtual void put(uint8_t);
 };
-
-} /* namespace Pin */
 
 #endif /* TTY_H_ */

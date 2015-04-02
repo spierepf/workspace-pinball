@@ -47,7 +47,7 @@ bool EndPointManager::loop() {
 		*(end+1) = 0;
 
 		try {
-			Hardware* hardware = new Pin::Tty(s);
+			Hardware* hardware = new Tty(s);
 			endPoints.push_back(new EndPoint(notebook, s, hardware));
 			LOG(INFO) << "Pending connection to " << s;
 		} catch(SerialPort::OpenFailed& e) {
