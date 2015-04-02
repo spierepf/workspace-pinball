@@ -1,5 +1,5 @@
 //============================================================================
-// Name        : KingPinRegistraar.cpp
+// Name        : PinDuinoRegistrar.cpp
 // Author      : 
 // Version     :
 // Copyright   : Your copyright notice
