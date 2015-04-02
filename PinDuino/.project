@@ -32,5 +32,10 @@
 			<type>2</type>
 			<locationURI>WORKSPACE_LOC/HDLC/src</locationURI>
 		</link>
+		<link>
+			<name>pin</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/Pin/src</locationURI>
+		</link>
 	</linkedResources>
 </projectDescription>

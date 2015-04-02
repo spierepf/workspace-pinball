@@ -8,22 +8,20 @@
 #ifndef ENDPOINT_H_
 #define ENDPOINT_H_
 
-#include <pt.h>
+#include <AbstractEndPoint.h>
 
 #include <PinDuinoDataLink.h>
 #include <PingPong.h>
 
-class EndPoint {
-	struct pt pt;
-	PT_THREAD(run());
-
+class EndPoint : public AbstractEndPoint {
 	PingPong& pingPong;
 
-public:
-	EndPoint(PingPong&);
-	virtual ~EndPoint();
+protected:
+	void handleIncomingFrame();
 
-	void schedule();
+public:
+	EndPoint(DataLink&, PingPong&);
+	virtual ~EndPoint();
 };
 
 #endif /* ENDPOINT_H_ */

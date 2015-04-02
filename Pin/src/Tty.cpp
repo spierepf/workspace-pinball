@@ -5,6 +5,8 @@
  *      Author: peter
  */
 
+#ifndef AVR
+
 #include <SerialPort.h>
 #include <errno.h>
 
@@ -42,3 +44,5 @@ void Tty::put(uint8_t b) {
 		}
 	} while(retry);
 }
+
+#endif

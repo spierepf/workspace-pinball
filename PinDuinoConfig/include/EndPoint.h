@@ -8,9 +8,9 @@
 #ifndef ENDPOINT_H_
 #define ENDPOINT_H_
 
-#include <gtkmm.h>
+#include <AbstractEndPoint.h>
 
-#include <pt.h>
+#include <gtkmm.h>
 
 #include <Tty.h>
 #include <DataLink.h>
@@ -20,7 +20,7 @@ using namespace std;
 
 #include <SolenoidActionController.h>
 
-class EndPoint {
+class EndPoint : public AbstractEndPoint {
 	Gtk::Notebook* notebook;
 
 	Gtk::Grid *grid;
@@ -45,17 +45,14 @@ class EndPoint {
 
 	string device;
 	Hardware* hardware;
-	DataLink datalink;
 	int id;
-	struct pt pt;
 
-	PT_THREAD(run());
+protected:
+	void handleIncomingFrame();
 
 public:
-	EndPoint(Gtk::Notebook* notebook, string, Hardware*);
+	EndPoint(Gtk::Notebook* notebook, string, Hardware*, DataLink*);
 	virtual ~EndPoint();
-
-	void schedule();
 };
 
 #endif /* ENDPOINT_H_ */

@@ -32,6 +32,7 @@
 								<option id="de.innot.avreclipse.compiler.option.optimize.378847109" name="Optimization Level" superClass="de.innot.avreclipse.compiler.option.optimize" value="de.innot.avreclipse.compiler.optimize.size" valueType="enumerated"/>
 								<option id="de.innot.avreclipse.compiler.option.incpath.1360771068" name="Include Paths (-I)" superClass="de.innot.avreclipse.compiler.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Pin/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/common/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pt/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/HDLC/include}&quot;"/>
@@ -49,6 +50,7 @@
 								<option id="de.innot.avreclipse.cppcompiler.option.optimize.1650393989" name="Optimization Level" superClass="de.innot.avreclipse.cppcompiler.option.optimize" value="de.innot.avreclipse.cppcompiler.optimize.size" valueType="enumerated"/>
 								<option id="de.innot.avreclipse.cppcompiler.option.incpath.1111753119" name="Include Paths (-I)" superClass="de.innot.avreclipse.cppcompiler.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Pin/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/common/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pt/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/HDLC/include}&quot;"/>
@@ -93,12 +95,12 @@
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-		<project id="Arduino EndPoint.de.innot.avreclipse.project.winavr.elf_2.1.0.1965882447" name="AVR Cross Target EndPoint" projectType="de.innot.avreclipse.project.winavr.elf_2.1.0"/>
+		<project id="Arduino Application.de.innot.avreclipse.project.winavr.elf_2.1.0.1965882447" name="AVR Cross Target Application" projectType="de.innot.avreclipse.project.winavr.elf_2.1.0"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="Debug">
-			<resource resourceType="PROJECT" workspacePath="/Arduino EndPoint"/>
+			<resource resourceType="PROJECT" workspacePath="/Arduino Application"/>
 		</configuration>
 	</storageModule>
 	<storageModule moduleId="scannerConfiguration">

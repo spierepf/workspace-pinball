@@ -60,7 +60,7 @@ Solenoid solenoids[6] = {
 
 StimulusResponse stimulusResponse;
 
-EndPoint endPoint(pingPong);
+EndPoint endPoint(datalink, pingPong);
 Blinker blinker;
 
 PinBank pinBankC(PinBank::C, 0b00111111);
@@ -104,7 +104,6 @@ void setup() {
 void loop() {
 	while(sizeof(SolenoidAction)!=4);
 	while(sizeof(Stimulus)!=1);
-	datalink.schedule();
 	endPoint.schedule();
 	pingPong.schedule();
 	blinker.schedule();
