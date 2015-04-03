@@ -50,12 +50,12 @@ PinBank pinBankB5(PinBank::B, _BV(5));
 PingPong pingPong;
 
 Solenoid solenoids[6] = {
-		Solenoid(pinBankB0),
-		Solenoid(pinBankB1),
-		Solenoid(pinBankB2),
-		Solenoid(pinBankB3),
-		Solenoid(pinBankB4),
-		Solenoid(pinBankB5)
+		Solenoid(pinBankB0, TCCR0A, 0, 0, OCR0A),
+		Solenoid(pinBankB1, TCCR1A, _BV(COM1A1) | _BV(COM1A0), _BV(COM1A1), OCR1AL),
+		Solenoid(pinBankB2, TCCR1A, _BV(COM1B1) | _BV(COM1B0), _BV(COM1B1), OCR1BL),
+		Solenoid(pinBankB3, TCCR2A, _BV(COM2A1) | _BV(COM2A0), _BV(COM2A1), OCR2A),
+		Solenoid(pinBankB4, TCCR0A, 0, 0, OCR0A),
+		Solenoid(pinBankB5, TCCR0A, 0, 0, OCR0A)
 };
 
 StimulusResponse stimulusResponse;
@@ -92,8 +92,6 @@ void setup() {
 	pinBankD.dataLow();
 	pinBankD.dirIn();
 	pinBankD.dataHigh();
-
-	solenoids[3].trigger(65000, 1);
 
 	for(int i = 0; i < 12; i++) {
 		eeprom_busy_wait();

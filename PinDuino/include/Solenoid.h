@@ -19,16 +19,31 @@ class Solenoid {
 	PT_THREAD(run());
 
 	PinBank pin;
-	uint16_t duration;
+	uint16_t attack;
+	uint8_t sustain;
 	Timer<uint16_t> timer;
 
+	volatile uint8_t& tccra;
+	uint8_t pwmMask;
+	uint8_t pwmEnableBits;
+	volatile uint8_t& ocr;
+
+	void enablePWM();
+	void disablePWM();
+	void setOCR(uint8_t);
+
+	void beginSustain();
+
+	bool inAttack();
+	bool inSustain();
+	bool inRelease();
+
 public:
-	Solenoid(PinBank&);
+	Solenoid(PinBank&, volatile uint8_t&, uint8_t, uint8_t, volatile uint8_t&);
 	virtual ~Solenoid();
 
 	void trigger(uint16_t, uint8_t);
 	void release();
-	bool triggered();
 
 	void schedule();
 };
