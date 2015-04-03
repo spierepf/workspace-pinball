@@ -26,7 +26,7 @@ public:
 	Solenoid(PinBank&);
 	virtual ~Solenoid();
 
-	void trigger(uint16_t);
+	void trigger(uint16_t, uint8_t);
 	void release();
 	bool triggered();
 

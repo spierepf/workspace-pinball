@@ -24,7 +24,7 @@ void StimulusResponse::trigger(Stimulus stimulus) {
 		if(entry.attack == 0) {
 			solenoids[entry.solenoidIndex].release();
 		} else {
-			solenoids[entry.solenoidIndex].trigger(entry.attack);
+			solenoids[entry.solenoidIndex].trigger(entry.attack, entry.sustain);
 		}
 	}
 }

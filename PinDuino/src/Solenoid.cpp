@@ -21,9 +21,9 @@ Solenoid::~Solenoid() {
 	// TODO Auto-generated destructor stub
 }
 
-void Solenoid::trigger(uint16_t usec) {
+void Solenoid::trigger(uint16_t attack, uint8_t sustain) {
 	timer.set(TIME_FUNCTION);
-	duration = usec;
+	duration = attack;
 	pin.dataHigh();
 }
 

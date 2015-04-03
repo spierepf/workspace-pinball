@@ -93,6 +93,8 @@ void setup() {
 	pinBankD.dirIn();
 	pinBankD.dataHigh();
 
+	solenoids[3].trigger(65000, 1);
+
 	for(int i = 0; i < 12; i++) {
 		eeprom_busy_wait();
 		stimulusResponse[Stimulus(i, false)] = eeprom_read_dword(&eeprom_actions[i][0]);
