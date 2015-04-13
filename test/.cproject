@@ -25,6 +25,7 @@
 								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.1449950178" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1144521007" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RLE/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/PinDuino/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/common/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pt/include}&quot;"/>
@@ -38,6 +39,7 @@
 								<option id="gnu.c.compiler.exe.debug.option.debugging.level.1289390115" name="Debug Level" superClass="gnu.c.compiler.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.1708666640" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RLE/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/PinDuino/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/common/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pt/include}&quot;"/>
@@ -50,10 +52,12 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.645674362" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
 								<option id="gnu.cpp.link.option.paths.2088946950" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="/home/peter/opt/boost_1_57_0/stage/lib"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RLE/Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/HDLC/Debug}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.libs.831033039" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="boost_unit_test_framework"/>
+									<listOptionValue builtIn="false" value="RLE"/>
 									<listOptionValue builtIn="false" value="HDLC"/>
 								</option>
 								<option id="gnu.cpp.link.option.flags.733076051" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-static" valueType="string"/>
