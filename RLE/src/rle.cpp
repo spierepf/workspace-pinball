@@ -45,7 +45,7 @@ size_t rle_compress(uint8_t src[], size_t src_size, uint8_t buf[]) {
 	return retval;
 }
 
-size_t rle_decompress(uint8_t buf[], size_t buf_size, uint8_t dst[]) {
+size_t rle_decompress(const uint8_t buf[], size_t buf_size, uint8_t dst[]) {
 	size_t byte_position = 0;
 	size_t bit_position = 0;
 	uint8_t bit = 1;

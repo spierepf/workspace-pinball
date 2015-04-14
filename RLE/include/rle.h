@@ -12,6 +12,6 @@
 #include <stdlib.h>
 
 size_t rle_compress(uint8_t[], size_t, uint8_t[]);
-size_t rle_decompress(uint8_t[], size_t, uint8_t[]);
+size_t rle_decompress(const uint8_t[], size_t, uint8_t[]);
 
 #endif /* INCLUDE_RLE_H_ */

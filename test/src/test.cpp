@@ -18,6 +18,7 @@
 #include <StimulusActionMap.h>
 
 #include <rle.h>
+#include <RleDecoder.h>
 
 BOOST_AUTO_TEST_CASE( ringbuffer_constructor ) {
 	RingBuffer<2> ringbuffer;
@@ -440,6 +441,19 @@ BOOST_AUTO_TEST_CASE( rle_decompress_test ) {
 	static unsigned char dst[3];
 
 	BOOST_CHECK_EQUAL(2, rle_decompress(buf, sizeof(buf), dst));
+	BOOST_CHECK_EQUAL(0xf0, dst[0]);
+	BOOST_CHECK_EQUAL(0x0f, dst[1]);
+}
+
+BOOST_AUTO_TEST_CASE( RleDecoder_test ) {
+	static unsigned char dst[3];
+	RleDecoder decoder(dst);
+
+	decoder.write(4);
+	decoder.write(8);
+	decoder.write(4);
+
+	BOOST_CHECK(2 == decoder.length());
 	BOOST_CHECK_EQUAL(0xf0, dst[0]);
 	BOOST_CHECK_EQUAL(0x0f, dst[1]);
 }
