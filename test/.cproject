@@ -30,7 +30,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/common/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pt/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/HDLC/include}&quot;"/>
-									<listOptionValue builtIn="false" value="/home/peter/opt/boost_1_57_0"/>
+									<listOptionValue builtIn="false" value="${HOME}/opt/boost_1_57_0"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1271932657" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
@@ -44,14 +44,14 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/common/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pt/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/HDLC/include}&quot;"/>
-									<listOptionValue builtIn="false" value="/home/peter/opt/boost_1_57_0"/>
+									<listOptionValue builtIn="false" value="${HOME}/opt/boost_1_57_0"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1430863591" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1467467531" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.645674362" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
 								<option id="gnu.cpp.link.option.paths.2088946950" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="/home/peter/opt/boost_1_57_0/stage/lib"/>
+									<listOptionValue builtIn="false" value="${HOME}/opt/boost_1_57_0/stage/lib"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RLE/Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/HDLC/Debug}&quot;"/>
 								</option>
