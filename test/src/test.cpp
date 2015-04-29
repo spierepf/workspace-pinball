@@ -555,5 +555,5 @@ BOOST_AUTO_TEST_CASE( rle_test ) {
 
 	BOOST_CHECK(byte_count == sizeof(src));
 
-	for(int i = 0; i < sizeof(src); i++) BOOST_CHECK_EQUAL(src[i], dst[i]);
+	for(size_t i = 0; i < sizeof(src); i++) BOOST_CHECK_EQUAL(src[i], dst[i]);
 }
