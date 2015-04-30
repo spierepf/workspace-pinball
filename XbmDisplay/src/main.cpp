@@ -36,7 +36,8 @@
  * CS		10
  */
 
-u8g_t u8g;
+u8g_t u8g_cs_7;
+u8g_t u8g_cs_10;
 
 const unsigned char* bitmaps[] = {
 		H_rle_data,
@@ -82,22 +83,38 @@ uint16_t lengths[] = {
 
 uint8_t image_buffer[1024];
 
-void draw(void)
-{
-	u8g_DrawXBM(&u8g, 0, 0, 128, 64, image_buffer);
+void update_display(u8g_t* display) {
+	u8g_FirstPage(display);
+	do
+		u8g_DrawXBM(display, 0, 0, 128, 64, image_buffer);
+	while (u8g_NextPage(display));
 }
 
 int main(void)
 {
 	int i = 0;
 
+	uint8_t cs_7 = PN(3, 7);
+	uint8_t cs_10 = PN(1, 2);
+	uint8_t reset = PN(1, 0);
+
+	u8g_SetPinOutput(cs_7);
+	u8g_SetPinOutput(cs_10);
+
+	u8g_SetPinLevel(cs_7, 1);
+	u8g_SetPinLevel(cs_10, 1);
+
+	u8g_SetPinOutput(reset);
+	u8g_SetPinLevel(reset, 0);
+	u8g_SetPinLevel(reset, 1);
+
 	/*
-	CS: PORTB, Bit 2 --> PN(1,2)
 	A0: PORTB, Bit 1 --> PN(1,1)
 	SCK: PORTB, Bit 5 --> PN(1,5)
 	MOSI: PORTB, Bit 3 --> PN(1,3)
 	*/
-	u8g_InitSPI(&u8g, &u8g_dev_ssd1306_128x64_2x_hw_spi, PN(1, 5), PN(1, 3), PN(1, 2), PN(1, 1), PN(1, 0));
+	u8g_InitSPI(&u8g_cs_10, &u8g_dev_ssd1306_128x64_2x_hw_spi, PN(1, 5), PN(1, 3), cs_10, PN(1, 1), 0);
+	u8g_InitSPI(&u8g_cs_7, &u8g_dev_ssd1306_128x64_2x_hw_spi, PN(1, 5), PN(1, 3), cs_7, PN(1, 1), 0);
 
 	for(;;) {
 		RleDecoder decoder(image_buffer);
@@ -105,12 +122,9 @@ int main(void)
 			decoder.write(pgm_read_byte(bitmaps[i] + j));
 		}
 
-		u8g_FirstPage(&u8g);
-		do
-		{
-			draw();
-		} while ( u8g_NextPage(&u8g) );
-		u8g_Delay(1000);
+		update_display(i % 2 ? &u8g_cs_10 : &u8g_cs_7);
+
+		u8g_Delay(500);
 
 		i = (i + 1) % 18;
 	}
