@@ -46,6 +46,7 @@ void EndPoint::handleIncomingFrame() {
 				datalink.begin_outgoing_frame(OpCode::SR_CONFIG);
 				stimulus.write_to(datalink);
 				stimulusResponse[stimulus].write_to(datalink);
+				datalink.end_outgoing_frame();
 			}
 		}
 	}
