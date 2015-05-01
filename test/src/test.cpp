@@ -20,6 +20,15 @@
 #include <rle.h>
 #include <RleDecoder.h>
 
+class TestDataLink : public DataLink {
+public:
+	TestDataLink(Hardware &hardware) : DataLink(hardware) {
+	}
+
+	void log(const char *fmt, ...) {
+	}
+};
+
 BOOST_AUTO_TEST_CASE( ringbuffer_constructor ) {
 	RingBuffer<2> ringbuffer;
 
@@ -147,7 +156,7 @@ BOOST_AUTO_TEST_CASE( datalink_get ) {
 	RingBuffer<16> incoming_bytes;
 	RingBuffer<16> outgoing_bytes;
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
-	DataLink datalink(hardware);
+	TestDataLink datalink(hardware);
 
 	hardware.incoming_bytes.put(0);
 
@@ -160,7 +169,7 @@ BOOST_AUTO_TEST_CASE( datalink_get_escape ) {
 	RingBuffer<16> incoming_bytes;
 	RingBuffer<16> outgoing_bytes;
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
-	DataLink datalink(hardware);
+	TestDataLink datalink(hardware);
 
 	hardware.incoming_bytes.put(0x7d);
 	hardware.incoming_bytes.put(0x11 ^ 0x20);
@@ -174,7 +183,7 @@ BOOST_AUTO_TEST_CASE( datalink_have_incoming_frame ) {
 	RingBuffer<16> incoming_bytes;
 	RingBuffer<16> outgoing_bytes;
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
-	DataLink datalink(hardware);
+	TestDataLink datalink(hardware);
 
 	BOOST_CHECK( !datalink.have_incoming_frame() );
 
@@ -191,7 +200,7 @@ BOOST_AUTO_TEST_CASE( datalink_incoming_frame_length ) {
 	RingBuffer<16> incoming_bytes;
 	RingBuffer<16> outgoing_bytes;
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
-	DataLink datalink(hardware);
+	TestDataLink datalink(hardware);
 
 	hardware.incoming_bytes.put(0x00);
 	hardware.incoming_bytes.put(0x7e);
@@ -206,7 +215,7 @@ BOOST_AUTO_TEST_CASE( datalink_next_incoming_frame ) {
 	RingBuffer<16> incoming_bytes;
 	RingBuffer<16> outgoing_bytes;
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
-	DataLink datalink(hardware);
+	TestDataLink datalink(hardware);
 
 	hardware.incoming_bytes.put(0x00);
 	hardware.incoming_bytes.put(0x7e);
@@ -229,7 +238,7 @@ BOOST_AUTO_TEST_CASE( datalink_outgoing_frame ) {
 	RingBuffer<16> incoming_bytes;
 	RingBuffer<16> outgoing_bytes;
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
-	DataLink datalink(hardware);
+	TestDataLink datalink(hardware);
 
 	datalink.begin_outgoing_frame(0x00);
 	datalink.append_payload(0x01);
@@ -255,7 +264,7 @@ BOOST_AUTO_TEST_CASE( datalink_outgoing_frame_escape ) {
 	RingBuffer<16> incoming_bytes;
 	RingBuffer<16> outgoing_bytes;
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
-	DataLink datalink(hardware);
+	TestDataLink datalink(hardware);
 
 	datalink.begin_outgoing_frame(0x11);
 	datalink.append_payload(0x13);
@@ -282,7 +291,7 @@ BOOST_AUTO_TEST_CASE( datalink_no_output ) {
 	RingBuffer<16> incoming_bytes;
 	RingBuffer<16> outgoing_bytes;
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
-	DataLink datalink(hardware);
+	TestDataLink datalink(hardware);
 
 	datalink.schedule();
 
@@ -293,7 +302,7 @@ BOOST_AUTO_TEST_CASE( datalink_no_input ) {
 	RingBuffer<16> incoming_bytes;
 	RingBuffer<16> outgoing_bytes;
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
-	DataLink datalink(hardware);
+	TestDataLink datalink(hardware);
 
 	datalink.schedule();
 	datalink.end_outgoing_frame();
@@ -308,8 +317,8 @@ BOOST_AUTO_TEST_CASE( datalink_ping ) {
 	MockHardware hardware_a(b_to_a, a_to_b);
 	MockHardware hardware_b(a_to_b, b_to_a);
 
-	DataLink datalink_a(hardware_a);
-	DataLink datalink_b(hardware_b);
+	TestDataLink datalink_a(hardware_a);
+	TestDataLink datalink_b(hardware_b);
 
 	datalink_a.begin_outgoing_frame(0x00);
 	datalink_a.append_payload(0x01);
@@ -356,8 +365,8 @@ BOOST_AUTO_TEST_CASE( read_write_solenoid_action_through_datalink ) {
 	MockHardware hardware_a(b_to_a, a_to_b);
 	MockHardware hardware_b(a_to_b, b_to_a);
 
-	DataLink datalink_a(hardware_a);
-	DataLink datalink_b(hardware_b);
+	TestDataLink datalink_a(hardware_a);
+	TestDataLink datalink_b(hardware_b);
 
 	datalink_a.begin_outgoing_frame(0x00);
 	action.write_to(datalink_a);
@@ -388,8 +397,8 @@ BOOST_AUTO_TEST_CASE( read_write_stimulus_through_datalink ) {
 	MockHardware hardware_a(b_to_a, a_to_b);
 	MockHardware hardware_b(a_to_b, b_to_a);
 
-	DataLink datalink_a(hardware_a);
-	DataLink datalink_b(hardware_b);
+	TestDataLink datalink_a(hardware_a);
+	TestDataLink datalink_b(hardware_b);
 
 	datalink_a.begin_outgoing_frame(0x00);
 	stimulus.write_to(datalink_a);

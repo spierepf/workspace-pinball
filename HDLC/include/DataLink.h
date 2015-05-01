@@ -87,6 +87,9 @@ public:
 
 	/** Completes the current outgoing frame. */
 	void end_outgoing_frame();
+
+	/** Emits a log message. */
+	virtual void log(const char*, ...) = 0;
 };
 
 #endif /* DATALINK_H_ */

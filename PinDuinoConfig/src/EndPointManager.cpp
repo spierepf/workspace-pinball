@@ -7,6 +7,8 @@
 
 #include "EndPointManager.h"
 
+#include "HostDataLink.h"
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -48,7 +50,7 @@ bool EndPointManager::loop() {
 
 		try {
 			Hardware* hardware = new Tty(s);
-			DataLink* datalink = new DataLink(*hardware);
+			DataLink* datalink = new HostDataLink(*hardware);
 			endPoints.push_back(new EndPoint(notebook, s, hardware, datalink));
 			LOG(INFO) << "Pending connection to " << s;
 		} catch(SerialPort::OpenFailed& e) {
