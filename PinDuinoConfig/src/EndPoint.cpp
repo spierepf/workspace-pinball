@@ -109,6 +109,9 @@ void EndPoint::handleIncomingFrame() {
 		LOG(INFO) << "Device " << device << " registered id: " << (int)id;
 		datalink.begin_outgoing_frame(OpCode::SR_ENABLE);
 		datalink.end_outgoing_frame();
+		ostringstream convert;
+		convert << id;
+		label->set_text(convert.str());
 	} else if(datalink.peek(0) == OpCode::PIN_LOW) {
 		LOG(INFO) << "Pin Low: " << id << ":" << (int)datalink.peek(1);
 	} else if(datalink.peek(0) == OpCode::PIN_HIGH) {
