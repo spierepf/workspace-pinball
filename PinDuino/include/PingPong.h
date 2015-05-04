@@ -19,9 +19,9 @@ class PingPong {
 
 	Timer<unsigned long> timer;
 	unsigned long total_latency;
-	unsigned long wait_time;
 	uint8_t counter;
 	bool pongAccepted;
+	uint16_t missedPings;
 
 	void sendPing();
 

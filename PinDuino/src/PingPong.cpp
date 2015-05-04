@@ -12,7 +12,7 @@
 
 #define N 128
 
-PingPong::PingPong() : total_latency(0), wait_time(0), counter(0), pongAccepted(false) {
+PingPong::PingPong() : total_latency(0), counter(0), pongAccepted(false), missedPings(0) {
 	PT_INIT(&pt);
 }
 
@@ -28,28 +28,24 @@ PT_THREAD(PingPong::run()) {
 	PT_BEGIN(&pt);
 	for(;;) {
 		for(counter = 0; counter < N; counter++) {
-			// random delay
-			wait_time = random(100000);
 			timer.set(micros());
-			PT_WAIT_UNTIL(&pt, timer.elapsed(micros()) > wait_time);
-
-			timer.set(micros());
-
-			pongAccepted = false;
 			sendPing();
-
-			PT_WAIT_UNTIL(&pt, pongAccepted);
-
+			PT_WAIT_UNTIL(&pt, pongAccepted || timer.elapsed(micros()) > 100000);
+			if(!pongAccepted) missedPings++;
 			total_latency += timer.elapsed(micros());
+			PT_WAIT_UNTIL(&pt, timer.elapsed(micros()) > 100000);
 		}
 
 		datalink.log("Average Latency: %lu us", total_latency / N);
+		if(missedPings > 0) datalink.log("\tMissed Pings: %u", missedPings);
+		missedPings = 0;
 		total_latency = 0;
 	}
 	PT_END(&pt);
 }
 
 void PingPong::sendPing() {
+	pongAccepted = false;
 	datalink.begin_outgoing_frame(OpCode::PING); // ping
 	datalink.append_payload(counter);
 	datalink.end_outgoing_frame();
