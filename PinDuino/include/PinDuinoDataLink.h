@@ -15,7 +15,7 @@ public:
 	PinDuinoDataLink(ByteSource&, ByteSink&);
 	virtual ~PinDuinoDataLink();
 
-	virtual void log(const char*, ...);
+	void log(const char*, ...);
 };
 
 extern PinDuinoDataLink datalink;
