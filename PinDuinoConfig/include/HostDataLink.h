@@ -12,7 +12,7 @@
 
 class HostDataLink: public DataLink {
 public:
-	HostDataLink(Hardware&);
+	HostDataLink(ByteSource&, ByteSink&);
 	virtual ~HostDataLink();
 
 	virtual void log(const char*, ...);

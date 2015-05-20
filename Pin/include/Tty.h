@@ -10,17 +10,18 @@
 
 #include <SerialPort.h>
 
-#include <Hardware.h>
+#include <ByteSource.h>
+#include <ByteSink.h>
 
-class Tty : public Hardware {
+class Tty : public ByteSource, public ByteSink {
 	SerialPort serial;
 
 public:
 	Tty(const char*);
 	virtual ~Tty();
 
-	virtual bool get_ready();
-	virtual bool put_ready();
+	virtual bool getReady();
+	virtual bool putReady();
 	virtual uint8_t get();
 	virtual void put(uint8_t);
 };

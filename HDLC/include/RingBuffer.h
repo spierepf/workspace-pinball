@@ -10,8 +10,11 @@
 
 #include <stdint.h>
 
+#include <ByteSource.h>
+#include <ByteSink.h>
+
 template<uint8_t SIZE> // SIZE must be a power of 2
-class RingBuffer {
+class RingBuffer : public ByteSource, public ByteSink {
 	uint8_t buf[SIZE];
 	uint8_t count;
 	uint8_t head;
@@ -34,12 +37,20 @@ public:
 		return SIZE == count;
 	}
 
+	bool putReady() {
+		return !full();
+	}
+
 	void put(uint8_t b) {
 		if(!full()) {
 			buf[head] = b;
 			head = modulo_add(head, 1);
 			count++;
 		}
+	}
+
+	bool getReady() {
+		return !empty();
 	}
 
 	uint8_t get() {

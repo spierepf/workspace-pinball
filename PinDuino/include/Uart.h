@@ -8,15 +8,16 @@
 #ifndef UART_H_
 #define UART_H_
 
-#include <Hardware.h>
+#include <ByteSource.h>
+#include <ByteSink.h>
 
-class Uart : public Hardware {
+class Uart : public ByteSource, public ByteSink {
 public:
 	Uart();
 	virtual ~Uart();
 
-	virtual bool get_ready();
-	virtual bool put_ready();
+	virtual bool getReady();
+	virtual bool putReady();
 	virtual uint8_t get();
 	virtual void put(uint8_t);
 };

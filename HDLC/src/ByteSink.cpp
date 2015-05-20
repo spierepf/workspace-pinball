@@ -1,18 +1,17 @@
 /*
- * Hardware.cpp
+ * ByteSink.cpp
  *
- *  Created on: Jan 29, 2015
+ *  Created on: May 20, 2015
  *      Author: peter
  */
 
-#include "Hardware.h"
+#include "ByteSink.h"
 
-Hardware::Hardware() {
+ByteSink::ByteSink() {
 	// TODO Auto-generated constructor stub
 
 }
 
-Hardware::~Hardware() {
+ByteSink::~ByteSink() {
 	// TODO Auto-generated destructor stub
 }
-

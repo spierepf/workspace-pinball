@@ -7,7 +7,7 @@
 
 #include <DataLink.h>
 
-DataLink::DataLink(Hardware& hardware) : hardware(hardware), current_frame_length(0) {
+DataLink::DataLink(ByteSource& byteSource, ByteSink& byteSink) : byteSource(byteSource), byteSink(byteSink), current_frame_length(0) {
 	PT_INIT(&outgoing);
 	PT_INIT(&incoming);
 }
@@ -33,8 +33,8 @@ void DataLink::schedule() {
 PT_THREAD(DataLink::outgoing_thread()) {
 	PT_BEGIN(&outgoing);
 	for (;;) {
-		PT_WAIT_UNTIL(&outgoing, hardware.put_ready() && !outgoing_bytes.empty());
-		hardware.put(outgoing_bytes.get());
+		PT_WAIT_UNTIL(&outgoing, byteSink.putReady() && !outgoing_bytes.empty());
+		byteSink.put(outgoing_bytes.get());
 		PT_YIELD(&outgoing);
 	}
 	PT_END(&outgoing);
@@ -44,8 +44,8 @@ PT_THREAD(DataLink::incoming_thread()) {
 	uint8_t b;
 	PT_BEGIN(&incoming);
 	for (;;) {
-		PT_WAIT_UNTIL(&incoming, hardware.get_ready());
-		b = hardware.get();
+		PT_WAIT_UNTIL(&incoming, byteSource.getReady());
+		b = byteSource.get();
 		if(b == FLAG) {
 			if(current_frame_length != 0) {
 				incoming_frame_lengths.put(current_frame_length);
@@ -53,8 +53,8 @@ PT_THREAD(DataLink::incoming_thread()) {
 			}
 		} else {
 			if(b == ESC) {
-				PT_WAIT_UNTIL(&incoming, hardware.get_ready());
-				b = hardware.get() ^ MASK;
+				PT_WAIT_UNTIL(&incoming, byteSource.getReady());
+				b = byteSource.get() ^ MASK;
 			}
 			incoming_bytes.put(b);
 			current_frame_length++;

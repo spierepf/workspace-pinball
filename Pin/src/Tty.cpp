@@ -20,11 +20,11 @@ Tty::~Tty() {
 	// TODO Auto-generated destructor stub
 }
 
-bool Tty::get_ready() {
+bool Tty::getReady() {
 	return serial.IsDataAvailable();
 }
 
-bool Tty::put_ready() {
+bool Tty::putReady() {
 	return true;
 }
 

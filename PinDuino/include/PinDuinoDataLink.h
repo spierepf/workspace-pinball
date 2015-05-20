@@ -12,7 +12,7 @@
 
 class PinDuinoDataLink: public DataLink {
 public:
-	PinDuinoDataLink(Hardware&);
+	PinDuinoDataLink(ByteSource&, ByteSink&);
 	virtual ~PinDuinoDataLink();
 
 	virtual void log(const char*, ...);

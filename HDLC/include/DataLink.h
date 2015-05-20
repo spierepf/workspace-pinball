@@ -10,7 +10,8 @@
 
 #include <pt.h>
 
-#include <Hardware.h>
+#include <ByteSource.h>
+#include <ByteSink.h>
 #include <RingBuffer.h>
 
 /** Handles message framing and flow control.
@@ -36,7 +37,8 @@ private:
 		ESC=0x7d,
 		FLAG=0x7e
 	};
-	Hardware& hardware;
+	ByteSource& byteSource;
+	ByteSink& byteSink;
 
 	struct pt outgoing;
 	struct pt incoming;
@@ -53,7 +55,7 @@ private:
 	void put(uint8_t);
 
 public:
-	DataLink(Hardware&);
+	DataLink(ByteSource&, ByteSink&);
 	virtual ~DataLink();
 
 	/** Used to schedule our incoming and outgoing protothreads for execution. */

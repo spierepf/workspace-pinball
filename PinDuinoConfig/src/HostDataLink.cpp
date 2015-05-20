@@ -12,7 +12,7 @@
 
 #include <easylogging++.h>
 
-HostDataLink::HostDataLink(Hardware& hardware) : DataLink(hardware) {
+HostDataLink::HostDataLink(ByteSource& byteSource, ByteSink& byteSink) : DataLink(byteSource, byteSink) {
 }
 
 HostDataLink::~HostDataLink() {

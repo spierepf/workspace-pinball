@@ -8,11 +8,12 @@
 #ifndef MOCKHARDWARE_H_
 #define MOCKHARDWARE_H_
 
-#include <Hardware.h>
+#include <ByteSource.h>
+#include <ByteSink.h>
 
 #include <RingBuffer.h>
 
-class MockHardware: public Hardware {
+class MockHardware: public ByteSource, public ByteSink {
 public:
 	RingBuffer<16>& incoming_bytes;
 	RingBuffer<16>& outgoing_bytes;
@@ -23,7 +24,7 @@ public:
 	virtual ~MockHardware() {
 	}
 
-	virtual bool get_ready() {
+	virtual bool getReady() {
 		return !incoming_bytes.empty();
 	}
 
@@ -31,7 +32,7 @@ public:
 		return incoming_bytes.get();
 	}
 
-	virtual bool put_ready() {
+	virtual bool putReady() {
 		return !outgoing_bytes.full();
 	}
 

@@ -12,7 +12,7 @@
 #include <PinDuinoDataLink.h>
 #include <OpCode.h>
 
-PinDuinoDataLink::PinDuinoDataLink(Hardware& hardware) : DataLink(hardware) {
+PinDuinoDataLink::PinDuinoDataLink(ByteSource& byteSource, ByteSink& byteSink) : DataLink(byteSource, byteSink) {
 	// TODO Auto-generated constructor stub
 }
 

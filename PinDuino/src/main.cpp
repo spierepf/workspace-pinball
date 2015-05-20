@@ -38,7 +38,7 @@ void uart_init(void) {
 }
 
 Uart hardware;
-PinDuinoDataLink datalink(hardware);
+PinDuinoDataLink datalink(hardware, hardware);
 
 PinBank pinBankB0(PinBank::B, _BV(0));
 PinBank pinBankB1(PinBank::B, _BV(1));

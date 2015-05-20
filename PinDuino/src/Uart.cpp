@@ -17,11 +17,11 @@ Uart::~Uart() {
 	// TODO Auto-generated destructor stub
 }
 
-bool Uart::get_ready() {
+bool Uart::getReady() {
 	return bit_is_set(UCSR0A, RXC0);
 }
 
-bool Uart::put_ready() {
+bool Uart::putReady() {
 	return bit_is_set(UCSR0A, UDRE0);
 }
 
