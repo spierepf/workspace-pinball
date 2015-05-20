@@ -13,7 +13,8 @@
 #include <gtkmm.h>
 
 #include <Tty.h>
-#include <DataLink.h>
+#include <IncomingDataLink.h>
+#include <OutgoingDataLink.h>
 
 #include <string>
 using namespace std;
@@ -52,7 +53,7 @@ protected:
 	void handleIncomingFrame();
 
 public:
-	EndPoint(Gtk::Notebook* notebook, string, ByteSource*, ByteSink*, DataLink*);
+	EndPoint(Gtk::Notebook* notebook, string, ByteSource*, ByteSink*, IncomingDataLink*, OutgoingDataLink*);
 	virtual ~EndPoint();
 };
 

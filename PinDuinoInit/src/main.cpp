@@ -9,7 +9,8 @@
 
 #include <eeprom.h>
 
-#include <DataLink.h>
+#include <IncomingDataLink.h>
+#include <OutgoingDataLink.h>
 #include <SolenoidAction.h>
 
 const uint8_t id = 5;

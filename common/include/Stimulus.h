@@ -21,12 +21,12 @@ struct Stimulus {
 	Stimulus(uint8_t pin, bool newState) : pin(pin), newState(newState) {
 	}
 
-	void write_to(DataLink& datalink) {
+	void write_to(OutgoingDataLink& datalink) {
 		uint8_t *p = (uint8_t*)this;
 		datalink.append_payload(*p++);
 	}
 
-	void read_from(DataLink& datalink, uint8_t& i) {
+	void read_from(IncomingDataLink& datalink, uint8_t& i) {
 		uint8_t *p = (uint8_t*)this;
 		*p++=datalink.peek(i++);
 	}

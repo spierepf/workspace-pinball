@@ -9,18 +9,20 @@
 #define ABSTRACTENDPOINT_H_
 
 #include <pt.h>
-#include <DataLink.h>
+#include <IncomingDataLink.h>
+#include <OutgoingDataLink.h>
 
 class AbstractEndPoint {
 	struct pt pt;
 	PT_THREAD(run());
 
 protected:
-	DataLink &datalink;
+	IncomingDataLink &incomingDatalink;
+	OutgoingDataLink &outgoingDatalink;
 	virtual void handleIncomingFrame() = 0;
 
 public:
-	AbstractEndPoint(DataLink&);
+	AbstractEndPoint(IncomingDataLink&, OutgoingDataLink&);
 	virtual ~AbstractEndPoint();
 
 	void schedule();

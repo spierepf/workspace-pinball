@@ -8,7 +8,8 @@
 #include <Arduino.h>
 
 #include <Uart.h>
-#include <DataLink.h>
+#include <IncomingDataLink.h>
+#include <OutgoingDataLink.h>
 #include <Solenoid.h>
 #include <Blinker.h>
 #include <EndPoint.h>
@@ -60,7 +61,7 @@ Solenoid solenoids[6] = {
 
 StimulusResponse stimulusResponse;
 
-EndPoint endPoint(datalink, pingPong);
+EndPoint endPoint(datalink, datalink, pingPong);
 Blinker blinker;
 
 PinBank pinBankC(PinBank::C, 0b00111111);

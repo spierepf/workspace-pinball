@@ -26,7 +26,7 @@ char* labels[] = {
 		"7",
 };
 
-EndPoint::EndPoint(Gtk::Notebook* notebook, string device, ByteSource* byteSource, ByteSink* byteSink, DataLink* datalink) : AbstractEndPoint(*datalink), notebook(notebook), device(device), byteSource(byteSource), byteSink(byteSink), id(255) {
+EndPoint::EndPoint(Gtk::Notebook* notebook, string device, ByteSource* byteSource, ByteSink* byteSink, IncomingDataLink* incomingDatalink, OutgoingDataLink* outgoingDatalink) : AbstractEndPoint(*incomingDatalink, *outgoingDatalink), notebook(notebook), device(device), byteSource(byteSource), byteSink(byteSink), id(255) {
 	grid = new Gtk::Grid();
 	label = new Gtk::Label(device);
 
@@ -58,8 +58,8 @@ EndPoint::EndPoint(Gtk::Notebook* notebook, string device, ByteSource* byteSourc
 	for(int i = 0; i < 12; i++) {
 		rowLabels[i] = new Gtk::Label(labels[i]);
 		grid->attach(*rowLabels[i], 0, i+2, 1, 1);
-		solenoidActionControllers[i][0] = new SolenoidActionController(*datalink, Stimulus(i, false), grid, 1, i+2);
-		solenoidActionControllers[i][1] = new SolenoidActionController(*datalink, Stimulus(i, true), grid, 7, i+2);
+		solenoidActionControllers[i][0] = new SolenoidActionController(*outgoingDatalink, Stimulus(i, false), grid, 1, i+2);
+		solenoidActionControllers[i][1] = new SolenoidActionController(*outgoingDatalink, Stimulus(i, true), grid, 7, i+2);
 	}
 
 	notebook -> append_page(*grid, *label);
@@ -93,37 +93,37 @@ EndPoint::~EndPoint() {
 }
 
 void EndPoint::handleIncomingFrame() {
-	if(datalink.peek(0) == OpCode::PING) { // ping
-		datalink.begin_outgoing_frame(OpCode::PONG); // pong
-		datalink.append_payload(datalink.peek(1)); // return the payload of the ping
-		datalink.end_outgoing_frame();
-	} else if(datalink.peek(0) == OpCode::LOG) { // log
+	if(incomingDatalink.peek(0) == OpCode::PING) { // ping
+		outgoingDatalink.begin_outgoing_frame(OpCode::PONG); // pong
+		outgoingDatalink.append_payload(incomingDatalink.peek(1)); // return the payload of the ping
+		outgoingDatalink.end_outgoing_frame();
+	} else if(incomingDatalink.peek(0) == OpCode::LOG) { // log
 		char buf[32];
-		for(int i = 1; i < datalink.incoming_frame_length(); i++) {
-			buf[i-1] = (char)datalink.peek(i);
+		for(int i = 1; i < incomingDatalink.incoming_frame_length(); i++) {
+			buf[i-1] = (char)incomingDatalink.peek(i);
 		}
-		buf[datalink.incoming_frame_length() - 1] = '\0';
+		buf[incomingDatalink.incoming_frame_length() - 1] = '\0';
 		LOG(INFO) << "From " << id << ": " << buf;
-	} else if(datalink.peek(0) == OpCode::MY_ID) {
-		id = datalink.peek(1);
+	} else if(incomingDatalink.peek(0) == OpCode::MY_ID) {
+		id = incomingDatalink.peek(1);
 		LOG(INFO) << "Device " << device << " registered id: " << (int)id;
-		datalink.begin_outgoing_frame(OpCode::SR_ENABLE);
-		datalink.end_outgoing_frame();
+		outgoingDatalink.begin_outgoing_frame(OpCode::SR_ENABLE);
+		outgoingDatalink.end_outgoing_frame();
 		ostringstream convert;
 		convert << id;
 		label->set_text(convert.str());
-	} else if(datalink.peek(0) == OpCode::PIN_LOW) {
-		LOG(INFO) << "Pin Low: " << id << ":" << (int)datalink.peek(1);
-	} else if(datalink.peek(0) == OpCode::PIN_HIGH) {
-		LOG(INFO) << "Pin High: " << id << ":"  << (int)datalink.peek(1);
-	} else if(datalink.peek(0) == OpCode::SR_CONFIG) {
+	} else if(incomingDatalink.peek(0) == OpCode::PIN_LOW) {
+		LOG(INFO) << "Pin Low: " << id << ":" << (int)incomingDatalink.peek(1);
+	} else if(incomingDatalink.peek(0) == OpCode::PIN_HIGH) {
+		LOG(INFO) << "Pin High: " << id << ":"  << (int)incomingDatalink.peek(1);
+	} else if(incomingDatalink.peek(0) == OpCode::SR_CONFIG) {
 		uint8_t i = 1;
-		if(datalink.incoming_frame_length() >= i+sizeof(Stimulus)) {
+		if(incomingDatalink.incoming_frame_length() >= i+sizeof(Stimulus)) {
 			Stimulus stimulus;
-			stimulus.read_from(datalink, i);
-			if(datalink.incoming_frame_length() >= i+sizeof(SolenoidAction)) {
+			stimulus.read_from(incomingDatalink, i);
+			if(incomingDatalink.incoming_frame_length() >= i+sizeof(SolenoidAction)) {
 				SolenoidAction action;
-				action.read_from(datalink, i);
+				action.read_from(incomingDatalink, i);
 				solenoidActionControllers[stimulus.pin][stimulus.newState]->set(action);
 			}
 		}

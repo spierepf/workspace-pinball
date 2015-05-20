@@ -12,10 +12,15 @@
 
 #include <easylogging++.h>
 
-HostDataLink::HostDataLink(ByteSource& byteSource, ByteSink& byteSink) : DataLink(byteSource, byteSink) {
+HostDataLink::HostDataLink(ByteSource& byteSource, ByteSink& byteSink) : IncomingDataLink(byteSource), OutgoingDataLink(byteSink) {
 }
 
 HostDataLink::~HostDataLink() {
+}
+
+void HostDataLink::schedule() {
+	PT_SCHEDULE(outgoing_thread());
+	PT_SCHEDULE(incoming_thread());
 }
 
 void HostDataLink::log(const char* fmt, ...) {

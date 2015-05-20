@@ -52,8 +52,8 @@ bool EndPointManager::loop() {
 			Tty* hardware = new Tty(s);
 			ByteSource* byteSource = hardware;
 			ByteSink* byteSink = hardware;
-			DataLink* datalink = new HostDataLink(*byteSource, *byteSink);
-			endPoints.push_back(new EndPoint(notebook, s, byteSource, byteSink, datalink));
+			HostDataLink* datalink = new HostDataLink(*byteSource, *byteSink);
+			endPoints.push_back(new EndPoint(notebook, s, byteSource, byteSink, datalink, datalink));
 			LOG(INFO) << "Pending connection to " << s;
 		} catch(SerialPort::OpenFailed& e) {
 			LOG(ERROR) << "While opening " << s << " : " << e.what();

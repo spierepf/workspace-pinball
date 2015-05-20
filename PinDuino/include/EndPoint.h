@@ -20,7 +20,7 @@ protected:
 	void handleIncomingFrame();
 
 public:
-	EndPoint(DataLink&, PingPong&);
+	EndPoint(IncomingDataLink&, OutgoingDataLink&, PingPong&);
 	virtual ~EndPoint();
 };
 

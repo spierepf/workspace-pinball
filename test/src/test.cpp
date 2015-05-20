@@ -10,7 +10,8 @@
 
 #include <RingBuffer.h>
 #include <MockHardware.h>
-#include <DataLink.h>
+#include <IncomingDataLink.h>
+#include <OutgoingDataLink.h>
 #include <Timer.h>
 
 #include <SolenoidAction.h>
@@ -20,9 +21,15 @@
 #include <rle.h>
 #include <RleDecoder.h>
 
-class TestDataLink : public DataLink {
+class TestDataLink : public IncomingDataLink, public OutgoingDataLink {
 public:
-	TestDataLink(ByteSource &byteSource, ByteSink& byteSink) : DataLink(byteSource, byteSink) {
+	TestDataLink(ByteSource &byteSource, ByteSink& byteSink) : IncomingDataLink(byteSource), OutgoingDataLink(byteSink) {
+	}
+
+	/** Used to schedule our incoming and outgoing protothreads for execution. */
+	void schedule() {
+		PT_SCHEDULE(outgoing_thread());
+		PT_SCHEDULE(incoming_thread());
 	}
 
 	void log(const char *fmt, ...) {

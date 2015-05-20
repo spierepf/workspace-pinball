@@ -8,12 +8,16 @@
 #ifndef HOSTDATALINK_H_
 #define HOSTDATALINK_H_
 
-#include <DataLink.h>
+#include <IncomingDataLink.h>
+#include <OutgoingDataLink.h>
 
-class HostDataLink: public DataLink {
+class HostDataLink: public IncomingDataLink, public OutgoingDataLink {
 public:
 	HostDataLink(ByteSource&, ByteSink&);
 	virtual ~HostDataLink();
+
+	/** Used to schedule our incoming and outgoing protothreads for execution. */
+	void schedule();
 
 	virtual void log(const char*, ...);
 };

@@ -29,7 +29,7 @@ struct SolenoidAction {
 		*((uint32_t*)this) = src;
 	}
 
-	void write_to(DataLink& datalink) {
+	void write_to(OutgoingDataLink& datalink) {
 		uint8_t *p = (uint8_t*)this;
 		datalink.append_payload(*p++);
 		datalink.append_payload(*p++);
@@ -37,7 +37,7 @@ struct SolenoidAction {
 		datalink.append_payload(*p++);
 	}
 
-	void read_from(DataLink& datalink, uint8_t& i) {
+	void read_from(IncomingDataLink& datalink, uint8_t& i) {
 		uint8_t *p = (uint8_t*)this;
 		*p++=datalink.peek(i++);
 		*p++=datalink.peek(i++);

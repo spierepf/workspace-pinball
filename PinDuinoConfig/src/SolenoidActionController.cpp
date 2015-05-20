@@ -11,7 +11,7 @@
 
 #include <easylogging++.h>
 
-SolenoidActionController::SolenoidActionController(DataLink& datalink, Stimulus stimulus, Gtk::Grid* child, int left, int top) : datalink(datalink), stimulus(stimulus), initialized(false) {
+SolenoidActionController::SolenoidActionController(OutgoingDataLink& datalink, Stimulus stimulus, Gtk::Grid* child, int left, int top) : datalink(datalink), stimulus(stimulus), initialized(false) {
 	enable = new Gtk::CheckButton();
 	enable->signal_clicked().connect(sigc::mem_fun(this, &SolenoidActionController::update));
 	child->attach(*enable, left, top, 1, 1);

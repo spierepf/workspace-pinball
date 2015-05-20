@@ -13,7 +13,7 @@ extern uint32_t eeprom_actions[12][2];
 #include <OpCode.h>
 #include <StimulusResponse.h>
 
-EndPoint::EndPoint(DataLink& _datalink, PingPong &pingPong) : AbstractEndPoint(_datalink), pingPong(pingPong) {
+EndPoint::EndPoint(IncomingDataLink& _incomingDatalink, OutgoingDataLink& _outgoingDatalink, PingPong &pingPong) : AbstractEndPoint(_incomingDatalink, _outgoingDatalink), pingPong(pingPong) {
 	eeprom_busy_wait();
 	datalink.begin_outgoing_frame(OpCode::MY_ID);
 	datalink.append_payload(eeprom_read_byte(&eeprom_id));

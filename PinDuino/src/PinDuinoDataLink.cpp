@@ -12,12 +12,17 @@
 #include <PinDuinoDataLink.h>
 #include <OpCode.h>
 
-PinDuinoDataLink::PinDuinoDataLink(ByteSource& byteSource, ByteSink& byteSink) : DataLink(byteSource, byteSink) {
+PinDuinoDataLink::PinDuinoDataLink(ByteSource& byteSource, ByteSink& byteSink) : IncomingDataLink(byteSource), OutgoingDataLink(byteSink) {
 	// TODO Auto-generated constructor stub
 }
 
 PinDuinoDataLink::~PinDuinoDataLink() {
 	// TODO Auto-generated destructor stub
+}
+
+void PinDuinoDataLink::schedule() {
+	PT_SCHEDULE(outgoing_thread());
+	PT_SCHEDULE(incoming_thread());
 }
 
 void PinDuinoDataLink::log(const char *fmt, ...)

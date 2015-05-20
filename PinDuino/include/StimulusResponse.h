@@ -10,7 +10,8 @@
 
 #include <stdint.h>
 
-#include <DataLink.h>
+#include <IncomingDataLink.h>
+#include <OutgoingDataLink.h>
 
 #include <Stimulus.h>
 #include <Solenoid.h>

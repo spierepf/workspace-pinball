@@ -7,7 +7,7 @@
 
 #include "AbstractEndPoint.h"
 
-AbstractEndPoint::AbstractEndPoint(DataLink &datalink) : datalink(datalink) {
+AbstractEndPoint::AbstractEndPoint(IncomingDataLink &incomingDatalink, OutgoingDataLink &outgoingDatalink) : incomingDatalink(incomingDatalink), outgoingDatalink(outgoingDatalink) {
 	PT_INIT(&pt);
 }
 
@@ -18,16 +18,17 @@ AbstractEndPoint::~AbstractEndPoint() {
 PT_THREAD(AbstractEndPoint::run()) {
 	PT_BEGIN(&pt);
 	for(;;) {
-		PT_WAIT_UNTIL(&pt, datalink.have_incoming_frame());
+		PT_WAIT_UNTIL(&pt, incomingDatalink.have_incoming_frame());
 
 		handleIncomingFrame();
 
-		datalink.next_incoming_frame();
+		incomingDatalink.next_incoming_frame();
 	}
 	PT_END(&pt);
 }
 
 void AbstractEndPoint::schedule() {
-	datalink.schedule();
+	incomingDatalink.schedule();
+	outgoingDatalink.schedule();
 	PT_SCHEDULE(run());
 }
