@@ -10,7 +10,7 @@
 
 #include <AbstractEndPoint.h>
 
-#include <PinDuinoDataLink.h>
+#include <OutgoingPinDuinoDataLink.h>
 #include <PingPong.h>
 
 class EndPoint : public AbstractEndPoint {

@@ -18,7 +18,7 @@ class InputPin {
 	struct pt pt;
 	PT_THREAD(run());
 
-	EndPoint& endPoint;
+	OutgoingDataLink& outgoingDatalink;
 	PinBank& bank;
 	uint8_t mask;
 	uint8_t id;
@@ -27,7 +27,7 @@ class InputPin {
 	void pinChange(bool);
 
 public:
-	InputPin(EndPoint&, PinBank&, uint8_t, uint8_t);
+	InputPin(OutgoingDataLink&, PinBank&, uint8_t, uint8_t);
 	virtual ~InputPin();
 
 	void schedule();

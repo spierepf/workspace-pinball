@@ -39,7 +39,9 @@ void uart_init(void) {
 }
 
 Uart hardware;
-PinDuinoDataLink datalink(hardware, hardware);
+
+IncomingDataLink incomingDataLink(hardware);
+OutgoingPinDuinoDataLink outgoingDataLink(hardware);
 
 PinBank pinBankB0(PinBank::B, _BV(0));
 PinBank pinBankB1(PinBank::B, _BV(1));
@@ -48,7 +50,7 @@ PinBank pinBankB3(PinBank::B, _BV(3));
 PinBank pinBankB4(PinBank::B, _BV(4));
 PinBank pinBankB5(PinBank::B, _BV(5));
 
-PingPong pingPong;
+PingPong pingPong(outgoingDataLink);
 
 Solenoid solenoids[6] = {
 		Solenoid(pinBankB0, TCCR0A, 0, 0, OCR0A),
@@ -61,26 +63,26 @@ Solenoid solenoids[6] = {
 
 StimulusResponse stimulusResponse;
 
-EndPoint endPoint(datalink, datalink, pingPong);
+EndPoint endPoint(incomingDataLink, outgoingDataLink, pingPong);
 Blinker blinker;
 
 PinBank pinBankC(PinBank::C, 0b00111111);
 PinBank pinBankD(PinBank::D, 0b11111100);
 
 InputPin inputPins[12] = {
-		InputPin(endPoint, pinBankC, 0, 0),
-		InputPin(endPoint, pinBankC, 1, 1),
-		InputPin(endPoint, pinBankC, 2, 2),
-		InputPin(endPoint, pinBankC, 3, 3),
-		InputPin(endPoint, pinBankC, 4, 4),
-		InputPin(endPoint, pinBankC, 5, 5),
+		InputPin(outgoingDataLink, pinBankC, 0, 0),
+		InputPin(outgoingDataLink, pinBankC, 1, 1),
+		InputPin(outgoingDataLink, pinBankC, 2, 2),
+		InputPin(outgoingDataLink, pinBankC, 3, 3),
+		InputPin(outgoingDataLink, pinBankC, 4, 4),
+		InputPin(outgoingDataLink, pinBankC, 5, 5),
 
-		InputPin(endPoint, pinBankD, 2, 6),
-		InputPin(endPoint, pinBankD, 3, 7),
-		InputPin(endPoint, pinBankD, 4, 8),
-		InputPin(endPoint, pinBankD, 5, 9),
-		InputPin(endPoint, pinBankD, 6, 10),
-		InputPin(endPoint, pinBankD, 7, 11)
+		InputPin(outgoingDataLink, pinBankD, 2, 6),
+		InputPin(outgoingDataLink, pinBankD, 3, 7),
+		InputPin(outgoingDataLink, pinBankD, 4, 8),
+		InputPin(outgoingDataLink, pinBankD, 5, 9),
+		InputPin(outgoingDataLink, pinBankD, 6, 10),
+		InputPin(outgoingDataLink, pinBankD, 7, 11)
 };
 
 void setup() {

@@ -7,13 +7,13 @@
 
 #include <Arduino.h>
 
-#include <PinDuinoDataLink.h>
+#include <OutgoingPinDuinoDataLink.h>
 #include <StimulusResponse.h>
 #include <OpCode.h>
 
 #include "InputPin.h"
 
-InputPin::InputPin(EndPoint& endPoint, PinBank& bank, uint8_t index, uint8_t id) : endPoint(endPoint), bank(bank), mask(_BV(index)), id(id) {
+InputPin::InputPin(OutgoingDataLink& outgoingDatalink, PinBank& bank, uint8_t index, uint8_t id) : outgoingDatalink(outgoingDatalink), bank(bank), mask(_BV(index)), id(id) {
 	PT_INIT(&pt);
 }
 
@@ -26,9 +26,9 @@ void InputPin::schedule() {
 }
 
 void InputPin::pinChange(bool newState) {
-	datalink.begin_outgoing_frame(newState ? OpCode::PIN_HIGH : OpCode::PIN_LOW);
-	datalink.append_payload(id);
-	datalink.end_outgoing_frame();
+	outgoingDatalink.begin_outgoing_frame(newState ? OpCode::PIN_HIGH : OpCode::PIN_LOW);
+	outgoingDatalink.append_payload(id);
+	outgoingDatalink.end_outgoing_frame();
 	stimulusResponse.trigger(Stimulus(id, newState));
 }
 

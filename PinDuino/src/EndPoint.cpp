@@ -15,9 +15,9 @@ extern uint32_t eeprom_actions[12][2];
 
 EndPoint::EndPoint(IncomingDataLink& _incomingDatalink, OutgoingDataLink& _outgoingDatalink, PingPong &pingPong) : AbstractEndPoint(_incomingDatalink, _outgoingDatalink), pingPong(pingPong) {
 	eeprom_busy_wait();
-	datalink.begin_outgoing_frame(OpCode::MY_ID);
-	datalink.append_payload(eeprom_read_byte(&eeprom_id));
-	datalink.end_outgoing_frame();
+	outgoingDatalink.begin_outgoing_frame(OpCode::MY_ID);
+	outgoingDatalink.append_payload(eeprom_read_byte(&eeprom_id));
+	outgoingDatalink.end_outgoing_frame();
 }
 
 EndPoint::~EndPoint() {
@@ -25,28 +25,28 @@ EndPoint::~EndPoint() {
 }
 
 void EndPoint::handleIncomingFrame() {
-	if(datalink.peek(0) == OpCode::PONG) {
-		pingPong.acceptPong();
-	} else if(datalink.peek(0) == OpCode::SR_INHIBIT) {
+	if(incomingDatalink.peek(0) == OpCode::PONG) {
+		pingPong.acceptPong(incomingDatalink.peek(1));
+	} else if(incomingDatalink.peek(0) == OpCode::SR_INHIBIT) {
 		stimulusResponse.inhibit();
-	} else if(datalink.peek(0) == OpCode::SR_ENABLE) {
+	} else if(incomingDatalink.peek(0) == OpCode::SR_ENABLE) {
 		stimulusResponse.enable();
-	} else if(datalink.peek(0) == OpCode::SR_CONFIG) {
+	} else if(incomingDatalink.peek(0) == OpCode::SR_CONFIG) {
 		uint8_t i = 1;
-		if(datalink.incoming_frame_length() >= i+sizeof(Stimulus)) {
+		if(incomingDatalink.incoming_frame_length() >= i+sizeof(Stimulus)) {
 			Stimulus stimulus;
-			stimulus.read_from(datalink, i);
-			if(datalink.incoming_frame_length() >= i+sizeof(SolenoidAction)) {
+			stimulus.read_from(incomingDatalink, i);
+			if(incomingDatalink.incoming_frame_length() >= i+sizeof(SolenoidAction)) {
 				SolenoidAction action;
-				action.read_from(datalink, i);
+				action.read_from(incomingDatalink, i);
 				stimulusResponse[stimulus] = action;
 				eeprom_busy_wait();
 				eeprom_write_dword(&eeprom_actions[stimulus.pin][stimulus.newState], action);
 			} else {
-				datalink.begin_outgoing_frame(OpCode::SR_CONFIG);
-				stimulus.write_to(datalink);
-				stimulusResponse[stimulus].write_to(datalink);
-				datalink.end_outgoing_frame();
+				outgoingDatalink.begin_outgoing_frame(OpCode::SR_CONFIG);
+				stimulus.write_to(outgoingDatalink);
+				stimulusResponse[stimulus].write_to(outgoingDatalink);
+				outgoingDatalink.end_outgoing_frame();
 			}
 		}
 	}

@@ -1,31 +1,27 @@
 /*
- * PinDuinoDataLink.cpp
+ * OutgoingPinDuinoDataLink.cpp
  *
- *  Created on: Feb 3, 2015
+ *  Created on: May 20, 2015
  *      Author: peter
  */
+
+#include "OutgoingPinDuinoDataLink.h"
 
 #include <stdio.h>
 #include <limits.h>
 #include <string.h>
 
-#include <PinDuinoDataLink.h>
 #include <OpCode.h>
 
-PinDuinoDataLink::PinDuinoDataLink(ByteSource& byteSource, ByteSink& byteSink) : IncomingDataLink(byteSource), OutgoingDataLink(byteSink) {
+OutgoingPinDuinoDataLink::OutgoingPinDuinoDataLink(ByteSink& byteSink) : OutgoingDataLink(byteSink) {
 	// TODO Auto-generated constructor stub
 }
 
-PinDuinoDataLink::~PinDuinoDataLink() {
+OutgoingPinDuinoDataLink::~OutgoingPinDuinoDataLink() {
 	// TODO Auto-generated destructor stub
 }
 
-void PinDuinoDataLink::schedule() {
-	PT_SCHEDULE(outgoing_thread());
-	PT_SCHEDULE(incoming_thread());
-}
-
-void PinDuinoDataLink::log(const char *fmt, ...)
+void OutgoingPinDuinoDataLink::log(const char *fmt, ...)
 {
 	char s[32];
 
@@ -46,4 +42,3 @@ void PinDuinoDataLink::log(const char *fmt, ...)
 	}
 	end_outgoing_frame();
 }
-

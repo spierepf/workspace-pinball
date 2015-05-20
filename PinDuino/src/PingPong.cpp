@@ -12,7 +12,7 @@
 
 #define N 128
 
-PingPong::PingPong() : total_latency(0), counter(0), pongAccepted(false), missedPings(0) {
+PingPong::PingPong(OutgoingPinDuinoDataLink& outgoingDatalink) : outgoingDatalink(outgoingDatalink), total_latency(0), counter(0), pongAccepted(false), missedPings(0) {
 	PT_INIT(&pt);
 }
 
@@ -36,8 +36,8 @@ PT_THREAD(PingPong::run()) {
 			PT_WAIT_UNTIL(&pt, timer.elapsed(micros()) > 100000);
 		}
 
-		datalink.log("Average Latency: %lu us", total_latency / N);
-		if(missedPings > 0) datalink.log("\tMissed Pings: %u", missedPings);
+		outgoingDatalink.log("Average Latency: %lu us", total_latency / N);
+		if(missedPings > 0) outgoingDatalink.log("\tMissed Pings: %u", missedPings);
 		missedPings = 0;
 		total_latency = 0;
 	}
@@ -46,13 +46,13 @@ PT_THREAD(PingPong::run()) {
 
 void PingPong::sendPing() {
 	pongAccepted = false;
-	datalink.begin_outgoing_frame(OpCode::PING); // ping
-	datalink.append_payload(counter);
-	datalink.end_outgoing_frame();
+	outgoingDatalink.begin_outgoing_frame(OpCode::PING); // ping
+	outgoingDatalink.append_payload(counter);
+	outgoingDatalink.end_outgoing_frame();
 }
 
-void PingPong::acceptPong() {
-	pongAccepted = datalink.peek(1) == counter;
+void PingPong::acceptPong(uint8_t id) {
+	pongAccepted = id == counter;
 	if(!pongAccepted) {
 		sendPing();
 	}
