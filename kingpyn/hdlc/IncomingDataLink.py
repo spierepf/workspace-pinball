@@ -19,6 +19,7 @@ class IncomingDataLink(object):
         self.queue = deque()
         self.currentFrameLength = 0
         self.incomingFrameLengths = deque()
+        self.nextByteEscaped = False
      
     def schedule(self):
         if self.hardware.getReady():
@@ -28,11 +29,13 @@ class IncomingDataLink(object):
                     self.incomingFrameLengths.append(self.currentFrameLength)
                     self.currentFrameLength = 0
             elif b != 0x7d:
+                if self.nextByteEscaped:
+                    b ^= 0x20
+                    self.nextByteEscaped = False
                 self.queue.append(b)
                 self.currentFrameLength += 1
             else:
-                self.queue.append(self.hardware.get() ^ 0x20)
-                self.currentFrameLength += 1
+                self.nextByteEscaped = True
                 
     def peek(self, i):
         return self.queue[i]

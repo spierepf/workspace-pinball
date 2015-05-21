@@ -48,7 +48,22 @@ class Test(unittest.TestCase):
         hardware.incomingBytes.append(0x11 ^ 0x20)
         
         datalink.schedule()
+        datalink.schedule()
         
+        self.assertEqual(0x11, datalink.peek(0))
+
+    def testGetFragmentedEscape(self):
+        hardware = MockIncomingHardware()
+        datalink = IncomingDataLink(hardware)
+
+        hardware.incomingBytes.append(0x7d)
+
+        datalink.schedule()
+        
+        hardware.incomingBytes.append(0x11 ^ 0x20)
+        
+        datalink.schedule()
+
         self.assertEqual(0x11, datalink.peek(0))
 
     def testHaveIncomingFrame(self):
