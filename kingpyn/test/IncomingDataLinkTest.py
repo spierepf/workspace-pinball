@@ -8,7 +8,7 @@ from hdlc.IncomingDataLink import IncomingDataLink
 from collections import deque
 
 
-class MockHardware(object):
+class MockIncomingHardware(object):
     def __init__(self):
         self.incomingBytes = deque()
         
@@ -31,7 +31,7 @@ class Test(unittest.TestCase):
 
 
     def testGet(self):
-        hardware = MockHardware()
+        hardware = MockIncomingHardware()
         datalink = IncomingDataLink(hardware)
         
         hardware.incomingBytes.append(0)
@@ -41,7 +41,7 @@ class Test(unittest.TestCase):
         self.assertEqual(0, datalink.peek(0))
         
     def testGetEscape(self):
-        hardware = MockHardware()
+        hardware = MockIncomingHardware()
         datalink = IncomingDataLink(hardware)
 
         hardware.incomingBytes.append(0x7d)
@@ -52,7 +52,7 @@ class Test(unittest.TestCase):
         self.assertEqual(0x11, datalink.peek(0))
 
     def testHaveIncomingFrame(self):
-        hardware = MockHardware()
+        hardware = MockIncomingHardware()
         datalink = IncomingDataLink(hardware)
 
         self.assertFalse(datalink.haveIncomingFrame())
@@ -66,7 +66,7 @@ class Test(unittest.TestCase):
         self.assertTrue(datalink.haveIncomingFrame())
 
     def testZeroLengthIncomingFrame(self):
-        hardware = MockHardware()
+        hardware = MockIncomingHardware()
         datalink = IncomingDataLink(hardware)
 
         self.assertFalse(datalink.haveIncomingFrame())
@@ -78,7 +78,7 @@ class Test(unittest.TestCase):
         self.assertFalse(datalink.haveIncomingFrame())
 
     def testIncomingFrameLength(self):
-        hardware = MockHardware()
+        hardware = MockIncomingHardware()
         datalink = IncomingDataLink(hardware)
 
         hardware.incomingBytes.append(0x00);
@@ -90,7 +90,7 @@ class Test(unittest.TestCase):
         self.assertEqual(1, datalink.incomingFrameLength())
     
     def testNextIncomingFrame(self):
-        hardware = MockHardware()
+        hardware = MockIncomingHardware()
         datalink = IncomingDataLink(hardware)
 
         hardware.incomingBytes.append(0x00);
