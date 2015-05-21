@@ -10,6 +10,25 @@ class IncomingDataLink(object):
     classdocs
     '''
 
+    @staticmethod
+    def XON():
+        return 0x11
+    
+    @staticmethod
+    def XOFF():
+        return 0x13
+    
+    @staticmethod
+    def MASK():
+        return 0x20
+    
+    @staticmethod
+    def ESC():
+        return 0x7d
+    
+    @staticmethod
+    def FLAG():
+        return 0x7e
 
     def __init__(self, hardware):
         '''
@@ -24,13 +43,13 @@ class IncomingDataLink(object):
     def schedule(self):
         if self.hardware.getReady():
             b = self.hardware.get()
-            if b == 0x7e:
+            if b == IncomingDataLink.FLAG():
                 if self.currentFrameLength != 0:
                     self.incomingFrameLengths.append(self.currentFrameLength)
                     self.currentFrameLength = 0
-            elif b != 0x7d:
+            elif b != IncomingDataLink.ESC():
                 if self.nextByteEscaped:
-                    b ^= 0x20
+                    b ^= IncomingDataLink.MASK()
                     self.nextByteEscaped = False
                 self.queue.append(b)
                 self.currentFrameLength += 1
