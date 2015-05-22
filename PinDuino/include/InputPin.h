@@ -22,6 +22,9 @@ class InputPin {
 	PinBank& bank;
 	uint8_t mask;
 	uint8_t id;
+	uint8_t history;
+	bool state;
+
 	Timer<unsigned int> timer;
 
 	void pinChange(bool);

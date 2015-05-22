@@ -13,7 +13,7 @@
 
 #include "InputPin.h"
 
-InputPin::InputPin(OutgoingDataLink& outgoingDatalink, PinBank& bank, uint8_t index, uint8_t id) : outgoingDatalink(outgoingDatalink), bank(bank), mask(_BV(index)), id(id) {
+InputPin::InputPin(OutgoingDataLink& outgoingDatalink, PinBank& bank, uint8_t index, uint8_t id) : outgoingDatalink(outgoingDatalink), bank(bank), mask(_BV(index)), id(id), history(0xff), state(true) {
 	PT_INIT(&pt);
 }
 
@@ -26,6 +26,7 @@ void InputPin::schedule() {
 }
 
 void InputPin::pinChange(bool newState) {
+	state = newState;
 	outgoingDatalink.begin_outgoing_frame(newState ? OpCode::PIN_HIGH : OpCode::PIN_LOW);
 	outgoingDatalink.append_payload(id);
 	outgoingDatalink.end_outgoing_frame();
@@ -35,14 +36,13 @@ void InputPin::pinChange(bool newState) {
 PT_THREAD(InputPin::run()) {
 	PT_BEGIN(&pt);
 	for(;;) {
-		PT_WAIT_UNTIL(&pt, (bank.read() & mask) == 0);
-		pinChange(false);
-		timer.set(micros());
-		PT_WAIT_UNTIL(&pt, timer.elapsed(micros()) > 3000);
-		PT_WAIT_UNTIL(&pt, (bank.read() & mask) != 0);
-		pinChange(true);
-		timer.set(micros());
-		PT_WAIT_UNTIL(&pt, timer.elapsed(micros()) > 3000);
+		history = (history << 1) | ((bank.read() & mask) == 0 ? 0 : 1);
+		if(state) {
+			if(history == 0x00) pinChange(false);
+		} else {
+			if(history == 0xff) pinChange(true);
+		}
+		PT_YIELD(&pt);
 	}
 	PT_END(&pt);
 }
