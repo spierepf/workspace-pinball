@@ -66,5 +66,5 @@ class IncomingDataLink(object):
         return self.incomingFrameLengths[0]
     
     def nextIncomingFrame(self):
-        for _ in range(0, self.incomingFrameLength()):
+        for _ in range(0, self.incomingFrameLengths.popleft()):
             self.queue.popleft()

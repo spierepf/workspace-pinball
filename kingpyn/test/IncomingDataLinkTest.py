@@ -123,7 +123,11 @@ class Test(unittest.TestCase):
         
         self.assertTrue(datalink.haveIncomingFrame())
         self.assertEqual(1, datalink.peek(0))
-        
+
+        datalink.nextIncomingFrame();
+
+        self.assertFalse(datalink.haveIncomingFrame())
+
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testGet']
     unittest.main()
