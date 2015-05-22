@@ -32,9 +32,9 @@ EndPoint::EndPoint(Gtk::Notebook* notebook, string device, ByteSource* byteSourc
 
 	inputLabel = new Gtk::Label("Input");
 	grid->attach(*inputLabel, 0, 0, 1, 1);
-	onLowLabel = new Gtk::Label("On Low");
+	onLowLabel = new Gtk::Label("On Active");
 	grid->attach_next_to(*onLowLabel, *inputLabel, Gtk::POS_RIGHT, 6, 1);
-	onHighLabel = new Gtk::Label("On High");
+	onHighLabel = new Gtk::Label("On Inactive");
 	grid->attach_next_to(*onHighLabel, *onLowLabel, Gtk::POS_RIGHT, 6, 1);
 
 	onLowEnableLabel = new Gtk::Label("Enable");
@@ -112,10 +112,10 @@ void EndPoint::handleIncomingFrame() {
 		ostringstream convert;
 		convert << id;
 		label->set_text(convert.str());
-	} else if(incomingDatalink.peek(0) == OpCode::PIN_LOW) {
-		LOG(INFO) << "Pin Low: " << id << ":" << (int)incomingDatalink.peek(1);
-	} else if(incomingDatalink.peek(0) == OpCode::PIN_HIGH) {
-		LOG(INFO) << "Pin High: " << id << ":"  << (int)incomingDatalink.peek(1);
+	} else if(incomingDatalink.peek(0) == OpCode::SWITCH_ACTIVE) {
+		LOG(INFO) << "Switch Active: " << id << ":" << (int)incomingDatalink.peek(1);
+	} else if(incomingDatalink.peek(0) == OpCode::SWITCH_INACTIVE) {
+		LOG(INFO) << "Switch Inactive: " << id << ":"  << (int)incomingDatalink.peek(1);
 	} else if(incomingDatalink.peek(0) == OpCode::SR_CONFIG) {
 		uint8_t i = 1;
 		if(incomingDatalink.incoming_frame_length() >= i+sizeof(Stimulus)) {

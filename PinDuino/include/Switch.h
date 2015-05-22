@@ -1,12 +1,12 @@
 /*
- * InputPin.h
+ * Switch.h
  *
  *  Created on: Feb 19, 2015
  *      Author: peter
  */
 
-#ifndef INPUTPIN_H_
-#define INPUTPIN_H_
+#ifndef SWITCH_H_
+#define SWITCH_H_
 
 #include <EndPoint.h>
 #include <pt.h>
@@ -14,7 +14,7 @@
 #include <PinBank.h>
 #include <Timer.h>
 
-class InputPin {
+class Switch {
 	struct pt pt;
 	PT_THREAD(run());
 
@@ -30,10 +30,10 @@ class InputPin {
 	void pinChange(bool);
 
 public:
-	InputPin(OutgoingDataLink&, PinBank&, uint8_t, uint8_t);
-	virtual ~InputPin();
+	Switch(OutgoingDataLink&, PinBank&, uint8_t, uint8_t);
+	virtual ~Switch();
 
 	void schedule();
 };
 
-#endif /* INPUTPIN_H_ */
+#endif /* SWITCH_H_ */

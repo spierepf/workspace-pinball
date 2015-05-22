@@ -13,7 +13,7 @@
 #include <Solenoid.h>
 #include <Blinker.h>
 #include <EndPoint.h>
-#include <InputPin.h>
+#include <Switch.h>
 #include <StimulusResponse.h>
 
 #ifndef BAUD
@@ -69,20 +69,20 @@ Blinker blinker;
 PinBank pinBankC(PinBank::C, 0b00111111);
 PinBank pinBankD(PinBank::D, 0b11111100);
 
-InputPin inputPins[12] = {
-		InputPin(outgoingDataLink, pinBankC, 0, 0),
-		InputPin(outgoingDataLink, pinBankC, 1, 1),
-		InputPin(outgoingDataLink, pinBankC, 2, 2),
-		InputPin(outgoingDataLink, pinBankC, 3, 3),
-		InputPin(outgoingDataLink, pinBankC, 4, 4),
-		InputPin(outgoingDataLink, pinBankC, 5, 5),
+Switch inputPins[12] = {
+		Switch(outgoingDataLink, pinBankC, 0, 0),
+		Switch(outgoingDataLink, pinBankC, 1, 1),
+		Switch(outgoingDataLink, pinBankC, 2, 2),
+		Switch(outgoingDataLink, pinBankC, 3, 3),
+		Switch(outgoingDataLink, pinBankC, 4, 4),
+		Switch(outgoingDataLink, pinBankC, 5, 5),
 
-		InputPin(outgoingDataLink, pinBankD, 2, 6),
-		InputPin(outgoingDataLink, pinBankD, 3, 7),
-		InputPin(outgoingDataLink, pinBankD, 4, 8),
-		InputPin(outgoingDataLink, pinBankD, 5, 9),
-		InputPin(outgoingDataLink, pinBankD, 6, 10),
-		InputPin(outgoingDataLink, pinBankD, 7, 11)
+		Switch(outgoingDataLink, pinBankD, 2, 6),
+		Switch(outgoingDataLink, pinBankD, 3, 7),
+		Switch(outgoingDataLink, pinBankD, 4, 8),
+		Switch(outgoingDataLink, pinBankD, 5, 9),
+		Switch(outgoingDataLink, pinBankD, 6, 10),
+		Switch(outgoingDataLink, pinBankD, 7, 11)
 };
 
 void setup() {
@@ -110,7 +110,7 @@ void loop() {
 	endPoint.schedule();
 	pingPong.schedule();
 	blinker.schedule();
-	for(size_t i = 0; i < sizeof(inputPins) / sizeof(InputPin); i++) {
+	for(size_t i = 0; i < sizeof(inputPins) / sizeof(Switch); i++) {
 		inputPins[i].schedule();
 	}
 	for(size_t i = 0; i < sizeof(solenoids) / sizeof(Solenoid); i++) {

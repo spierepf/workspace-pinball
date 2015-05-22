@@ -1,5 +1,5 @@
 /*
- * InputPin.cpp
+ * Switch.cpp
  *
  *  Created on: Feb 19, 2015
  *      Author: peter
@@ -11,29 +11,29 @@
 #include <StimulusResponse.h>
 #include <OpCode.h>
 
-#include "InputPin.h"
+#include "Switch.h"
 
-InputPin::InputPin(OutgoingDataLink& outgoingDatalink, PinBank& bank, uint8_t index, uint8_t id) : outgoingDatalink(outgoingDatalink), bank(bank), mask(_BV(index)), id(id), history(0xff), state(true) {
+Switch::Switch(OutgoingDataLink& outgoingDatalink, PinBank& bank, uint8_t index, uint8_t id) : outgoingDatalink(outgoingDatalink), bank(bank), mask(_BV(index)), id(id), history(0xff), state(true) {
 	PT_INIT(&pt);
 }
 
-InputPin::~InputPin() {
+Switch::~Switch() {
 	// TODO Auto-generated destructor stub
 }
 
-void InputPin::schedule() {
+void Switch::schedule() {
 	PT_SCHEDULE(run());
 }
 
-void InputPin::pinChange(bool newState) {
+void Switch::pinChange(bool newState) {
 	state = newState;
-	outgoingDatalink.begin_outgoing_frame(newState ? OpCode::PIN_HIGH : OpCode::PIN_LOW);
+	outgoingDatalink.begin_outgoing_frame(newState ? OpCode::SWITCH_ACTIVE : OpCode::SWITCH_INACTIVE);
 	outgoingDatalink.append_payload(id);
 	outgoingDatalink.end_outgoing_frame();
 	stimulusResponse.trigger(Stimulus(id, newState));
 }
 
-PT_THREAD(InputPin::run()) {
+PT_THREAD(Switch::run()) {
 	PT_BEGIN(&pt);
 	for(;;) {
 		history = (history << 1) | ((bank.read() & mask) == 0 ? 0 : 1);

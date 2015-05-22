@@ -14,8 +14,8 @@ namespace OpCode {
 		PING,
 		PONG,
 		LOG,
-		PIN_LOW = 0x10,
-		PIN_HIGH,
+		SWITCH_ACTIVE = 0x10,
+		SWITCH_INACTIVE,
 		SR_INHIBIT = 0x20,
 		SR_ENABLE,
 		SR_CONFIG
