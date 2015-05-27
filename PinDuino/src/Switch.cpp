@@ -27,7 +27,7 @@ void Switch::schedule() {
 
 void Switch::pinChange(bool newState) {
 	state = newState;
-	outgoingDatalink.begin_outgoing_frame(newState ? OpCode::SWITCH_ACTIVE : OpCode::SWITCH_INACTIVE);
+	outgoingDatalink.begin_outgoing_frame(newState ? OpCode::SWITCH_INACTIVE : OpCode::SWITCH_ACTIVE);
 	outgoingDatalink.append_payload(id);
 	outgoingDatalink.end_outgoing_frame();
 	stimulusResponse.trigger(Stimulus(id, newState));
