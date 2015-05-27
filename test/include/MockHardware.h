@@ -8,12 +8,11 @@
 #ifndef MOCKHARDWARE_H_
 #define MOCKHARDWARE_H_
 
-#include <ByteSource.h>
-#include <ByteSink.h>
+#include <Hardware.h>
 
 #include <RingBuffer.h>
 
-class MockHardware: public ByteSource, public ByteSink {
+class MockHardware: public Hardware {
 public:
 	RingBuffer<16>& incoming_bytes;
 	RingBuffer<16>& outgoing_bytes;

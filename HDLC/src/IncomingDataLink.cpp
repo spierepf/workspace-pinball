@@ -9,7 +9,7 @@
 
 #include <stdint.h>
 
-IncomingDataLink::IncomingDataLink(ByteSource& byteSource) : byteSource(byteSource), current_frame_length(0) {
+IncomingDataLink::IncomingDataLink(Hardware& byteSource) : byteSource(byteSource), current_frame_length(0) {
 	PT_INIT(&incoming);
 }
 

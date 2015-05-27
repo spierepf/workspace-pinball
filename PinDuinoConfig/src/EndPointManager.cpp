@@ -51,8 +51,8 @@ bool EndPointManager::loop() {
 
 		try {
 			Tty* hardware = new Tty(s);
-			ByteSource* byteSource = hardware;
-			ByteSink* byteSink = hardware;
+			Hardware* byteSource = hardware;
+			Hardware* byteSink = hardware;
 			IncomingDataLink* incomingDatalink = new IncomingDataLink(*byteSource);
 			OutgoingDataLink* outgoingDatalink = new OutgoingDataLink(*byteSink);
 			endPoints.push_back(new EndPoint(notebook, s, byteSource, byteSink, incomingDatalink, outgoingDatalink));

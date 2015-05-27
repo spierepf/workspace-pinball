@@ -10,10 +10,9 @@
 
 #include <SerialPort.h>
 
-#include <ByteSource.h>
-#include <ByteSink.h>
+#include <Hardware.h>
 
-class Tty : public ByteSource, public ByteSink {
+class Tty : public Hardware {
 	SerialPort serial;
 
 public:

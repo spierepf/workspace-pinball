@@ -10,7 +10,7 @@
 
 #include <pt.h>
 
-#include <ByteSink.h>
+#include <Hardware.h>
 #include <RingBuffer.h>
 
 /** Handles message framing and flow control.
@@ -31,7 +31,7 @@ class OutgoingDataLink {
 	};
 
 	struct pt outgoing;
-	ByteSink& byteSink;
+	Hardware& byteSink;
 	RingBuffer<64> outgoing_bytes;
 
 	void put(uint8_t);
@@ -40,7 +40,7 @@ protected:
 	PT_THREAD(outgoing_thread());
 
 public:
-	OutgoingDataLink(ByteSink&);
+	OutgoingDataLink(Hardware&);
 	virtual ~OutgoingDataLink();
 
 	/** Used to schedule our protothread for execution. */

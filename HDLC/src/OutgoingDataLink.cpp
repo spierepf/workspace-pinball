@@ -7,7 +7,7 @@
 
 #include "OutgoingDataLink.h"
 
-OutgoingDataLink::OutgoingDataLink(ByteSink& byteSink) : byteSink(byteSink) {
+OutgoingDataLink::OutgoingDataLink(Hardware& byteSink) : byteSink(byteSink) {
 	PT_INIT(&outgoing);
 }
 

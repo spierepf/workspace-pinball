@@ -8,10 +8,9 @@
 #ifndef UART_H_
 #define UART_H_
 
-#include <ByteSource.h>
-#include <ByteSink.h>
+#include <Hardware.h>
 
-class Uart : public ByteSource, public ByteSink {
+class Uart : public Hardware {
 public:
 	Uart();
 	virtual ~Uart();

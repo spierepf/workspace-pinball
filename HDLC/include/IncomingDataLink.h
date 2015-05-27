@@ -10,7 +10,7 @@
 
 #include <pt.h>
 
-#include <ByteSource.h>
+#include <Hardware.h>
 #include <RingBuffer.h>
 
 /** Handles message framing and flow control.
@@ -32,7 +32,7 @@ class IncomingDataLink {
 
 protected:
 	struct pt incoming;
-	ByteSource& byteSource;
+	Hardware& byteSource;
 	uint8_t current_frame_length;
 	RingBuffer<64> incoming_bytes;
 	RingBuffer<4> incoming_frame_lengths;
@@ -40,7 +40,7 @@ protected:
 	PT_THREAD(incoming_thread());
 
 public:
-	IncomingDataLink(ByteSource&);
+	IncomingDataLink(Hardware&);
 	virtual ~IncomingDataLink();
 
 	/** Used to schedule our protothread for execution. */

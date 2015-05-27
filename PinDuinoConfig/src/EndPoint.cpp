@@ -26,7 +26,7 @@ char* labels[] = {
 		"7",
 };
 
-EndPoint::EndPoint(Gtk::Notebook* notebook, string device, ByteSource* byteSource, ByteSink* byteSink, IncomingDataLink* incomingDatalink, OutgoingDataLink* outgoingDatalink) : AbstractEndPoint(*incomingDatalink, *outgoingDatalink), notebook(notebook), device(device), byteSource(byteSource), byteSink(byteSink), id(255) {
+EndPoint::EndPoint(Gtk::Notebook* notebook, string device, Hardware* byteSource, Hardware* byteSink, IncomingDataLink* incomingDatalink, OutgoingDataLink* outgoingDatalink) : AbstractEndPoint(*incomingDatalink, *outgoingDatalink), notebook(notebook), device(device), byteSource(byteSource), byteSink(byteSink), id(255) {
 	grid = new Gtk::Grid();
 	label = new Gtk::Label(device);
 
