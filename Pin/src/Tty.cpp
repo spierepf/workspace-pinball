@@ -13,7 +13,7 @@
 #include "Tty.h"
 
 Tty::Tty(const char* device) : serial(device) {
-	serial.Open(SerialPort::BAUD_115200);
+	serial.Open(SerialPort::BAUD_38400);
 }
 
 Tty::~Tty() {

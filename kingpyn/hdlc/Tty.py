@@ -16,7 +16,7 @@ class Tty(object):
         '''
         Constructor
         '''
-        self.serial = serial.Serial(port, 115200) 
+        self.serial = serial.Serial(port, 38400) 
 
     def getReady(self):
         '''
