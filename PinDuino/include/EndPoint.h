@@ -15,12 +15,13 @@
 
 class EndPoint : public AbstractEndPoint {
 	PingPong& pingPong;
+	OutgoingPinDuinoDataLink& logger;
 
 protected:
 	void handleIncomingFrame();
 
 public:
-	EndPoint(IncomingDataLink&, OutgoingDataLink&, PingPong&);
+	EndPoint(IncomingDataLink&, OutgoingPinDuinoDataLink&, PingPong&);
 	virtual ~EndPoint();
 };
 
