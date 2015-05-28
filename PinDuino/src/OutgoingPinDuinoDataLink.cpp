@@ -13,7 +13,7 @@
 
 #include <OpCode.h>
 
-OutgoingPinDuinoDataLink::OutgoingPinDuinoDataLink(Hardware& byteSink) : OutgoingDataLink(byteSink) {
+OutgoingPinDuinoDataLink::OutgoingPinDuinoDataLink(Hardware& hardware) : OutgoingDataLink(hardware) {
 	// TODO Auto-generated constructor stub
 }
 

@@ -32,7 +32,7 @@ class IncomingDataLink {
 
 protected:
 	struct pt incoming;
-	Hardware& byteSource;
+	Hardware& hardware;
 	uint8_t current_frame_length;
 	RingBuffer<64> incoming_bytes;
 	RingBuffer<4> incoming_frame_lengths;

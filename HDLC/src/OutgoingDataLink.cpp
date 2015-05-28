@@ -7,7 +7,7 @@
 
 #include "OutgoingDataLink.h"
 
-OutgoingDataLink::OutgoingDataLink(Hardware& byteSink) : byteSink(byteSink) {
+OutgoingDataLink::OutgoingDataLink(Hardware& hardware) : hardware(hardware) {
 	PT_INIT(&outgoing);
 }
 
@@ -27,8 +27,8 @@ void OutgoingDataLink::put(uint8_t b) {
 PT_THREAD(OutgoingDataLink::outgoing_thread()) {
 	PT_BEGIN(&outgoing);
 	for (;;) {
-		PT_WAIT_UNTIL(&outgoing, byteSink.putReady() && !outgoing_bytes.empty());
-		byteSink.put(outgoing_bytes.get());
+		PT_WAIT_UNTIL(&outgoing, hardware.putReady() && !outgoing_bytes.empty());
+		hardware.put(outgoing_bytes.get());
 		PT_YIELD(&outgoing);
 	}
 	PT_END(&outgoing);

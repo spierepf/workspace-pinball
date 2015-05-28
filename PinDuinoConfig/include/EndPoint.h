@@ -45,15 +45,14 @@ class EndPoint : public AbstractEndPoint {
 	SolenoidActionController* solenoidActionControllers[12][2];
 
 	string device;
-	Hardware* byteSource;
-	Hardware* byteSink;
+	Hardware* hardware;
 	int id;
 
 protected:
 	void handleIncomingFrame();
 
 public:
-	EndPoint(Gtk::Notebook* notebook, string, Hardware*, Hardware*, IncomingDataLink*, OutgoingDataLink*);
+	EndPoint(Gtk::Notebook* notebook, string, Hardware*, IncomingDataLink*, OutgoingDataLink*);
 	virtual ~EndPoint();
 };
 
