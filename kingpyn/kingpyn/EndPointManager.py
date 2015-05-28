@@ -43,6 +43,11 @@ class EndPointManager(object):
     def registerSwitch(self, switchNumber):
         self.registeredSwitches.append(switchNumber)
 
+    def getEndPoint(self, boardId):
+        for endPoint in self.endPoints:
+            if(endPoint.id == boardId):
+                return endPoint
+
 
     class SwitchObserver(Observer):
         def __init__(self, outer, endpoint, switchIndex, state):
