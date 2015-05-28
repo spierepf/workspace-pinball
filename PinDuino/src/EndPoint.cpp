@@ -40,8 +40,6 @@ void EndPoint::handleIncomingFrame() {
 				SolenoidAction action;
 				action.read_from(incomingDatalink, i);
 				stimulusResponse[stimulus] = action;
-				eeprom_busy_wait();
-				eeprom_write_dword(&eeprom_actions[stimulus.pin][stimulus.newState], action);
 			} else {
 				outgoingDatalink.begin_outgoing_frame(OpCode::SR_CONFIG);
 				stimulus.write_to(outgoingDatalink);
