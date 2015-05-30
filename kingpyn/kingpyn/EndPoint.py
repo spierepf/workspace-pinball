@@ -58,16 +58,9 @@ class EndPoint(object):
         while self.id == None:
             self.schedule()
 
-    def setHardwareRule(self, switchId, activity, driverId, attack, sustain):
+    def addHardwareRule(self, hardwareRule):
         self.outgoingDatalink.beginOutgoingFrame(OpCode.SR_CONFIG())
-        if activity == 0:
-            self.outgoingDatalink.appendPayload(switchId + 128)
-        else:
-            self.outgoingDatalink.appendPayload(switchId + 0)
-        self.outgoingDatalink.appendPayload(driverId * 2 + 1)
-        self.outgoingDatalink.appendPayload(sustain)
-        self.outgoingDatalink.appendPayload(attack % 256)
-        self.outgoingDatalink.appendPayload(int(attack / 256))
+        self.outgoingDatalink.appendPayload(hardwareRule.toByteArray())
         self.outgoingDatalink.endOutgoingFrame()
     
     

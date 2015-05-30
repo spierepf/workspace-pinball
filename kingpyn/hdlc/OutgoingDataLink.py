@@ -4,6 +4,7 @@ Created on May 21, 2015
 @author: peter
 '''
 from collections import deque
+from array import array
 
 class OutgoingDataLink(object):
     '''
@@ -50,7 +51,11 @@ class OutgoingDataLink(object):
         pass
     
     def appendPayload(self, payload):
-        self.put(payload)
+        if isinstance(payload, (list, tuple, array)):
+            for p in payload:
+                self.put(p)
+        else:
+            self.put(payload)
     
     def endOutgoingFrame(self):
         self.queue.append(OutgoingDataLink.FLAG())
