@@ -11,24 +11,19 @@
 
 #include <IncomingDataLink.h>
 #include <OutgoingDataLink.h>
-#include <SolenoidAction.h>
 
 const uint8_t id = 5;
 
 void setup() {
 	pinMode(13, OUTPUT);
-	for(int i = 0; i < 12; i++) {
-		eeprom_busy_wait();
-		eeprom_update_dword(&eeprom_actions[i][0], SolenoidAction(1, 5, 65000, 0));
-		eeprom_busy_wait();
-		eeprom_update_dword(&eeprom_actions[i][1], SolenoidAction(0, 5, 0, 0));
-	}
 	eeprom_busy_wait();
 	eeprom_update_byte(&eeprom_id, id);
 	eeprom_busy_wait();
-	digitalWrite(13, eeprom_read_byte(&eeprom_id) == id);
 }
 
 void loop() {
-
+	digitalWrite(13, eeprom_read_byte(&eeprom_id) == id);
+	delay(1000);
+	digitalWrite(13, LOW);
+	delay(1000);
 }
