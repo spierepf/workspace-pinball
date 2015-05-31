@@ -26,11 +26,11 @@ class Stimulus(object):
         return hash(self.switchId) ^ hash(self.activity)
     
     def toByteArray(self):
-        return [(self.switchId << 1) | (self.activity & 1)]
+        return [((self.activity & 1) << 7) | self.switchId ]
     
     @staticmethod
     def fromByteArray(byteArray):
-        switchId = byteArray[0] >> 1
-        activity = byteArray[0] & 1
+        activity = byteArray[0] >> 7
+        switchId = byteArray[0] & 0x7F
         return Stimulus(switchId, activity)
         

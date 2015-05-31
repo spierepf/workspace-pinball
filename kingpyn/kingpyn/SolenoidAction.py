@@ -28,15 +28,15 @@ class SolenoidAction(object):
         return hash(self.enabled) ^ hash(self.driverId) ^ hash(self.attack) ^ hash(self.sustain)
     
     def toByteArray(self):
-        return [(self.enabled << 7) | self.driverId,
+        return [self.enabled | self.driverId << 1,
                 self.sustain,
                 self.attack & 255,
                 self.attack >> 8 ]
         
     @staticmethod
     def fromByteArray(byteArray):
-        enabled = byteArray[0] >> 7
-        driverId = byteArray[0] & 0x7F
+        enabled = byteArray[0] & 0x01
+        driverId = byteArray[0] >> 1
         attack = byteArray[2] + (byteArray[3] << 8)
         sustain = byteArray[1]
         return SolenoidAction(enabled, driverId, attack, sustain)

@@ -22,6 +22,10 @@ class Test(unittest.TestCase):
         x = Stimulus(2, 1)
         self.assertEqual(x, Stimulus.fromByteArray(x.toByteArray()))
 
+    def testFromByteArray(self):
+        x = Stimulus(2, 1)
+        self.assertEqual(128 + 2, x.toByteArray()[0])
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testByteArray']

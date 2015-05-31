@@ -546,3 +546,22 @@ BOOST_AUTO_TEST_CASE( rle_test ) {
 
 	for(size_t i = 0; i < sizeof(src); i++) BOOST_CHECK_EQUAL(src[i], dst[i]);
 }
+
+BOOST_AUTO_TEST_CASE(stimulus_test)
+{
+	Stimulus s(2, true);
+	uint8_t *b = (uint8_t*)&s;
+
+	BOOST_CHECK_EQUAL(128+2, *b);
+}
+
+BOOST_AUTO_TEST_CASE(solenoid_action_test)
+{
+	SolenoidAction s(true, 2, 3, 4);
+	uint8_t *b = (uint8_t*)&s;
+
+	BOOST_CHECK_EQUAL((2 << 1) | 1, b[0]);
+	BOOST_CHECK_EQUAL(4, b[1]);
+	BOOST_CHECK_EQUAL(3, b[2]);
+	BOOST_CHECK_EQUAL(0, b[3]);
+}
