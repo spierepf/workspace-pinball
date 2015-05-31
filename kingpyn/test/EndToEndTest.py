@@ -36,7 +36,10 @@ class Test(unittest.TestCase):
 
 
     def testName(self):
-        self.endpoint.addHardwareRule(HardwareRule(Stimulus(6, 1), SolenoidAction(True, 1, 10000, 0)))
+        self.endpoint.addHardwareRule(HardwareRule(Stimulus(6, 0), SolenoidAction(True, 1, 1, 255)))
+        self.endpoint.addHardwareRule(HardwareRule(Stimulus(6, 1), SolenoidAction(True, 1, 0, 0)))
+        self.endpoint.addHardwareRule(HardwareRule(Stimulus(7, 0), SolenoidAction(True, 2, 1, 255)))
+        self.endpoint.addHardwareRule(HardwareRule(Stimulus(7, 1), SolenoidAction(True, 2, 0, 0)))
         while True:
             self.endPointManager.run()
 
