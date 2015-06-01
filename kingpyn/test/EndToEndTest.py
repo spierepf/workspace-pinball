@@ -21,7 +21,7 @@ class Test(unittest.TestCase):
     def setUp(self):
         logging.basicConfig()
         
-        self.hardware = Tty("/dev/ttyACM0")
+        self.hardware = Tty("/dev/ttyUSB0")
         self.incomingDatalink = IncomingDataLink(self.hardware)
         self.outgoingDatalink = OutgoingDataLink(self.hardware)
         self.endpoint = EndPoint(self.incomingDatalink, self.outgoingDatalink)
