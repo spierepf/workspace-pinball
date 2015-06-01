@@ -17,7 +17,7 @@
 #include <StimulusResponse.h>
 
 #ifndef BAUD
-#define BAUD 38400
+#define BAUD 9600
 #endif
 
 #include <util/setbaud.h>
