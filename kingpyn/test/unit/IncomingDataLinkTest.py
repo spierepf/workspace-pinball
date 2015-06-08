@@ -5,19 +5,7 @@ Created on May 20, 2015
 '''
 import unittest
 from hdlc.IncomingDataLink import IncomingDataLink
-from collections import deque
-
-
-class MockIncomingHardware(object):
-    def __init__(self):
-        self.incomingBytes = deque()
-        
-    def getReady(self):
-        return len(self.incomingBytes) > 0
-    
-    def get(self):
-        return self.incomingBytes.popleft()
-
+from test.unit.MockIncomingHardware import MockIncomingHardware
 
 class Test(unittest.TestCase):
 
