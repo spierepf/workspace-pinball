@@ -21,8 +21,12 @@ class IncomingFrameHandler(object):
     def schedule(self):
         self.incomingDatalink.schedule()
         if self.incomingDatalink.haveIncomingFrame():
-            self.frameNotifier.setChanged() 
-            self.frameNotifier.notifyObservers()
+            self.frameNotifier.setChanged()
+            opcode = self.incomingDatalink.peek(0)
+            payload = []
+            for i in range(1, self.incomingDatalink.incomingFrameLength()):
+                payload.append(self.incomingDatalink.peek(i)) 
+            self.frameNotifier.notifyObservers((opcode, payload))
             self.incomingDatalink.nextIncomingFrame()
 
                 
@@ -30,5 +34,5 @@ class IncomingFrameHandler(object):
         def __init__(self, outer):
             Observable.__init__(self)
             self.outer = outer
-        def notifyObservers(self):
-            Observable.notifyObservers(self)
+        def notifyObservers(self, frame):
+            Observable.notifyObservers(self, frame)

@@ -16,6 +16,7 @@ class MockFrameObserver(Observer):
 
     def update(self, observable, arg):
         self.receivedFrameCount = self.receivedFrameCount + 1
+        self.receivedFrame = arg
 
 
 class Test(unittest.TestCase):
@@ -45,6 +46,7 @@ class Test(unittest.TestCase):
             incomingFrameHandler.schedule()
         
         self.assertEquals(1, observer.receivedFrameCount)
+        self.assertEquals((OpCode.MY_ID(), [5]), observer.receivedFrame)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
