@@ -38,4 +38,8 @@ class HardwareRule(object):
         solenoidAction = SolenoidAction.fromByteArray([byteArray[1], byteArray[2], byteArray[3], byteArray[4]])
         return HardwareRule(stimulus, solenoidAction)
         
-        
+    def __str__(self):
+        return "HardwareRule({}, {})".format(self.stimulus, self.solenoidAction)
+    
+    def __repr__(self):
+        return self.__str__()

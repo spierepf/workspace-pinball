@@ -33,4 +33,9 @@ class Stimulus(object):
         activity = byteArray[0] >> 7
         switchId = byteArray[0] & 0x7F
         return Stimulus(switchId, activity)
-        
+
+    def __str__(self):
+        return "Stimulus({}, {})".format(self.switchId, self.activity)
+    
+    def __repr__(self):
+        return self.__str__()

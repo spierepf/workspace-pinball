@@ -40,3 +40,9 @@ class SolenoidAction(object):
         attack = byteArray[2] + (byteArray[3] << 8)
         sustain = byteArray[1]
         return SolenoidAction(enabled, driverId, attack, sustain)
+    
+    def __str__(self):
+        return "SolenoidAction({}, {}, {}, {})".format(self.enabled, self.driverId, self.attack, self.sustain)
+    
+    def __repr__(self):
+        return self.__str__()
