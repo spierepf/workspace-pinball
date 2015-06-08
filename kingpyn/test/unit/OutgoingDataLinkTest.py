@@ -5,18 +5,7 @@ Created on May 21, 2015
 '''
 import unittest
 from hdlc.OutgoingDataLink import OutgoingDataLink
-from collections import deque
-
-
-class MockOutgoingHardware(object):
-    def __init__(self):
-        self.outgoingBytes = deque()
-        
-    def putReady(self):
-        return True
-
-    def put(self, b):
-        self.outgoingBytes.append(b)
+from test.unit.MockOutgoingHardware import MockOutgoingHardware
 
 class Test(unittest.TestCase):
 
