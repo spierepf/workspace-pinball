@@ -6,6 +6,10 @@ Created on Jun 10, 2015
 import logging
 from PingPong import PingPong
 from OpCode import OpCode
+from HardwareRuleManager import HardwareRuleManager
+from HardwareRule import HardwareRule
+from Stimulus import Stimulus
+from SolenoidAction import SolenoidAction
 
 class EndPoint(object):
     '''
@@ -29,6 +33,9 @@ class EndPoint(object):
         self.pingPong = PingPong(outgoingFrameHandler)
         self.incomingFrameHandler.frameNotifier.addObserver(self.pingPong)
         
+        self.hardwareRuleManager = HardwareRuleManager(outgoingFrameHandler)
+        self.incomingFrameHandler.frameNotifier.addObserver(self.hardwareRuleManager)
+        
     def schedule(self):
         self.incomingFrameHandler.schedule()
         self.outgoingFrameHandler.schedule()
@@ -48,3 +55,6 @@ class EndPoint(object):
     def ensureID(self):
         while self.id == None:
             self.schedule()
+            
+    def addHardwareRule(self, switchId, activity, solenoidId, attack, sustain):
+        self.hardwareRuleManager.addRule(HardwareRule(Stimulus(switchId, activity), SolenoidAction(True, solenoidId, attack, sustain)))

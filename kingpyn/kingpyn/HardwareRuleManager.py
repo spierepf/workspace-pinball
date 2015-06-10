@@ -49,6 +49,7 @@ class HardwareRuleManager(object):
                 self.dirty.add(existingRule.stimulus)
                 self.sendRule(existingRule)
         elif frame[0] == OpCode.MY_ID():
-            for stimulus in self.rules.keys():
-                self.dirty.add(stimulus)
-            self.sendRule()
+            if len(self.rules) > 0:
+                for stimulus in self.rules.keys():
+                    self.dirty.add(stimulus)
+                self.sendRule()

@@ -21,15 +21,20 @@ class EndPointManager(object):
         '''
         Constructor
         '''
-        self.endPoints = []
+        self.endPoints = {}
         self.switchEventQueue = deque()
         
     def addDevice(self, device):
         tty = Tty(device)
-        self.endPoints.append(EndPoint(IncomingFrameHandler(IncomingDataLink(tty)),
-                                       OutgoingFrameHandler(OutgoingDataLink(tty)),
-                                       self.switchEventQueue))
+        endPoint = EndPoint(IncomingFrameHandler(IncomingDataLink(tty)),
+                            OutgoingFrameHandler(OutgoingDataLink(tty)),
+                            self.switchEventQueue)
+        endPoint.ensureID()
+        self.endPoints[endPoint.id] = endPoint
     
     def schedule(self):
-        for endPoint in self.endPoints:
+        for endPoint in self.endPoints.itervalues():
             endPoint.schedule()
+
+    def addHardwareRule(self, endPointId, switchId, activity, solenoidId, attack, sustain):
+        self.endPoints[endPointId].addHardwareRule(switchId, activity, solenoidId, attack, sustain)
