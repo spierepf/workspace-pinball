@@ -24,6 +24,12 @@ class SolenoidAction(object):
             return self.enabled == other.enabled and self.driverId == other.driverId and self.attack == other.attack and self.sustain == other.sustain
         return NotImplemented
     
+    def __ne__(self, other):
+        result = self.__eq__(other)
+        if result is NotImplemented:
+            return result
+        return not result
+
     def __hash__(self):
         return hash(self.enabled) ^ hash(self.driverId) ^ hash(self.attack) ^ hash(self.sustain)
     
@@ -35,7 +41,7 @@ class SolenoidAction(object):
         
     @staticmethod
     def fromByteArray(byteArray):
-        enabled = byteArray[0] & 0x01
+        enabled = byteArray[0] & 0x01 == 0x01
         driverId = byteArray[0] >> 1
         attack = byteArray[2] + (byteArray[3] << 8)
         sustain = byteArray[1]

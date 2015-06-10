@@ -24,6 +24,12 @@ class HardwareRule(object):
             return self.stimulus == other.stimulus and self.solenoidAction == other.solenoidAction
         return NotImplemented
     
+    def __ne__(self, other):
+        result = self.__eq__(other)
+        if result is NotImplemented:
+            return result
+        return not result
+
     def __hash__(self):
         return hash(self.stimulus) ^ hash(self.solenoidAction)
     

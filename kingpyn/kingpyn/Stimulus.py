@@ -22,6 +22,12 @@ class Stimulus(object):
             return self.switchId == other.switchId and self.activity == other.activity
         return NotImplemented
     
+    def __ne__(self, other):
+        result = self.__eq__(other)
+        if result is NotImplemented:
+            return result
+        return not result
+
     def __hash__(self):
         return hash(self.switchId) ^ hash(self.activity)
     
