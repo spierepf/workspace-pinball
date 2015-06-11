@@ -4,12 +4,12 @@ Created on Jun 10, 2015
 @author: peter
 '''
 from collections import deque
-from Tty import Tty
-from EndPoint import EndPoint
-from IncomingFrameHandler import IncomingFrameHandler
-from IncomingDataLink import IncomingDataLink
-from OutgoingFrameHandler import OutgoingFrameHandler
-from OutgoingDataLink import OutgoingDataLink
+from hdlc.Tty import Tty
+from kingpyn.EndPoint import EndPoint
+from kingpyn.IncomingFrameHandler import IncomingFrameHandler
+from hdlc.IncomingDataLink import IncomingDataLink
+from kingpyn.OutgoingFrameHandler import OutgoingFrameHandler
+from hdlc.OutgoingDataLink import OutgoingDataLink
 
 class EndPointManager(object):
     '''
