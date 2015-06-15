@@ -48,9 +48,9 @@ class EndPoint(object):
             if self.log != None:
                 self.log.info("".join(map(chr, frame[1])))
         elif frame[0] == OpCode.SWITCH_ACTIVE():
-            self.switchEventQueue.append(("{}-{}".format(self.id, frame[1][0]), True))
+            self.switchEventQueue.append(("{}-{}".format(self.id, frame[1][0]), 1))
         elif frame[0] == OpCode.SWITCH_INACTIVE():
-            self.switchEventQueue.append(("{}-{}".format(self.id, frame[1][0]), False))
+            self.switchEventQueue.append(("{}-{}".format(self.id, frame[1][0]), 0))
 
     def ensureID(self):
         while self.id == None:
