@@ -18,7 +18,8 @@ namespace OpCode {
 		SWITCH_INACTIVE,
 		SR_INHIBIT = 0x20,
 		SR_ENABLE,
-		SR_CONFIG
+		SR_CONFIG,
+		PULSE_COIL = 0x30
 	};
 }
 

@@ -44,4 +44,8 @@ class OpCode(object):
     @staticmethod
     def SR_CONFIG():
         return 0x22
+    
+    @staticmethod
+    def PULSE_COIL():
+        return 0x30
         

@@ -12,6 +12,7 @@ extern uint32_t eeprom_actions[12][2];
 #include <EndPoint.h>
 #include <OpCode.h>
 #include <StimulusResponse.h>
+extern Solenoid solenoids[6];
 
 EndPoint::EndPoint(IncomingDataLink& _incomingDatalink, OutgoingPinDuinoDataLink& _outgoingDatalink, PingPong &pingPong) : AbstractEndPoint(_incomingDatalink, _outgoingDatalink), pingPong(pingPong), logger(_outgoingDatalink) {
 	eeprom_busy_wait();
@@ -27,6 +28,17 @@ EndPoint::~EndPoint() {
 void EndPoint::handleIncomingFrame() {
 	if(incomingDatalink.peek(0) == OpCode::PONG) {
 		pingPong.acceptPong(incomingDatalink.peek(1));
+	} else if(incomingDatalink.peek(0) == OpCode::PULSE_COIL) {
+		SolenoidAction action;
+		uint8_t i = 1;
+		action.read_from(incomingDatalink, i);
+		if(action.enabled && action.solenoidIndex < 6 && action.attack <= 65000) {
+			if(action.attack == 0) {
+				solenoids[action.solenoidIndex].release();
+			} else {
+				solenoids[action.solenoidIndex].trigger(action.attack, action.sustain);
+			}
+		}
 	} else if(incomingDatalink.peek(0) == OpCode::SR_INHIBIT) {
 		stimulusResponse.inhibit();
 	} else if(incomingDatalink.peek(0) == OpCode::SR_ENABLE) {

@@ -58,3 +58,7 @@ class EndPoint(object):
             
     def addHardwareRule(self, switchId, activity, solenoidId, attack, sustain):
         self.hardwareRuleManager.addRule(HardwareRule(Stimulus(switchId, activity), SolenoidAction(True, solenoidId, attack, sustain)))
+
+    def pulseSolenoid(self, activity):
+        self.outgoingFrameHandler.postFrame(OpCode.PULSE_COIL(), activity.toByteArray())
+        pass

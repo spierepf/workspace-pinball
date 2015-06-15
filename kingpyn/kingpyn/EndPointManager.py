@@ -10,6 +10,7 @@ from kingpyn.IncomingFrameHandler import IncomingFrameHandler
 from hdlc.IncomingDataLink import IncomingDataLink
 from kingpyn.OutgoingFrameHandler import OutgoingFrameHandler
 from hdlc.OutgoingDataLink import OutgoingDataLink
+from kingpyn.SolenoidAction import SolenoidAction
 
 class EndPointManager(object):
     '''
@@ -38,3 +39,6 @@ class EndPointManager(object):
 
     def addHardwareRule(self, endPointId, switchId, activity, solenoidId, attack, sustain):
         self.endPoints[endPointId].addHardwareRule(switchId, activity, solenoidId, attack, sustain)
+
+    def pulseSolenoid(self, endPointId, solenoidId, milliseconds):
+        self.endPoints[endPointId].pulseSolenoid(SolenoidAction(True, solenoidId, milliseconds * 1000, 0))
