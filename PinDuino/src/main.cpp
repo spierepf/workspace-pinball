@@ -15,6 +15,7 @@
 #include <EndPoint.h>
 #include <Switch.h>
 #include <StimulusResponse.h>
+#include <SwitchBank.h>
 
 #ifndef BAUD
 #define BAUD 9600
@@ -66,24 +67,36 @@ StimulusResponse stimulusResponse;
 EndPoint endPoint(incomingDataLink, outgoingDataLink, pingPong);
 Blinker blinker;
 
+uint8_t dirtyListC = 0;
+uint8_t dirtyListD = 0;
+
 PinBank pinBankC(PinBank::C, 0b00111111);
 PinBank pinBankD(PinBank::D, 0b11111100);
 
-Switch inputPins[12] = {
-		Switch(outgoingDataLink, pinBankC, 0, 0),
-		Switch(outgoingDataLink, pinBankC, 1, 1),
-		Switch(outgoingDataLink, pinBankC, 2, 2),
-		Switch(outgoingDataLink, pinBankC, 3, 3),
-		Switch(outgoingDataLink, pinBankC, 4, 4),
-		Switch(outgoingDataLink, pinBankC, 5, 5),
-
-		Switch(outgoingDataLink, pinBankD, 2, 6),
-		Switch(outgoingDataLink, pinBankD, 3, 7),
-		Switch(outgoingDataLink, pinBankD, 4, 8),
-		Switch(outgoingDataLink, pinBankD, 5, 9),
-		Switch(outgoingDataLink, pinBankD, 6, 10),
-		Switch(outgoingDataLink, pinBankD, 7, 11)
+Switch *switchesC[] = {
+		new Switch(outgoingDataLink, 0, 0, dirtyListC),
+		new Switch(outgoingDataLink, 1, 1, dirtyListC),
+		new Switch(outgoingDataLink, 2, 2, dirtyListC),
+		new Switch(outgoingDataLink, 3, 3, dirtyListC),
+		new Switch(outgoingDataLink, 4, 4, dirtyListC),
+		new Switch(outgoingDataLink, 5, 5, dirtyListC),
+		NULL,
+		NULL
 };
+
+Switch *switchesD[] = {
+		NULL,
+		NULL,
+		new Switch(outgoingDataLink, 2, 6, dirtyListD),
+		new Switch(outgoingDataLink, 3, 7, dirtyListD),
+		new Switch(outgoingDataLink, 4, 8, dirtyListD),
+		new Switch(outgoingDataLink, 5, 9, dirtyListD),
+		new Switch(outgoingDataLink, 6, 10, dirtyListD),
+		new Switch(outgoingDataLink, 7, 11, dirtyListD)
+};
+
+SwitchBank switchBankC = SwitchBank(switchesC, pinBankC, dirtyListC);
+SwitchBank switchBankD = SwitchBank(switchesD, pinBankD, dirtyListD);
 
 void setup() {
 	uart_init();
@@ -103,9 +116,8 @@ void loop() {
 	endPoint.schedule();
 	pingPong.schedule();
 	blinker.schedule();
-	for(size_t i = 0; i < sizeof(inputPins) / sizeof(Switch); i++) {
-		inputPins[i].schedule();
-	}
+	switchBankC.schedule();
+	switchBankD.schedule();
 	for(size_t i = 0; i < sizeof(solenoids) / sizeof(Solenoid); i++) {
 		solenoids[i].schedule();
 	}
