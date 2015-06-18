@@ -22,7 +22,7 @@ class EndPoint(object):
         Constructor
         '''
         self.id = None
-        self.log = None
+        self.log = logging.getLogger("EndPoint[{}]".format(self.id))
         self.switchEventQueue = switchEventQueue
         
         self.incomingFrameHandler = incomingFrameHandler
@@ -41,15 +41,15 @@ class EndPoint(object):
         self.outgoingFrameHandler.schedule()
 
     def update(self, observable, frame):
-        if frame[0] == OpCode.MY_ID():
+        if frame[0] == OpCode.MY_ID() and len(frame[1]) == 1:
             self.id = frame[1][0]
             self.log = logging.getLogger("EndPoint[{}]".format(self.id))
-        elif frame[0] == OpCode.LOG():
+        elif frame[0] == OpCode.LOG() and len(frame[1]) > 0:
             if self.log != None:
                 self.log.info("".join(map(chr, frame[1])))
-        elif frame[0] == OpCode.SWITCH_ACTIVE():
+        elif frame[0] == OpCode.SWITCH_ACTIVE() and len(frame[1]) == 1:
             self.switchEventQueue.append(("{}-{}".format(self.id, frame[1][0]), 1))
-        elif frame[0] == OpCode.SWITCH_INACTIVE():
+        elif frame[0] == OpCode.SWITCH_INACTIVE() and len(frame[1]) == 1:
             self.switchEventQueue.append(("{}-{}".format(self.id, frame[1][0]), 0))
 
     def ensureID(self):
