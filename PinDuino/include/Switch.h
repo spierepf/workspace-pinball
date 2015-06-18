@@ -22,8 +22,6 @@ class Switch {
 	bool state;
 	uint8_t& dirtyList;
 
-	Timer<unsigned int> timer;
-
 	void pinChange(bool);
 
 public:
