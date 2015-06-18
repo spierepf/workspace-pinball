@@ -11,8 +11,7 @@
 
 #define TIME_FUNCTION micros()
 
-Solenoid::Solenoid(PinBank& pin, volatile uint8_t& tccra, uint8_t pwmMask, uint8_t pwmEnableBits, volatile uint8_t& ocr) : pin(pin), attack(0), sustain(0), tccra(tccra), pwmMask(pwmMask), pwmEnableBits(pwmEnableBits), ocr(ocr) {
-	PT_INIT(&pt);
+Solenoid::Solenoid(PinBank& pin, volatile uint8_t& tccra, uint8_t pwmMask, uint8_t pwmEnableBits, volatile uint8_t& ocr, uint8_t mask, uint8_t& dirtyList) : pin(pin), attack(0), sustain(0), tccra(tccra), pwmMask(pwmMask), pwmEnableBits(pwmEnableBits), ocr(ocr), mask(mask), dirtyList(dirtyList) {
 	pin.dataLow();
 	pin.dirOut();
 }
@@ -34,6 +33,7 @@ void Solenoid::setOCR(uint8_t value) {
 }
 
 void Solenoid::trigger(uint16_t attack, uint8_t sustain) {
+	dirtyList |= mask;
 	timer.set(TIME_FUNCTION);
 	this->attack = attack;
 	this->sustain = sustain;
@@ -71,18 +71,12 @@ bool Solenoid::inRelease() {
 	return attack == 0 && sustain == 0;
 }
 
-void Solenoid::schedule() {
-	PT_SCHEDULE(run());
-}
+void Solenoid::update() {
+	// if in attack mode but timer has elapsed go to sustain mode
+	if(inAttack() && timer.elapsed(TIME_FUNCTION) > attack) beginSustain();
+	// if in sustain mode do nothing
+	// if in release mode do nothing
 
-PT_THREAD(Solenoid::run()) {
-	PT_BEGIN(&pt);
-	for(;;) {
-		// if in attack mode but timer has elapsed go to sustain mode
-		if(inAttack() && timer.elapsed(TIME_FUNCTION) > attack) beginSustain();
-		// if in sustain mode do nothing
-		// if in release mode do nothing
-		PT_YIELD(&pt);
-	}
-	PT_END(&pt);
+	// We are only dirty when we are in attack mode
+	if(!inAttack()) dirtyList &= ~mask;
 }

@@ -10,13 +10,11 @@
 
 #include <stdint.h>
 
-#include <pt.h>
 #include <PinBank.h>
 #include <Timer.h>
 
 class Solenoid {
-	struct pt pt;
-	PT_THREAD(run());
+	friend class SolenoidBank;
 
 	PinBank pin;
 	uint16_t attack;
@@ -27,6 +25,9 @@ class Solenoid {
 	uint8_t pwmMask;
 	uint8_t pwmEnableBits;
 	volatile uint8_t& ocr;
+
+	uint8_t mask;
+	uint8_t& dirtyList;
 
 	void enablePWM();
 	void disablePWM();
@@ -39,13 +40,13 @@ class Solenoid {
 	bool inRelease();
 
 public:
-	Solenoid(PinBank&, volatile uint8_t&, uint8_t, uint8_t, volatile uint8_t&);
+	Solenoid(PinBank&, volatile uint8_t&, uint8_t, uint8_t, volatile uint8_t&, uint8_t, uint8_t&);
 	virtual ~Solenoid();
 
 	void trigger(uint16_t, uint8_t);
 	void release();
 
-	void schedule();
+	void update();
 };
 
 #endif /* SOLENOID_H_ */

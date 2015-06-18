@@ -9,7 +9,9 @@
 
 #include <Solenoid.h>
 
-extern Solenoid solenoids[6];
+#include <stdlib.h>
+
+extern Solenoid *solenoids[];
 
 StimulusResponse::StimulusResponse() : enabled(true) {
 }
@@ -22,9 +24,9 @@ void StimulusResponse::trigger(Stimulus stimulus) {
 	SolenoidAction& entry = operator[](stimulus);
 	if(enabled && entry.enabled && entry.solenoidIndex < 6 && entry.attack <= 65000) {
 		if(entry.attack == 0) {
-			solenoids[entry.solenoidIndex].release();
+			if(solenoids[entry.solenoidIndex] != NULL) solenoids[entry.solenoidIndex] -> release();
 		} else {
-			solenoids[entry.solenoidIndex].trigger(entry.attack, entry.sustain);
+			if(solenoids[entry.solenoidIndex] != NULL) solenoids[entry.solenoidIndex] -> trigger(entry.attack, entry.sustain);
 		}
 	}
 }

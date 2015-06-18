@@ -16,6 +16,7 @@
 #include <Switch.h>
 #include <StimulusResponse.h>
 #include <SwitchBank.h>
+#include <SolenoidBank.h>
 
 #ifndef BAUD
 #define BAUD 9600
@@ -53,14 +54,20 @@ PinBank pinBankB5(PinBank::B, _BV(5));
 
 PingPong pingPong(outgoingDataLink);
 
-Solenoid solenoids[6] = {
-		Solenoid(pinBankB0, TCCR0A, 0, 0, OCR0A),
-		Solenoid(pinBankB1, TCCR1A, _BV(COM1A1) | _BV(COM1A0), _BV(COM1A1), OCR1AL),
-		Solenoid(pinBankB2, TCCR1A, _BV(COM1B1) | _BV(COM1B0), _BV(COM1B1), OCR1BL),
-		Solenoid(pinBankB3, TCCR2A, _BV(COM2A1) | _BV(COM2A0), _BV(COM2A1), OCR2A),
-		Solenoid(pinBankB4, TCCR0A, 0, 0, OCR0A),
-		Solenoid(pinBankB5, TCCR0A, 0, 0, OCR0A)
+uint8_t dirtyListB = 0;
+
+Solenoid *solenoids[] = {
+		new Solenoid(pinBankB0, TCCR0A, 0, 0, OCR0A, _BV(0), dirtyListB),
+		new Solenoid(pinBankB1, TCCR1A, _BV(COM1A1) | _BV(COM1A0), _BV(COM1A1), OCR1AL, _BV(1), dirtyListB),
+		new Solenoid(pinBankB2, TCCR1A, _BV(COM1B1) | _BV(COM1B0), _BV(COM1B1), OCR1BL, _BV(2), dirtyListB),
+		new Solenoid(pinBankB3, TCCR2A, _BV(COM2A1) | _BV(COM2A0), _BV(COM2A1), OCR2A, _BV(3), dirtyListB),
+		new Solenoid(pinBankB4, TCCR0A, 0, 0, OCR0A, _BV(4), dirtyListB),
+		new Solenoid(pinBankB5, TCCR0A, 0, 0, OCR0A, _BV(5), dirtyListB),
+		NULL,
+		NULL
 };
+
+SolenoidBank solenoidBankB(solenoids, dirtyListB);
 
 StimulusResponse stimulusResponse;
 
@@ -118,8 +125,6 @@ void loop() {
 	blinker.schedule();
 	switchBankC.schedule();
 	switchBankD.schedule();
-	for(size_t i = 0; i < sizeof(solenoids) / sizeof(Solenoid); i++) {
-		solenoids[i].schedule();
-	}
+	solenoidBankB.schedule();
 	wdt_reset();
 }
