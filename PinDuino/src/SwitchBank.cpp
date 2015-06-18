@@ -8,8 +8,7 @@
 #include "SwitchBank.h"
 
 SwitchBank::SwitchBank(Switch** switches, PinBank& pinBank, uint8_t& dirtyList) : switches(switches), pinBank(pinBank), last(0), current(0), dirtyList(dirtyList) {
-	// TODO Auto-generated constructor stub
-
+	PT_INIT(&pt);
 }
 
 SwitchBank::~SwitchBank() {
