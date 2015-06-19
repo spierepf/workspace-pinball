@@ -6,11 +6,13 @@
  */
 
 #include <Blinker.h>
+#include <Arduino.h>
 
-Blinker::Blinker() : led(PinBank::B, _BV(5)), count(0) {
+Blinker::Blinker(OutgoingPinDuinoDataLink& outgoingDatalink) : outgoingDatalink(outgoingDatalink), led(PinBank::B, _BV(5)), count(0) {
 	led.dataLow();
 	led.dirOut();
 	PT_INIT(&pt);
+	timer.set(micros());
 }
 
 Blinker::~Blinker() {
@@ -25,7 +27,11 @@ PT_THREAD(Blinker::run()) {
 	PT_BEGIN(&pt);
 	for(;;) {
 		PT_YIELD(&pt);
-		if(count++ == 0xFFFF) led.toggle();
+		if(count++ == 0xFFFF) {
+			outgoingDatalink.log("Loop time: %lu", timer.elapsed(micros()));
+			timer.set(micros());
+			led.toggle();
+		}
 	}
 	PT_END(&pt);
 }
