@@ -10,6 +10,7 @@
 #include <stdlib.h>
 
 SolenoidBank::SolenoidBank(Solenoid** solenoids, uint8_t& dirtyList) : solenoids(solenoids), dirtyList(dirtyList) {
+	PT_INIT(&pt);
 }
 
 SolenoidBank::~SolenoidBank() {
