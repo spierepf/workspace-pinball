@@ -9,7 +9,7 @@
 
 #include <stdlib.h>
 
-SolenoidBank::SolenoidBank(Solenoid** solenoids, uint8_t& dirtyList) : solenoids(solenoids), dirtyList(dirtyList) {
+SolenoidBank::SolenoidBank(Solenoid** solenoids, uint8_t& dirtyList) : items(solenoids), dirtyList(dirtyList) {
 	PT_INIT(&pt);
 }
 
@@ -24,10 +24,11 @@ void SolenoidBank::schedule() {
 PT_THREAD(SolenoidBank::run()) {
 	PT_BEGIN(&pt);
 	for(;;) {
+		updateSelf();
 		if(dirtyList) {
-			for(int i = 0; i < 8; i++) {
-				if((solenoids[i] != NULL) && ((dirtyList & solenoids[i]->mask) != 0)) {
-					solenoids[i] -> update();
+			for(uint8_t i = 0; i < 8; i++) {
+				if((items[i] != NULL) && ((dirtyList & items[i]->mask) != 0)) {
+					updateItem(items[i]);
 				}
 			}
 		}
