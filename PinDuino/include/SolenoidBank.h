@@ -16,8 +16,13 @@ class SolenoidBank {
 	struct pt pt;
 	PT_THREAD(run());
 
-	Solenoid** solenoids;
+	Solenoid** items;
 	uint8_t& dirtyList;
+
+	void updateSelf() {}
+	void updateItem(Solenoid* item) {
+		item -> update();
+	}
 
 public:
 	SolenoidBank(Solenoid**, uint8_t&);

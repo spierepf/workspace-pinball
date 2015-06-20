@@ -7,7 +7,9 @@
 
 #include "SwitchBank.h"
 
-SwitchBank::SwitchBank(Switch** switches, PinBank& pinBank, uint8_t& dirtyList) : switches(switches), pinBank(pinBank), last(0), current(0), dirtyList(dirtyList) {
+#include <stdlib.h>
+
+SwitchBank::SwitchBank(Switch** switches, PinBank& pinBank, uint8_t& dirtyList) : items(switches), pinBank(pinBank), last(0), current(0), dirtyList(dirtyList) {
 	PT_INIT(&pt);
 }
 
@@ -20,19 +22,13 @@ void SwitchBank::schedule() {
 }
 
 PT_THREAD(SwitchBank::run()) {
-	uint8_t delta;
-
 	PT_BEGIN(&pt);
 	for(;;) {
-		last = current;
-		current = pinBank.read();
-		delta = last ^ current;
-		dirtyList |= delta;
-
+		updateSelf();
 		if(dirtyList) {
 			for(uint8_t i = 0; i < 8; i++) {
-				if((switches[i] != NULL) && ((dirtyList & switches[i]->mask) != 0)) {
-					switches[i] -> update(current);
+				if((items[i] != NULL) && ((dirtyList & items[i]->mask) != 0)) {
+					updateItem(items[i]);
 				}
 			}
 		}

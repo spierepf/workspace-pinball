@@ -10,8 +10,6 @@
 
 #include <pt.h>
 
-#include <stdlib.h>
-
 #include <Switch.h>
 #include <PinBank.h>
 
@@ -19,11 +17,21 @@ class SwitchBank {
 	struct pt pt;
 	PT_THREAD(run());
 
-	Switch** switches;
+	Switch** items;
 	PinBank& pinBank;
 	uint8_t last;
 	uint8_t current;
 	uint8_t& dirtyList;
+
+	void updateSelf() {
+		last = current;
+		current = pinBank.read();
+		dirtyList |= last ^ current;
+	}
+
+	void updateItem(Switch* item) {
+		item->update(current);
+	}
 
 public:
 	SwitchBank(Switch**, PinBank&, uint8_t&);
