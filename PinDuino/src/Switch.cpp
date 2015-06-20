@@ -13,7 +13,7 @@
 
 #include "Switch.h"
 
-Switch::Switch(OutgoingPinDuinoDataLink& outgoingDatalink, uint8_t index, uint8_t id, uint8_t& dirtyList) : outgoingDatalink(outgoingDatalink), mask(_BV(index)), id(id), history(0xff), state(true), dirtyList(dirtyList) {
+Switch::Switch(OutgoingPinDuinoDataLink& outgoingDatalink, uint8_t index, uint8_t id, uint8_t& dirtyList) : Item(_BV(index), dirtyList), outgoingDatalink(outgoingDatalink), id(id), history(0xff), state(true) {
 }
 
 Switch::~Switch() {
@@ -31,10 +31,10 @@ void Switch::pinChange(bool newState) {
 void Switch::update(uint8_t read) {
 	history = (history << 1) | ((read & mask) == 0 ? 0 : 1);
 	if(history == 0x00) {
-		dirtyList &= ~mask;
+		clean();
 		if(state) pinChange(false);
 	} else if(history == 0xff) {
-		dirtyList &= ~mask;
+		clean();
 		if(!state) pinChange(true);
 	}
 }

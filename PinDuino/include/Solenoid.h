@@ -8,12 +8,12 @@
 #ifndef SOLENOID_H_
 #define SOLENOID_H_
 
-#include <stdint.h>
+#include <Item.h>
 
 #include <PinBank.h>
 #include <Timer.h>
 
-class Solenoid {
+class Solenoid : public Item {
 	friend class SolenoidBank;
 
 	PinBank pin;
@@ -25,9 +25,6 @@ class Solenoid {
 	uint8_t pwmMask;
 	uint8_t pwmEnableBits;
 	volatile uint8_t& ocr;
-
-	uint8_t mask;
-	uint8_t& dirtyList;
 
 	void enablePWM();
 	void disablePWM();

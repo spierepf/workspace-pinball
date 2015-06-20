@@ -27,7 +27,7 @@ PT_THREAD(SolenoidBank::run()) {
 		updateSelf();
 		if(dirtyList) {
 			for(uint8_t i = 0; i < 8; i++) {
-				if((items[i] != NULL) && ((dirtyList & items[i]->mask) != 0)) {
+				if((items[i] != NULL) && items[i]->isDirty()) {
 					updateItem(items[i]);
 				}
 			}

@@ -8,19 +8,17 @@
 #ifndef SWITCH_H_
 #define SWITCH_H_
 
-#include <EndPoint.h>
+#include <Item.h>
 
-#include <Timer.h>
+#include <OutgoingPinDuinoDataLink.h>
 
-class Switch {
+class Switch : public Item {
 	friend class SwitchBank;
 
 	OutgoingPinDuinoDataLink& outgoingDatalink;
-	uint8_t mask;
 	uint8_t id;
 	uint8_t history;
 	bool state;
-	uint8_t& dirtyList;
 
 	void pinChange(bool);
 
