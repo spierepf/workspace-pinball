@@ -8,36 +8,29 @@
 #ifndef SWITCHBANK_H_
 #define SWITCHBANK_H_
 
-#include <pt.h>
+#include <ItemBank.h>
 
 #include <Switch.h>
 #include <PinBank.h>
 
-class SwitchBank {
-	struct pt pt;
-	PT_THREAD(run());
-
-	Switch** items;
+class SwitchBank : public ItemBank {
 	PinBank& pinBank;
 	uint8_t last;
 	uint8_t current;
-	uint8_t& dirtyList;
 
-	void updateSelf() {
+	virtual void updateSelf() {
 		last = current;
 		current = pinBank.read();
 		dirtyList |= last ^ current;
 	}
 
-	void updateItem(Switch* item) {
-		item->update(current);
+	virtual void updateItem(Item* item) {
+		((Switch*)item)->update(current);
 	}
 
 public:
-	SwitchBank(Switch**, PinBank&, uint8_t&);
-	virtual ~SwitchBank();
-
-	void schedule();
+	SwitchBank(Item** switches, PinBank& pinBank, uint8_t& dirtyList) : ItemBank(switches, dirtyList), pinBank(pinBank), last(0), current(0) {}
+	virtual ~SwitchBank() {}
 };
 
 #endif /* SWITCHBANK_H_ */

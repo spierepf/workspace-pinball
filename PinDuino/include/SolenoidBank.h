@@ -8,27 +8,19 @@
 #ifndef SOLENOIDBANK_H_
 #define SOLENOIDBANK_H_
 
-#include <pt.h>
+#include <ItemBank.h>
 
 #include "Solenoid.h"
 
-class SolenoidBank {
-	struct pt pt;
-	PT_THREAD(run());
-
-	Solenoid** items;
-	uint8_t& dirtyList;
-
-	void updateSelf() {}
-	void updateItem(Solenoid* item) {
-		item -> update();
+class SolenoidBank : public ItemBank {
+	virtual void updateSelf() {}
+	virtual void updateItem(Item* item) {
+		((Solenoid*)item) -> update();
 	}
 
 public:
-	SolenoidBank(Solenoid**, uint8_t&);
-	virtual ~SolenoidBank();
-
-	void schedule();
+	SolenoidBank(Item** solenoids, uint8_t& dirtyList) : ItemBank(solenoids, dirtyList) {}
+	virtual ~SolenoidBank() {}
 };
 
 #endif /* SOLENOIDBANK_H_ */

@@ -11,6 +11,8 @@
 #include <stdint.h>
 
 class Item {
+	friend class ItemBank;
+
 	uint8_t& dirtyList;
 
 protected:

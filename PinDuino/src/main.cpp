@@ -56,7 +56,7 @@ PingPong pingPong(outgoingDataLink);
 
 uint8_t dirtyListB = 0;
 
-Solenoid *solenoids[] = {
+Item *solenoids[] = {
 		new Solenoid(pinBankB0, TCCR0A, 0, 0, OCR0A, _BV(0), dirtyListB),
 		new Solenoid(pinBankB1, TCCR1A, _BV(COM1A1) | _BV(COM1A0), _BV(COM1A1), OCR1AL, _BV(1), dirtyListB),
 		new Solenoid(pinBankB2, TCCR1A, _BV(COM1B1) | _BV(COM1B0), _BV(COM1B1), OCR1BL, _BV(2), dirtyListB),
@@ -80,7 +80,7 @@ uint8_t dirtyListD = 0;
 PinBank pinBankC(PinBank::C, 0b00111111);
 PinBank pinBankD(PinBank::D, 0b11111100);
 
-Switch *switchesC[] = {
+Item *switchesC[] = {
 		new Switch(outgoingDataLink, 0, 0, dirtyListC),
 		new Switch(outgoingDataLink, 1, 1, dirtyListC),
 		new Switch(outgoingDataLink, 2, 2, dirtyListC),
@@ -91,7 +91,7 @@ Switch *switchesC[] = {
 		NULL
 };
 
-Switch *switchesD[] = {
+Item *switchesD[] = {
 		NULL,
 		NULL,
 		new Switch(outgoingDataLink, 2, 6, dirtyListD),
