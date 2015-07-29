@@ -1,0 +1,3 @@
+[submodule "mpf"]
+	path = mpf
+	url = git@github.com:spierepf/mpf.git
