@@ -17,7 +17,7 @@ class Switch : public Item {
 
 	OutgoingPinDuinoDataLink& outgoingDatalink;
 	uint8_t id;
-	uint8_t history;
+	uint8_t history = 1;
 	bool state;
 
 	void pinChange(bool);

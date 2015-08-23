@@ -74,11 +74,11 @@ StimulusResponse stimulusResponse;
 EndPoint endPoint(incomingDataLink, outgoingDataLink, pingPong);
 Blinker blinker(outgoingDataLink);
 
-uint8_t dirtyListC = 0;
-uint8_t dirtyListD = 0;
+uint8_t dirtyListC = 0b00111111;
+uint8_t dirtyListD = 0b11111100;
 
-PinBank pinBankC(PinBank::C, 0b00111111);
-PinBank pinBankD(PinBank::D, 0b11111100);
+PinBank pinBankC(PinBank::C, dirtyListC);
+PinBank pinBankD(PinBank::D, dirtyListD);
 
 Item *switchesC[] = {
 		new Switch(outgoingDataLink, 0, 0, dirtyListC),
