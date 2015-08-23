@@ -12,6 +12,8 @@ from kingpyn.OutgoingFrameHandler import OutgoingFrameHandler
 from hdlc.OutgoingDataLink import OutgoingDataLink
 from kingpyn.SolenoidAction import SolenoidAction
 
+import serial.tools.list_ports
+
 class EndPointManager(object):
     '''
     classdocs
@@ -33,6 +35,11 @@ class EndPointManager(object):
         endPoint.ensureID()
         self.endPoints[endPoint.id] = endPoint
     
+    def addDevices(self):
+        for (name, desc, hardware) in serial.tools.list_ports.comports():
+            if hardware != 'n/a':
+                self.addDevice(name)
+            
     def schedule(self):
         for endPoint in self.endPoints.itervalues():
             endPoint.schedule()
