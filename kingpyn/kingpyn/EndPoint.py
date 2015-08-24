@@ -44,6 +44,8 @@ class EndPoint(object):
         if frame[0] == OpCode.MY_ID() and len(frame[1]) == 1:
             self.id = frame[1][0]
             self.log = logging.getLogger("EndPoint[{}]".format(self.id))
+            self.log.setLevel(logging.DEBUG)
+            self.log.debug("Starting...")
         elif frame[0] == OpCode.LOG() and len(frame[1]) > 0:
             if self.log != None:
                 self.log.info("".join(map(chr, frame[1])))
