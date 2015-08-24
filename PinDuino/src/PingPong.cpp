@@ -53,7 +53,4 @@ void PingPong::sendPing() {
 
 void PingPong::acceptPong(uint8_t id) {
 	pongAccepted = id == counter;
-	if(!pongAccepted) {
-		sendPing();
-	}
 }
