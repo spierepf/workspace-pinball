@@ -268,6 +268,41 @@ BOOST_AUTO_TEST_CASE( datalink_next_incoming_frame ) {
 	BOOST_CHECK( 0x01 == datalink.peek(0) );
 }
 
+BOOST_AUTO_TEST_CASE( datalink_corrupt_incoming_frame ) {
+	RingBuffer<16> incoming_bytes;
+	RingBuffer<16> outgoing_bytes;
+	MockHardware hardware(incoming_bytes, outgoing_bytes);
+	IncomingDataLink datalink(hardware);
+
+	uint16_t crc = 0xFFFF;
+	hardware.incoming_bytes.put(0x00);
+	crc_ccitt_update(crc, 0x00);
+	hardware.incoming_bytes.put(crc >> 8);
+	hardware.incoming_bytes.put((crc & 0xFF) ^ 0x01); // corruption!
+	hardware.incoming_bytes.put(0x7e);
+
+	crc = 0xFFFF;
+	hardware.incoming_bytes.put(0x01);
+	crc_ccitt_update(crc, 0x01);
+	hardware.incoming_bytes.put(crc >> 8);
+	hardware.incoming_bytes.put(crc & 0xFF);
+	hardware.incoming_bytes.put(0x7e);
+
+	datalink.schedule();
+	datalink.schedule();
+	datalink.schedule();
+	datalink.schedule();
+	datalink.schedule();
+	datalink.schedule();
+	datalink.schedule();
+	datalink.schedule();
+
+	BOOST_CHECK( datalink.have_incoming_frame() );
+	BOOST_CHECK( 0x01 == datalink.peek(0) );
+	datalink.next_incoming_frame();
+	BOOST_CHECK( !datalink.have_incoming_frame() );
+}
+
 BOOST_AUTO_TEST_CASE( datalink_outgoing_frame ) {
 	RingBuffer<16> incoming_bytes;
 	RingBuffer<16> outgoing_bytes;

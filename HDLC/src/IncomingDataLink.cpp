@@ -29,8 +29,10 @@ PT_THREAD(IncomingDataLink::incoming_thread()) {
 				if(incomingCRC == 0) {
 					incoming_bytes.revert(2);
 					incoming_frame_lengths.put(current_frame_length - 2);
-					current_frame_length = 0;
+				} else {
+					incoming_bytes.revert(current_frame_length);
 				}
+				current_frame_length = 0;
 			}
 			incomingCRC = 0xFFFF;
 		} else {
