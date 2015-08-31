@@ -7,6 +7,8 @@ import unittest
 from hdlc.IncomingDataLink import IncomingDataLink
 from test.unit.MockIncomingHardware import MockIncomingHardware
 
+from hdlc.crc import crc_ccitt_update
+
 class Test(unittest.TestCase):
 
 
@@ -60,11 +62,17 @@ class Test(unittest.TestCase):
 
         self.assertFalse(datalink.haveIncomingFrame())
         
-        hardware.incomingBytes.append(0x00);
-        hardware.incomingBytes.append(0x7e);
+        crc = 0xFFFF
+        hardware.incomingBytes.append(0x00)
+        crc = crc_ccitt_update(crc, 0x00)
+        hardware.incomingBytes.append(crc >> 8)
+        hardware.incomingBytes.append(crc & 0xFF)
+        hardware.incomingBytes.append(0x7e)
 
-        datalink.schedule();
-        datalink.schedule();
+        datalink.schedule()
+        datalink.schedule()
+        datalink.schedule()
+        datalink.schedule()
 
         self.assertTrue(datalink.haveIncomingFrame())
 
@@ -84,11 +92,17 @@ class Test(unittest.TestCase):
         hardware = MockIncomingHardware()
         datalink = IncomingDataLink(hardware)
 
-        hardware.incomingBytes.append(0x00);
-        hardware.incomingBytes.append(0x7e);
+        crc = 0xFFFF
+        hardware.incomingBytes.append(0x00)
+        crc = crc_ccitt_update(crc, 0x00)
+        hardware.incomingBytes.append(crc >> 8)
+        hardware.incomingBytes.append(crc & 0xFF)
+        hardware.incomingBytes.append(0x7e)
 
-        datalink.schedule();
-        datalink.schedule();
+        datalink.schedule()
+        datalink.schedule()
+        datalink.schedule()
+        datalink.schedule()
 
         self.assertEqual(1, datalink.incomingFrameLength())
     
@@ -96,19 +110,65 @@ class Test(unittest.TestCase):
         hardware = MockIncomingHardware()
         datalink = IncomingDataLink(hardware)
 
-        hardware.incomingBytes.append(0x00);
-        hardware.incomingBytes.append(0x7e);
+        crc = 0xFFFF
+        hardware.incomingBytes.append(0x00)
+        crc = crc_ccitt_update(crc, 0x00)
+        hardware.incomingBytes.append(crc >> 8)
+        hardware.incomingBytes.append(crc & 0xFF)
+        hardware.incomingBytes.append(0x7e)
 
-        hardware.incomingBytes.append(0x01);
-        hardware.incomingBytes.append(0x7e);
+        crc = 0xFFFF
+        hardware.incomingBytes.append(0x01)
+        crc = crc_ccitt_update(crc, 0x01)
+        hardware.incomingBytes.append(crc >> 8)
+        hardware.incomingBytes.append(crc & 0xFF)
+        hardware.incomingBytes.append(0x7e)
         
-        datalink.schedule();
-        datalink.schedule();
-        datalink.schedule();
-        datalink.schedule();
+        datalink.schedule()
+        datalink.schedule()
+        datalink.schedule()
+        datalink.schedule()
+        datalink.schedule()
+        datalink.schedule()
+        datalink.schedule()
+        datalink.schedule()
 
         datalink.nextIncomingFrame();
         
+        self.assertTrue(datalink.haveIncomingFrame())
+        self.assertEqual(1, datalink.peek(0))
+
+        datalink.nextIncomingFrame();
+
+        self.assertFalse(datalink.haveIncomingFrame())
+
+    def testCorruptIncomingFrame(self):
+        hardware = MockIncomingHardware()
+        datalink = IncomingDataLink(hardware)
+
+        crc = 0xFFFF
+        hardware.incomingBytes.append(0x00)
+        crc = crc_ccitt_update(crc, 0x00)
+        hardware.incomingBytes.append(crc >> 8)
+        hardware.incomingBytes.append((crc & 0xFF) ^ 0x01) # corruption!
+        hardware.incomingBytes.append(0x7e)
+
+        crc = 0xFFFF
+        hardware.incomingBytes.append(0x01)
+        crc = crc_ccitt_update(crc, 0x01)
+        hardware.incomingBytes.append(crc >> 8)
+        hardware.incomingBytes.append(crc & 0xFF)
+        hardware.incomingBytes.append(0x7e)
+        
+        datalink.schedule()
+        datalink.schedule()
+        datalink.schedule()
+        datalink.schedule()
+        datalink.schedule()
+        datalink.schedule()
+        datalink.schedule()
+        datalink.schedule()
+
         self.assertTrue(datalink.haveIncomingFrame())
         self.assertEqual(1, datalink.peek(0))
 

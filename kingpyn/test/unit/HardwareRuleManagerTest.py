@@ -39,7 +39,7 @@ class Test(unittest.TestCase):
         
         for _ in range(100):
             self.manager.outgoingFrameHandler.schedule()
-        self.assertEqual(deque([126, 34, 0, 1, 0, 0, 0, 126, 34, 0, 126]), self.hardware.outgoingBytes)
+        self.assertEqual(deque([126, 34, 0, 1, 0, 0, 0, 198, 236, 126, 34, 0, 125, 93, 139, 126]), self.hardware.outgoingBytes)
 
     def testReceiveMatchingRuleFromHardwareMakesClean(self):
         self.manager.addRule(self.rule1)
@@ -49,7 +49,7 @@ class Test(unittest.TestCase):
 
         for _ in range(100):
             self.manager.outgoingFrameHandler.schedule()
-        self.assertEqual(deque([126, 34, 0, 1, 0, 0, 0, 126, 34, 0, 126]), self.hardware.outgoingBytes)
+        self.assertEqual(deque([126, 34, 0, 1, 0, 0, 0, 198, 236, 126, 34, 0, 125, 93, 139, 126]), self.hardware.outgoingBytes)
         
     def testAddMatchingRuleKeepsClean(self):
         self.manager.addRule(self.rule1)
@@ -60,7 +60,7 @@ class Test(unittest.TestCase):
 
         for _ in range(100):
             self.manager.outgoingFrameHandler.schedule()
-        self.assertEqual(deque([126, 34, 0, 1, 0, 0, 0, 126, 34, 0, 126]), self.hardware.outgoingBytes)
+        self.assertEqual(deque([126, 34, 0, 1, 0, 0, 0, 198, 236, 126, 34, 0, 125, 93, 139, 126]), self.hardware.outgoingBytes)
 
     def testReceiveNonMatchingRuleFromHardwareMakesDirty(self):
         self.manager.addRule(self.rule1)
@@ -71,7 +71,7 @@ class Test(unittest.TestCase):
 
         for _ in range(100):
             self.manager.outgoingFrameHandler.schedule()
-        self.assertEqual(deque([126, 34, 0, 1, 0, 0, 0, 126, 34, 0, 126, 34, 0, 1, 0, 0, 0, 126, 34, 0, 126]), self.hardware.outgoingBytes)
+        self.assertEqual(deque([126, 34, 0, 1, 0, 0, 0, 198, 236, 126, 34, 0, 125, 93, 139, 126, 34, 0, 1, 0, 0, 0, 198, 236, 126, 34, 0, 125, 93, 139, 126]), self.hardware.outgoingBytes)
     
     def testReceiveMyIDfromHardwareMakesDirty(self):
         self.manager.addRule(self.rule1)
@@ -82,7 +82,7 @@ class Test(unittest.TestCase):
 
         for _ in range(100):
             self.manager.outgoingFrameHandler.schedule()
-        self.assertEqual(deque([126, 34, 0, 1, 0, 0, 0, 126, 34, 0, 126, 34, 0, 1, 0, 0, 0, 126, 34, 0, 126]), self.hardware.outgoingBytes)
+        self.assertEqual(deque([126, 34, 0, 1, 0, 0, 0, 198, 236, 126, 34, 0, 125, 93, 139, 126, 34, 0, 1, 0, 0, 0, 198, 236, 126, 34, 0, 125, 93, 139, 126]), self.hardware.outgoingBytes)
     
     def testSendOnlyOneRuleAtOnce(self):
         self.manager.addRule(self.rule1)
@@ -90,7 +90,7 @@ class Test(unittest.TestCase):
         
         for _ in range(100):
             self.manager.outgoingFrameHandler.schedule()
-        self.assertEqual(deque([126, 34, 0, 1, 0, 0, 0, 126, 34, 0, 126]), self.hardware.outgoingBytes)
+        self.assertEqual(deque([126, 34, 0, 1, 0, 0, 0, 198, 236, 126, 34, 0, 125, 93, 139, 126]), self.hardware.outgoingBytes)
     
     def testSendSecondRuleOnceFirstIsAccepted(self):
         self.manager.addRule(self.rule1)
@@ -99,7 +99,7 @@ class Test(unittest.TestCase):
         
         for _ in range(100):
             self.manager.outgoingFrameHandler.schedule()
-        self.assertEqual(deque([126, 34, 0, 1, 0, 0, 0, 126, 34, 0, 126, 34, 128, 0, 0, 0, 0, 126, 34, 128, 126]), self.hardware.outgoingBytes)
+        self.assertEqual(deque([126, 34, 0, 1, 0, 0, 0, 198, 236, 126, 34, 0, 125, 93, 139, 126, 34, 128, 0, 0, 0, 0, 146, 136, 126, 34, 128, 236, 3, 126]), self.hardware.outgoingBytes)
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
