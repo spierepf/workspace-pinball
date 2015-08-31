@@ -32,6 +32,7 @@ class OutgoingDataLink {
 
 	struct pt outgoing;
 	Hardware& hardware;
+	uint16_t outgoingCRC;
 	RingBuffer<64> outgoing_bytes;
 
 	void put(uint8_t);

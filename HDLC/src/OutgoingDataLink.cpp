@@ -7,6 +7,8 @@
 
 #include "OutgoingDataLink.h"
 
+#include <crc.h>
+
 OutgoingDataLink::OutgoingDataLink(Hardware& hardware) : hardware(hardware) {
 	PT_INIT(&outgoing);
 }
@@ -42,12 +44,17 @@ void OutgoingDataLink::schedule() {
 void OutgoingDataLink::begin_outgoing_frame(uint8_t opcode) {
 	if(outgoing_bytes.empty()) outgoing_bytes.put(FLAG);
 	put(opcode);
+	outgoingCRC = 0xFFFF;
+	crc_ccitt_update(outgoingCRC, opcode);
 }
 
 void OutgoingDataLink::append_payload(uint8_t payload) {
 	put(payload);
+	crc_ccitt_update(outgoingCRC, payload);
 }
 
 void OutgoingDataLink::end_outgoing_frame() {
+	put(outgoingCRC >> 8);
+	put(outgoingCRC & 0xFF);
 	outgoing_bytes.put(FLAG);
 }

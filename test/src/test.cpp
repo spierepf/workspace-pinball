@@ -197,9 +197,15 @@ BOOST_AUTO_TEST_CASE( datalink_have_incoming_frame ) {
 
 	BOOST_CHECK( !datalink.have_incoming_frame() );
 
+	uint16_t crc = 0xFFFF;
 	hardware.incoming_bytes.put(0x00);
+	crc_ccitt_update(crc, 0x00);
+	hardware.incoming_bytes.put(crc >> 8);
+	hardware.incoming_bytes.put(crc & 0xFF);
 	hardware.incoming_bytes.put(0x7e);
 
+	datalink.schedule();
+	datalink.schedule();
 	datalink.schedule();
 	datalink.schedule();
 
@@ -212,9 +218,15 @@ BOOST_AUTO_TEST_CASE( datalink_incoming_frame_length ) {
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
 	IncomingDataLink datalink(hardware);
 
+	uint16_t crc = 0xFFFF;
 	hardware.incoming_bytes.put(0x00);
+	crc_ccitt_update(crc, 0x00);
+	hardware.incoming_bytes.put(crc >> 8);
+	hardware.incoming_bytes.put(crc & 0xFF);
 	hardware.incoming_bytes.put(0x7e);
 
+	datalink.schedule();
+	datalink.schedule();
 	datalink.schedule();
 	datalink.schedule();
 
@@ -227,12 +239,24 @@ BOOST_AUTO_TEST_CASE( datalink_next_incoming_frame ) {
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
 	IncomingDataLink datalink(hardware);
 
+	uint16_t crc = 0xFFFF;
 	hardware.incoming_bytes.put(0x00);
+	crc_ccitt_update(crc, 0x00);
+	hardware.incoming_bytes.put(crc >> 8);
+	hardware.incoming_bytes.put(crc & 0xFF);
 	hardware.incoming_bytes.put(0x7e);
 
+	crc = 0xFFFF;
 	hardware.incoming_bytes.put(0x01);
+	crc_ccitt_update(crc, 0x01);
+	hardware.incoming_bytes.put(crc >> 8);
+	hardware.incoming_bytes.put(crc & 0xFF);
 	hardware.incoming_bytes.put(0x7e);
 
+	datalink.schedule();
+	datalink.schedule();
+	datalink.schedule();
+	datalink.schedule();
 	datalink.schedule();
 	datalink.schedule();
 	datalink.schedule();
@@ -258,14 +282,25 @@ BOOST_AUTO_TEST_CASE( datalink_outgoing_frame ) {
 	datalink.append_payload(0x03);
 	datalink.end_outgoing_frame();
 
-	for(int i = 0; i < 7; i++) datalink.schedule();
+	for(int i = 0; i < 12; i++) datalink.schedule();
 
+	uint16_t crc = 0xFFFF;
 	BOOST_CHECK( 0x7e == hardware.outgoing_bytes.get() );
 	BOOST_CHECK( 0x00 == hardware.outgoing_bytes.get() );
+	crc_ccitt_update(crc, 0x00);
 	BOOST_CHECK( 0x01 == hardware.outgoing_bytes.get() );
+	crc_ccitt_update(crc, 0x01);
+	BOOST_CHECK( (crc >> 8) == hardware.outgoing_bytes.get() );
+	BOOST_CHECK( (crc & 0xFF) == hardware.outgoing_bytes.get() );
+
+	crc = 0xFFFF;
 	BOOST_CHECK( 0x7e == hardware.outgoing_bytes.get() );
 	BOOST_CHECK( 0x02 == hardware.outgoing_bytes.get() );
+	crc_ccitt_update(crc, 0x02);
 	BOOST_CHECK( 0x03 == hardware.outgoing_bytes.get() );
+	crc_ccitt_update(crc, 0x03);
+	BOOST_CHECK( (crc >> 8) == hardware.outgoing_bytes.get() );
+	BOOST_CHECK( (crc & 0xFF) == hardware.outgoing_bytes.get() );
 	BOOST_CHECK( 0x7e == hardware.outgoing_bytes.get() );
 	BOOST_CHECK( hardware.outgoing_bytes.empty() );
 }
@@ -282,7 +317,7 @@ BOOST_AUTO_TEST_CASE( datalink_outgoing_frame_escape ) {
 	datalink.append_payload(0x7e);
 	datalink.end_outgoing_frame();
 
-	for(int i = 0; i < 10; i++) datalink.schedule();
+	for(int i = 0; i < 12; i++) datalink.schedule();
 
 	BOOST_CHECK( 0x7e == hardware.outgoing_bytes.get() );
 	BOOST_CHECK( 0x7d == hardware.outgoing_bytes.get() );
@@ -293,6 +328,8 @@ BOOST_AUTO_TEST_CASE( datalink_outgoing_frame_escape ) {
 	BOOST_CHECK( (0x7d ^ 0x20) == hardware.outgoing_bytes.get() );
 	BOOST_CHECK( 0x7d == hardware.outgoing_bytes.get() );
 	BOOST_CHECK( (0x7e ^ 0x20) == hardware.outgoing_bytes.get() );
+	hardware.outgoing_bytes.get();
+	hardware.outgoing_bytes.get();
 	BOOST_CHECK( 0x7e == hardware.outgoing_bytes.get() );
 	BOOST_CHECK( hardware.outgoing_bytes.empty() );
 }
@@ -311,6 +348,8 @@ BOOST_AUTO_TEST_CASE( datalink_no_output ) {
 BOOST_AUTO_TEST_CASE( datalink_ping ) {
 	RingBuffer<16> a_to_b;
 	RingBuffer<16> b_to_a;
+	a_to_b.zero();
+	b_to_a.zero();
 
 	MockHardware hardware_a(b_to_a, a_to_b);
 	MockHardware hardware_b(a_to_b, b_to_a);

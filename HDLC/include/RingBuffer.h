@@ -69,6 +69,18 @@ public:
 			count -= amount;
 		}
 	}
+
+	void revert(uint8_t amount) {
+		if(count >= amount) {
+			head = modulo_add(head, -amount);
+			count -= amount;
+		}
+	}
+
+	void zero() {
+		for(uint8_t i = 0; i < SIZE; i++) buf[i] = 0;
+		count = head = tail = 0;
+	}
 };
 
 #endif /* RINGBUFFER_H_ */

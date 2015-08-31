@@ -8,8 +8,9 @@
 #include "IncomingDataLink.h"
 
 #include <stdint.h>
+#include <crc.h>
 
-IncomingDataLink::IncomingDataLink(Hardware& hardware) : hardware(hardware), current_frame_length(0) {
+IncomingDataLink::IncomingDataLink(Hardware& hardware) : hardware(hardware), current_frame_length(0), incomingCRC(0xFFFF) {
 	PT_INIT(&incoming);
 }
 
@@ -25,15 +26,20 @@ PT_THREAD(IncomingDataLink::incoming_thread()) {
 		b = hardware.get();
 		if(b == FLAG) {
 			if(current_frame_length != 0) {
-				incoming_frame_lengths.put(current_frame_length);
-				current_frame_length = 0;
+				if(incomingCRC == 0) {
+					incoming_bytes.revert(2);
+					incoming_frame_lengths.put(current_frame_length - 2);
+					current_frame_length = 0;
+				}
 			}
+			incomingCRC = 0xFFFF;
 		} else {
 			if(b == ESC) {
 				PT_WAIT_UNTIL(&incoming, hardware.getReady());
 				b = hardware.get() ^ MASK;
 			}
 			incoming_bytes.put(b);
+			crc_ccitt_update(incomingCRC, b);
 			current_frame_length++;
 		}
 		PT_YIELD(&incoming);
