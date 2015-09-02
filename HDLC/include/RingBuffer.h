@@ -14,7 +14,6 @@ template<uint8_t SIZE> // SIZE must be a power of 2
 class RingBuffer {
 	uint8_t buf[SIZE];
 	uint8_t count;
-	uint8_t head;
 	uint8_t tail;
 
 	uint8_t modulo_add(uint8_t a, uint8_t b) {
@@ -23,7 +22,7 @@ class RingBuffer {
 
 public:
 	RingBuffer() {
-		count = head = tail = 0;
+		count = tail = 0;
 	}
 
 	bool empty() {
@@ -40,8 +39,7 @@ public:
 
 	void put(uint8_t b) {
 		if(!full()) {
-			buf[head] = b;
-			head = modulo_add(head, 1);
+			buf[modulo_add(tail, count)] = b;
 			count++;
 		}
 	}
@@ -72,14 +70,13 @@ public:
 
 	void revert(uint8_t amount) {
 		if(count >= amount) {
-			head = modulo_add(head, -amount);
 			count -= amount;
 		}
 	}
 
 	void zero() {
 		for(uint8_t i = 0; i < SIZE; i++) buf[i] = 0;
-		count = head = tail = 0;
+		count = tail = 0;
 	}
 };
 
