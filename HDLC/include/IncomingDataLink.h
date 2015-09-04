@@ -11,7 +11,7 @@
 #include <pt.h>
 
 #include <Hardware.h>
-#include <RingBuffer.h>
+#include <FrameBuffer.h>
 
 /** Handles message framing and flow control.
  *
@@ -33,10 +33,9 @@ class IncomingDataLink {
 protected:
 	struct pt incoming;
 	Hardware& hardware;
-	uint8_t current_frame_length;
 	uint16_t incomingCRC;
-	RingBuffer<64> incoming_bytes;
-	RingBuffer<4> incoming_frame_lengths;
+	uint8_t current_frame_length;
+	FrameBuffer<64, 4> incomingFrames;
 
 	PT_THREAD(incoming_thread());
 

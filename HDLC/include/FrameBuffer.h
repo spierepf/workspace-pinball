@@ -68,6 +68,10 @@ public:
 		head = modulo_add(head, 1);
 	}
 
+	void revert(uint8_t count) {
+		head = modulo_add(head, -count);
+	}
+
 	void revertFrame() {
 		head = tails.peek(getFrameCount());
 	}

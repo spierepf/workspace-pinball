@@ -10,7 +10,7 @@
 #include <stdint.h>
 #include <crc.h>
 
-IncomingDataLink::IncomingDataLink(Hardware& hardware) : hardware(hardware), current_frame_length(0), incomingCRC(0xFFFF) {
+IncomingDataLink::IncomingDataLink(Hardware& hardware) : hardware(hardware), incomingCRC(0xFFFF), current_frame_length(0) {
 	PT_INIT(&incoming);
 }
 
@@ -18,29 +18,30 @@ IncomingDataLink::~IncomingDataLink() {
 	// TODO Auto-generated destructor stub
 }
 
+#define READ_HARDWARE() PT_WAIT_UNTIL(&incoming, hardware.getReady()); b = hardware.get()
+
 PT_THREAD(IncomingDataLink::incoming_thread()) {
 	uint8_t b;
 	PT_BEGIN(&incoming);
 	for (;;) {
-		PT_WAIT_UNTIL(&incoming, hardware.getReady());
-		b = hardware.get();
+		READ_HARDWARE();
 		if(b == FLAG) {
 			if(current_frame_length != 0) {
 				if(incomingCRC == 0) {
-					incoming_bytes.revert(2);
-					incoming_frame_lengths.put(current_frame_length - 2);
+					incomingFrames.revert(2);
+					incomingFrames.endFrame();
 				} else {
-					incoming_bytes.revert(current_frame_length);
+					incomingFrames.revertFrame();
 				}
 				current_frame_length = 0;
 			}
 			incomingCRC = 0xFFFF;
 		} else {
 			if(b == ESC) {
-				PT_WAIT_UNTIL(&incoming, hardware.getReady());
-				b = hardware.get() ^ MASK;
+				READ_HARDWARE();
+				b ^= MASK;
 			}
-			incoming_bytes.put(b);
+			incomingFrames.put(b);
 			crc_ccitt_update(incomingCRC, b);
 			current_frame_length++;
 		}
@@ -54,17 +55,17 @@ void IncomingDataLink::schedule() {
 }
 
 uint8_t IncomingDataLink::peek(uint8_t position) {
-	return incoming_bytes.peek(position);
+	return incomingFrames[0][position];
 }
 
 bool IncomingDataLink::have_incoming_frame() {
-	return !incoming_frame_lengths.empty();
+	return incomingFrames.hasFrame();
 }
 
 uint8_t IncomingDataLink::incoming_frame_length() {
-	return incoming_frame_lengths.peek(0);
+	return incomingFrames[0].getLength();
 }
 
 void IncomingDataLink::next_incoming_frame() {
-	incoming_bytes.consume(incoming_frame_lengths.get());
+	incomingFrames.removeFrame();
 }
