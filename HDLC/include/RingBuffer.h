@@ -78,6 +78,10 @@ public:
 		for(uint8_t i = 0; i < SIZE; i++) buf[i] = 0;
 		count = tail = 0;
 	}
+
+	uint8_t getCount() {
+		return count;
+	}
 };
 
 #endif /* RINGBUFFER_H_ */
