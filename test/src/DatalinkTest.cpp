@@ -181,6 +181,7 @@ BOOST_AUTO_TEST_CASE( datalink_outgoing_frame ) {
 
 	crc = 0xFFFF;
 	BOOST_CHECK( 0x7e == hardware.outgoing_bytes.get() );
+	BOOST_CHECK( 0x7e == hardware.outgoing_bytes.get() );
 	BOOST_CHECK( 0x02 == hardware.outgoing_bytes.get() );
 	crc_ccitt_update(crc, 0x02);
 	BOOST_CHECK( 0x03 == hardware.outgoing_bytes.get() );

@@ -17,21 +17,41 @@ OutgoingDataLink::~OutgoingDataLink() {
 	// TODO Auto-generated destructor stub
 }
 
-void OutgoingDataLink::put(uint8_t b) {
-	if(b == XON || b == XOFF || b == ESC || b == FLAG) {
-		outgoing_bytes.put(ESC);
-		outgoing_bytes.put(b ^ MASK);
-	} else {
-		outgoing_bytes.put(b);
-	}
-}
+#define WRITE_HARDWARE(b) PT_WAIT_UNTIL(&outgoing, hardware.putReady()); hardware.put(b)
 
 PT_THREAD(OutgoingDataLink::outgoing_thread()) {
 	PT_BEGIN(&outgoing);
-	for (;;) {
-		PT_WAIT_UNTIL(&outgoing, hardware.putReady() && !outgoing_bytes.empty());
-		hardware.put(outgoing_bytes.get());
-		PT_YIELD(&outgoing);
+	for(;;) {
+		PT_WAIT_UNTIL(&outgoing, frameBuffer.hasFrame());
+		currentFrame = frameBuffer[0];
+		outgoingCRC = 0xFFFF;
+		WRITE_HARDWARE(FLAG);
+		for(position = 0; position < currentFrame.getLength(); position++) {
+			data = currentFrame[position];
+			crc_ccitt_update(outgoingCRC, data);
+			if(data == XON || data == XOFF || data == ESC || data == FLAG) {
+				data = data ^ MASK;
+				WRITE_HARDWARE(ESC);
+			}
+			WRITE_HARDWARE(data);
+		}
+
+		data = outgoingCRC >> 8;
+		if(data == XON || data == XOFF || data == ESC || data == FLAG) {
+			data = data ^ MASK;
+			WRITE_HARDWARE(ESC);
+		}
+		WRITE_HARDWARE(data);
+
+		data = outgoingCRC & 0xFF;
+		if(data == XON || data == XOFF || data == ESC || data == FLAG) {
+			data = data ^ MASK;
+			WRITE_HARDWARE(ESC);
+		}
+		WRITE_HARDWARE(data);
+		WRITE_HARDWARE(FLAG);
+
+		frameBuffer.removeFrame();
 	}
 	PT_END(&outgoing);
 }
@@ -42,19 +62,13 @@ void OutgoingDataLink::schedule() {
 }
 
 void OutgoingDataLink::begin_outgoing_frame(uint8_t opcode) {
-	if(outgoing_bytes.empty()) outgoing_bytes.put(FLAG);
-	put(opcode);
-	outgoingCRC = 0xFFFF;
-	crc_ccitt_update(outgoingCRC, opcode);
+	frameBuffer.put(opcode);
 }
 
 void OutgoingDataLink::append_payload(uint8_t payload) {
-	put(payload);
-	crc_ccitt_update(outgoingCRC, payload);
+	frameBuffer.put(payload);
 }
 
 void OutgoingDataLink::end_outgoing_frame() {
-	put(outgoingCRC >> 8);
-	put(outgoingCRC & 0xFF);
-	outgoing_bytes.put(FLAG);
+	frameBuffer.endFrame();
 }

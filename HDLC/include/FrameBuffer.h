@@ -8,6 +8,8 @@
 #ifndef INCLUDE_FRAMEBUFFER_H_
 #define INCLUDE_FRAMEBUFFER_H_
 
+#include <stdlib.h>
+
 #include <RingBuffer.h>
 
 template<uint8_t SIZE, uint8_t FRAME_COUNT> // must be powers of 2
@@ -22,12 +24,15 @@ class FrameBuffer {
 
 public:
 	class Frame {
-		const FrameBuffer& owner;
-		const uint8_t tail;
-		const uint8_t length;
+		FrameBuffer* owner;
+		uint8_t tail;
+		uint8_t length;
 
 	public:
-		Frame(FrameBuffer* owner, uint8_t tail, uint8_t length) : owner(*owner), tail(tail), length(length) {
+		Frame() : owner(NULL), tail(0), length(0) {
+		}
+
+		Frame(FrameBuffer* owner, uint8_t tail, uint8_t length) : owner(owner), tail(tail), length(length) {
 		}
 
 		uint8_t getLength() const {
@@ -35,7 +40,7 @@ public:
 		}
 
 		uint8_t operator[](uint8_t i) const {
-			return owner.buf[modulo_add(tail, i)];
+			return owner->buf[modulo_add(tail, i)];
 		}
 	};
 
