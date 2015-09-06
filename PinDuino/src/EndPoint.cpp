@@ -7,7 +7,6 @@
 
 #include <avr/eeprom.h>
 extern uint8_t eeprom_id;
-extern uint32_t eeprom_actions[12][2];
 
 #include <EndPoint.h>
 #include <OpCode.h>
