@@ -13,7 +13,7 @@
 
 class OutgoingPinDuinoDataLink: public OutgoingDataLink {
 public:
-	OutgoingPinDuinoDataLink(Hardware&);
+	OutgoingPinDuinoDataLink(Hardware&, FrameBuffer<64, 4>&);
 	virtual ~OutgoingPinDuinoDataLink();
 
 	void log(const char*, ...);

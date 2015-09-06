@@ -36,7 +36,8 @@ BOOST_AUTO_TEST_CASE( read_write_solenoid_action_through_datalink ) {
 	MockHardware hardware_a(b_to_a, a_to_b);
 	MockHardware hardware_b(a_to_b, b_to_a);
 
-	OutgoingDataLink datalink_a(hardware_a);
+	FrameBuffer<64, 4> outgoingFrames;
+	OutgoingDataLink datalink_a(hardware_a, outgoingFrames);
 	FrameBuffer<64, 4> incomingFrames;
 	IncomingDataLink datalink_b(hardware_b, incomingFrames);
 

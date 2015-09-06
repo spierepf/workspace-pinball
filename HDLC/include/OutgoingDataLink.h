@@ -33,7 +33,7 @@ class OutgoingDataLink {
 	struct pt outgoing;
 	Hardware& hardware;
 	uint16_t outgoingCRC;
-	FrameBuffer<64, 4> frameBuffer;
+	FrameBuffer<64, 4> outgoingFrames;
 	FrameBuffer<64, 4>::Frame currentFrame;
 	uint8_t position;
 	uint8_t data;
@@ -42,7 +42,7 @@ protected:
 	PT_THREAD(outgoing_thread());
 
 public:
-	OutgoingDataLink(Hardware&);
+	OutgoingDataLink(Hardware&, FrameBuffer<64, 4>& outgoingFrames);
 	virtual ~OutgoingDataLink();
 
 	/** Used to schedule our protothread for execution. */

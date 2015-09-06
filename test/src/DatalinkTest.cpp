@@ -158,7 +158,7 @@ BOOST_AUTO_TEST_CASE( datalink_outgoing_frame ) {
 	RingBuffer<16> incoming_bytes;
 	RingBuffer<16> outgoing_bytes;
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
-	OutgoingDataLink datalink(hardware);
+	FrameBuffer<64, 4> outgoingFrames; OutgoingDataLink datalink(hardware, outgoingFrames);
 
 	datalink.begin_outgoing_frame(0x00);
 	datalink.append_payload(0x01);
@@ -196,7 +196,7 @@ BOOST_AUTO_TEST_CASE( datalink_outgoing_frame_escape ) {
 	RingBuffer<16> incoming_bytes;
 	RingBuffer<16> outgoing_bytes;
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
-	OutgoingDataLink datalink(hardware);
+	FrameBuffer<64, 4> outgoingFrames; OutgoingDataLink datalink(hardware, outgoingFrames);
 
 	datalink.begin_outgoing_frame(0x11);
 	datalink.append_payload(0x13);
@@ -225,7 +225,7 @@ BOOST_AUTO_TEST_CASE( datalink_no_output ) {
 	RingBuffer<16> incoming_bytes;
 	RingBuffer<16> outgoing_bytes;
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
-	OutgoingDataLink datalink(hardware);
+	FrameBuffer<64, 4> outgoingFrames; OutgoingDataLink datalink(hardware, outgoingFrames);
 
 	datalink.schedule();
 
@@ -241,7 +241,8 @@ BOOST_AUTO_TEST_CASE( datalink_ping ) {
 	MockHardware hardware_a(b_to_a, a_to_b);
 	MockHardware hardware_b(a_to_b, b_to_a);
 
-	OutgoingDataLink datalink_a(hardware_a);
+	FrameBuffer<64, 4> outgoingFrames;
+	OutgoingDataLink datalink_a(hardware_a, outgoingFrames);
 	FrameBuffer<64, 4> incomingFrames;
 	IncomingDataLink datalink_b(hardware_b, incomingFrames);
 

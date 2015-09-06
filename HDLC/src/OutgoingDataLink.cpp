@@ -9,7 +9,7 @@
 
 #include <crc.h>
 
-OutgoingDataLink::OutgoingDataLink(Hardware& hardware) : hardware(hardware) {
+OutgoingDataLink::OutgoingDataLink(Hardware& hardware, FrameBuffer<64, 4>& outgoingFrames) : hardware(hardware), outgoingFrames(outgoingFrames) {
 	PT_INIT(&outgoing);
 }
 
@@ -22,8 +22,8 @@ OutgoingDataLink::~OutgoingDataLink() {
 PT_THREAD(OutgoingDataLink::outgoing_thread()) {
 	PT_BEGIN(&outgoing);
 	for(;;) {
-		PT_WAIT_UNTIL(&outgoing, frameBuffer.hasFrame());
-		currentFrame = frameBuffer[0];
+		PT_WAIT_UNTIL(&outgoing, outgoingFrames.hasFrame());
+		currentFrame = outgoingFrames[0];
 		outgoingCRC = 0xFFFF;
 		WRITE_HARDWARE(FLAG);
 		for(position = 0; position < currentFrame.getLength(); position++) {
@@ -51,7 +51,7 @@ PT_THREAD(OutgoingDataLink::outgoing_thread()) {
 		WRITE_HARDWARE(data);
 		WRITE_HARDWARE(FLAG);
 
-		frameBuffer.removeFrame();
+		outgoingFrames.removeFrame();
 	}
 	PT_END(&outgoing);
 }
@@ -62,13 +62,13 @@ void OutgoingDataLink::schedule() {
 }
 
 void OutgoingDataLink::begin_outgoing_frame(uint8_t opcode) {
-	frameBuffer.put(opcode);
+	outgoingFrames.put(opcode);
 }
 
 void OutgoingDataLink::append_payload(uint8_t payload) {
-	frameBuffer.put(payload);
+	outgoingFrames.put(payload);
 }
 
 void OutgoingDataLink::end_outgoing_frame() {
-	frameBuffer.endFrame();
+	outgoingFrames.endFrame();
 }
