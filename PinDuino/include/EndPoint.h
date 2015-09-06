@@ -21,7 +21,7 @@ protected:
 	void handleIncomingFrame();
 
 public:
-	EndPoint(IncomingDataLink&, OutgoingPinDuinoDataLink&, FrameBuffer<64, 4>& incomingFrames, PingPong&);
+	EndPoint(IncomingDataLink&, OutgoingPinDuinoDataLink&, FrameBuffer<64, 4>& incomingFrames, FrameBuffer<64, 4>& outgoingFrames, PingPong&);
 	virtual ~EndPoint();
 };
 

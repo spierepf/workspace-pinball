@@ -13,7 +13,7 @@ extern uint8_t eeprom_id;
 #include <StimulusResponse.h>
 extern Solenoid *solenoids[];
 
-EndPoint::EndPoint(IncomingDataLink& _incomingDatalink, OutgoingPinDuinoDataLink& _outgoingDatalink, FrameBuffer<64, 4>& _incomingFrames, PingPong &pingPong) : AbstractEndPoint(_incomingDatalink, _outgoingDatalink, _incomingFrames), pingPong(pingPong), logger(_outgoingDatalink) {
+EndPoint::EndPoint(IncomingDataLink& _incomingDatalink, OutgoingPinDuinoDataLink& _outgoingDatalink, FrameBuffer<64, 4>& _incomingFrames, FrameBuffer<64, 4>& _outgoingFrames, PingPong &pingPong) : AbstractEndPoint(_incomingDatalink, _outgoingDatalink, _incomingFrames, _outgoingFrames), pingPong(pingPong), logger(_outgoingDatalink) {
 	eeprom_busy_wait();
 	outgoingDatalink.begin_outgoing_frame(OpCode::MY_ID);
 	outgoingDatalink.append_payload(eeprom_read_byte(&eeprom_id));

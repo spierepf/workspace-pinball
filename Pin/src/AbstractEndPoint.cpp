@@ -7,7 +7,7 @@
 
 #include "AbstractEndPoint.h"
 
-AbstractEndPoint::AbstractEndPoint(IncomingDataLink &incomingDatalink, OutgoingDataLink &outgoingDatalink, FrameBuffer<64, 4> &incomingFrames) : incomingDatalink(incomingDatalink), outgoingDatalink(outgoingDatalink), incomingFrames(incomingFrames) {
+AbstractEndPoint::AbstractEndPoint(IncomingDataLink &incomingDatalink, OutgoingDataLink &outgoingDatalink, FrameBuffer<64, 4> &incomingFrames, FrameBuffer<64, 4> &outgoingFrames) : incomingDatalink(incomingDatalink), outgoingDatalink(outgoingDatalink), incomingFrames(incomingFrames), outgoingFrames(outgoingFrames) {
 	PT_INIT(&pt);
 }
 
