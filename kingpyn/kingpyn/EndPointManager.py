@@ -38,6 +38,8 @@ class EndPointManager(object):
     def addDevices(self):
         for name in glob.glob('/dev/ttyUSB*'):
             self.addDevice(name)
+        for name in glob.glob('/dev/ttyACM*'):
+            self.addDevice(name)
             
     def schedule(self):
         for endPoint in self.endPoints.itervalues():
