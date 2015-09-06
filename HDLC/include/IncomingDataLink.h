@@ -35,12 +35,12 @@ protected:
 	Hardware& hardware;
 	uint16_t incomingCRC;
 	uint8_t current_frame_length;
-	FrameBuffer<64, 4> incomingFrames;
+	FrameBuffer<64, 4>& incomingFrames;
 
 	PT_THREAD(incoming_thread());
 
 public:
-	IncomingDataLink(Hardware&);
+	IncomingDataLink(Hardware&, FrameBuffer<64, 4>&);
 	virtual ~IncomingDataLink();
 
 	/** Used to schedule our protothread for execution. */

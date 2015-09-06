@@ -10,7 +10,7 @@
 #include <stdint.h>
 #include <crc.h>
 
-IncomingDataLink::IncomingDataLink(Hardware& hardware) : hardware(hardware), incomingCRC(0xFFFF), current_frame_length(0) {
+IncomingDataLink::IncomingDataLink(Hardware& hardware, FrameBuffer<64, 4>& incomingFrames) : hardware(hardware), incomingCRC(0xFFFF), current_frame_length(0), incomingFrames(incomingFrames) {
 	PT_INIT(&incoming);
 }
 

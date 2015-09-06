@@ -17,7 +17,7 @@ BOOST_AUTO_TEST_CASE( datalink_get ) {
 	RingBuffer<16> incoming_bytes;
 	RingBuffer<16> outgoing_bytes;
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
-	IncomingDataLink datalink(hardware);
+	FrameBuffer<64,4> incomingFrames; IncomingDataLink datalink(hardware, incomingFrames);
 
 	hardware.incoming_bytes.put(0);
 
@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE( datalink_get_escape ) {
 	RingBuffer<16> incoming_bytes;
 	RingBuffer<16> outgoing_bytes;
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
-	IncomingDataLink datalink(hardware);
+	FrameBuffer<64,4> incomingFrames; IncomingDataLink datalink(hardware, incomingFrames);
 
 	hardware.incoming_bytes.put(0x7d);
 	hardware.incoming_bytes.put(0x11 ^ 0x20);
@@ -44,7 +44,7 @@ BOOST_AUTO_TEST_CASE( datalink_have_incoming_frame ) {
 	RingBuffer<16> incoming_bytes;
 	RingBuffer<16> outgoing_bytes;
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
-	IncomingDataLink datalink(hardware);
+	FrameBuffer<64,4> incomingFrames; IncomingDataLink datalink(hardware, incomingFrames);
 
 	BOOST_CHECK( !datalink.have_incoming_frame() );
 
@@ -67,7 +67,7 @@ BOOST_AUTO_TEST_CASE( datalink_incoming_frame_length ) {
 	RingBuffer<16> incoming_bytes;
 	RingBuffer<16> outgoing_bytes;
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
-	IncomingDataLink datalink(hardware);
+	FrameBuffer<64,4> incomingFrames; IncomingDataLink datalink(hardware, incomingFrames);
 
 	uint16_t crc = 0xFFFF;
 	hardware.incoming_bytes.put(0x00);
@@ -88,7 +88,7 @@ BOOST_AUTO_TEST_CASE( datalink_next_incoming_frame ) {
 	RingBuffer<16> incoming_bytes;
 	RingBuffer<16> outgoing_bytes;
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
-	IncomingDataLink datalink(hardware);
+	FrameBuffer<64,4> incomingFrames; IncomingDataLink datalink(hardware, incomingFrames);
 
 	uint16_t crc = 0xFFFF;
 	hardware.incoming_bytes.put(0x00);
@@ -123,7 +123,7 @@ BOOST_AUTO_TEST_CASE( datalink_corrupt_incoming_frame ) {
 	RingBuffer<16> incoming_bytes;
 	RingBuffer<16> outgoing_bytes;
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
-	IncomingDataLink datalink(hardware);
+	FrameBuffer<64,4> incomingFrames; IncomingDataLink datalink(hardware, incomingFrames);
 
 	uint16_t crc = 0xFFFF;
 	hardware.incoming_bytes.put(0x00);
@@ -242,7 +242,8 @@ BOOST_AUTO_TEST_CASE( datalink_ping ) {
 	MockHardware hardware_b(a_to_b, b_to_a);
 
 	OutgoingDataLink datalink_a(hardware_a);
-	IncomingDataLink datalink_b(hardware_b);
+	FrameBuffer<64, 4> incomingFrames;
+	IncomingDataLink datalink_b(hardware_b, incomingFrames);
 
 	datalink_a.begin_outgoing_frame(0x00);
 	datalink_a.append_payload(0x01);

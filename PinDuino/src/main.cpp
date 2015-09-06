@@ -42,7 +42,8 @@ void uart_init(void) {
 
 Uart hardware;
 
-IncomingDataLink incomingDataLink(hardware);
+FrameBuffer<64, 4> incomingFrames;
+IncomingDataLink incomingDataLink(hardware, incomingFrames);
 OutgoingPinDuinoDataLink outgoingDataLink(hardware);
 
 PinBank pinBankB0(PinBank::B, _BV(0));

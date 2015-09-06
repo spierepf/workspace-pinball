@@ -34,7 +34,8 @@ BOOST_AUTO_TEST_CASE( read_write_stimulus_through_datalink ) {
 	MockHardware hardware_b(a_to_b, b_to_a);
 
 	OutgoingDataLink datalink_a(hardware_a);
-	IncomingDataLink datalink_b(hardware_b);
+	FrameBuffer<64, 4> incomingFrames;
+	IncomingDataLink datalink_b(hardware_b, incomingFrames);
 
 	datalink_a.begin_outgoing_frame(0x00);
 	stimulus.write_to(datalink_a);
