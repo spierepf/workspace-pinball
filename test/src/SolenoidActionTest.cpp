@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE( read_write_solenoid_action_through_datalink ) {
 
 	SolenoidAction result;
 	uint8_t i = 1;
-	result.read_from(datalink_b, i);
+	result.read_from(incomingFrames[0], i);
 
 	BOOST_CHECK( action.enabled == result.enabled );
 	BOOST_CHECK( action.solenoidIndex == result.solenoidIndex );

@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE( read_write_stimulus_through_datalink ) {
 
 	Stimulus result;
 	uint8_t i = 1;
-	result.read_from(datalink_b, i);
+	result.read_from(incomingFrames[0], i);
 
 	BOOST_CHECK( stimulus.pin == result.pin );
 	BOOST_CHECK( stimulus.newState == result.newState );

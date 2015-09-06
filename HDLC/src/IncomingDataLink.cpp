@@ -53,7 +53,3 @@ PT_THREAD(IncomingDataLink::incoming_thread()) {
 void IncomingDataLink::schedule() {
 	PT_SCHEDULE(incoming_thread());
 }
-
-uint8_t IncomingDataLink::peek(uint8_t position) {
-	return incomingFrames[0][position];
-}

@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_CASE( datalink_get ) {
 
 	datalink.schedule();
 
-	BOOST_CHECK( 0 == datalink.peek(0) );
+	BOOST_CHECK( 0 == incomingFrames[0][0] );
 }
 
 BOOST_AUTO_TEST_CASE( datalink_get_escape ) {
@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_CASE( datalink_get_escape ) {
 
 	datalink.schedule();
 
-	BOOST_CHECK( 0x11 == datalink.peek(0) );
+	BOOST_CHECK( 0x11 == incomingFrames[0][0] );
 }
 
 BOOST_AUTO_TEST_CASE( datalink_have_incoming_frame ) {
@@ -116,7 +116,7 @@ BOOST_AUTO_TEST_CASE( datalink_next_incoming_frame ) {
 	incomingFrames.removeFrame();
 
 	BOOST_CHECK( incomingFrames.hasFrame() );
-	BOOST_CHECK( 0x01 == datalink.peek(0) );
+	BOOST_CHECK( 0x01 == incomingFrames[0][0] );
 }
 
 BOOST_AUTO_TEST_CASE( datalink_corrupt_incoming_frame ) {
@@ -149,7 +149,7 @@ BOOST_AUTO_TEST_CASE( datalink_corrupt_incoming_frame ) {
 	datalink.schedule();
 
 	BOOST_CHECK( incomingFrames.hasFrame() );
-	BOOST_CHECK( 0x01 == datalink.peek(0) );
+	BOOST_CHECK( 0x01 == incomingFrames[0][0] );
 	incomingFrames.removeFrame();
 	BOOST_CHECK( !incomingFrames.hasFrame() );
 }
@@ -256,8 +256,8 @@ BOOST_AUTO_TEST_CASE( datalink_ping ) {
 
 	BOOST_CHECK(incomingFrames.hasFrame());
 	BOOST_CHECK(2 == incomingFrames[0].getLength());
-	BOOST_CHECK(0x00 == datalink_b.peek(0));
-	BOOST_CHECK(0x01 == datalink_b.peek(1));
+	BOOST_CHECK(0x00 == incomingFrames[0][0]);
+	BOOST_CHECK(0x01 == incomingFrames[0][1]);
 	incomingFrames.removeFrame();
 	BOOST_CHECK(!incomingFrames.hasFrame());
 }

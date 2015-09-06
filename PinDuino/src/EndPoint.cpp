@@ -25,12 +25,12 @@ EndPoint::~EndPoint() {
 }
 
 void EndPoint::handleIncomingFrame() {
-	if(incomingDatalink.peek(0) == OpCode::PONG) {
-		pingPong.acceptPong(incomingDatalink.peek(1));
-	} else if(incomingDatalink.peek(0) == OpCode::PULSE_COIL) {
+	if(incomingFrames[0][0] == OpCode::PONG) {
+		pingPong.acceptPong(incomingFrames[0][1]);
+	} else if(incomingFrames[0][0] == OpCode::PULSE_COIL) {
 		SolenoidAction action;
 		uint8_t i = 1;
-		action.read_from(incomingDatalink, i);
+		action.read_from(incomingFrames[0], i);
 		if(action.enabled && action.solenoidIndex < 6 && action.attack <= 65000) {
 			if(action.attack == 0) {
 				if(solenoids[action.solenoidIndex] != NULL) solenoids[action.solenoidIndex] -> release();
@@ -38,18 +38,18 @@ void EndPoint::handleIncomingFrame() {
 				if(solenoids[action.solenoidIndex] != NULL) solenoids[action.solenoidIndex] -> trigger(action.attack, action.sustain);
 			}
 		}
-	} else if(incomingDatalink.peek(0) == OpCode::SR_INHIBIT) {
+	} else if(incomingFrames[0][0] == OpCode::SR_INHIBIT) {
 		stimulusResponse.inhibit();
-	} else if(incomingDatalink.peek(0) == OpCode::SR_ENABLE) {
+	} else if(incomingFrames[0][0] == OpCode::SR_ENABLE) {
 		stimulusResponse.enable();
-	} else if(incomingDatalink.peek(0) == OpCode::SR_CONFIG) {
+	} else if(incomingFrames[0][0] == OpCode::SR_CONFIG) {
 		uint8_t i = 1;
 		if(incomingFrames[0].getLength() >= i+sizeof(Stimulus)) {
 			Stimulus stimulus;
-			stimulus.read_from(incomingDatalink, i);
+			stimulus.read_from(incomingFrames[0], i);
 			if(incomingFrames[0].getLength() >= i+sizeof(SolenoidAction)) {
 				SolenoidAction action;
-				action.read_from(incomingDatalink, i);
+				action.read_from(incomingFrames[0], i);
 				stimulusResponse[stimulus] = action;
 			} else {
 				outgoingDatalink.begin_outgoing_frame(OpCode::SR_CONFIG);

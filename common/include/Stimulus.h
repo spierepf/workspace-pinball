@@ -26,9 +26,9 @@ struct Stimulus {
 		datalink.append_payload(*p++);
 	}
 
-	void read_from(IncomingDataLink& datalink, uint8_t& i) {
+	void read_from(FrameBuffer<64, 4>::Frame frame, uint8_t& i) {
 		uint8_t *p = (uint8_t*)this;
-		*p++=datalink.peek(i++);
+		*p++=frame[i++];
 	}
 };
 

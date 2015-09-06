@@ -93,37 +93,37 @@ EndPoint::~EndPoint() {
 }
 
 void EndPoint::handleIncomingFrame() {
-	if(incomingDatalink.peek(0) == OpCode::PING) { // ping
+	if(incomingFrames[0][0] == OpCode::PING) { // ping
 		outgoingDatalink.begin_outgoing_frame(OpCode::PONG); // pong
-		outgoingDatalink.append_payload(incomingDatalink.peek(1)); // return the payload of the ping
+		outgoingDatalink.append_payload(incomingFrames[0][1]); // return the payload of the ping
 		outgoingDatalink.end_outgoing_frame();
-	} else if(incomingDatalink.peek(0) == OpCode::LOG) { // log
+	} else if(incomingFrames[0][0] == OpCode::LOG) { // log
 		char buf[32];
 		for(int i = 1; i < incomingFrames[0].getLength(); i++) {
-			buf[i-1] = (char)incomingDatalink.peek(i);
+			buf[i-1] = (char)incomingFrames[0][i];
 		}
 		buf[incomingFrames[0].getLength() - 1] = '\0';
 		LOG(INFO) << "From " << id << ": " << buf;
-	} else if(incomingDatalink.peek(0) == OpCode::MY_ID) {
-		id = incomingDatalink.peek(1);
+	} else if(incomingFrames[0][0] == OpCode::MY_ID) {
+		id = incomingFrames[0][1];
 		LOG(INFO) << "Device " << device << " registered id: " << (int)id;
 		outgoingDatalink.begin_outgoing_frame(OpCode::SR_ENABLE);
 		outgoingDatalink.end_outgoing_frame();
 		ostringstream convert;
 		convert << id;
 		label->set_text(convert.str());
-	} else if(incomingDatalink.peek(0) == OpCode::SWITCH_ACTIVE) {
-		LOG(INFO) << "Switch Active: " << id << ":" << (int)incomingDatalink.peek(1);
-	} else if(incomingDatalink.peek(0) == OpCode::SWITCH_INACTIVE) {
-		LOG(INFO) << "Switch Inactive: " << id << ":"  << (int)incomingDatalink.peek(1);
-	} else if(incomingDatalink.peek(0) == OpCode::SR_CONFIG) {
+	} else if(incomingFrames[0][0] == OpCode::SWITCH_ACTIVE) {
+		LOG(INFO) << "Switch Active: " << id << ":" << (int)incomingFrames[0][1];
+	} else if(incomingFrames[0][0] == OpCode::SWITCH_INACTIVE) {
+		LOG(INFO) << "Switch Inactive: " << id << ":"  << (int)incomingFrames[0][1];
+	} else if(incomingFrames[0][0] == OpCode::SR_CONFIG) {
 		uint8_t i = 1;
 		if(incomingFrames[0].getLength() >= i+sizeof(Stimulus)) {
 			Stimulus stimulus;
-			stimulus.read_from(incomingDatalink, i);
+			stimulus.read_from(incomingFrames[0], i);
 			if(incomingFrames[0].getLength() >= i+sizeof(SolenoidAction)) {
 				SolenoidAction action;
-				action.read_from(incomingDatalink, i);
+				action.read_from(incomingFrames[0], i);
 				solenoidActionControllers[stimulus.pin][stimulus.newState]->set(action);
 			}
 		}

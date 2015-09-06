@@ -13,14 +13,6 @@
 #include <Hardware.h>
 #include <FrameBuffer.h>
 
-/** Handles message framing and flow control.
- *
- * To receive an incoming frame, first ensure that one exists by calling have_incoming_frame().
- * Call incoming_frame_length() to establish the number of bytes in the incoming frame, and peek()
- * to examine the bytes of the incoming frame. peek(0) will return the opcode of the incoming frame.
- * peek(1) through peek(n-1) (where n = incoming_frame_length()) will return any payload bytes of the
- * incoming frame. peek() with an argument n or greater is undefined.
- */
 class IncomingDataLink {
 	enum {
 		XON=0x11,
@@ -43,16 +35,7 @@ public:
 	IncomingDataLink(Hardware&, FrameBuffer<64, 4>&);
 	virtual ~IncomingDataLink();
 
-	/** Used to schedule our protothread for execution. */
 	void schedule();
-
-	/** Returns the nth byte in the incoming frame.
-	 *
-	 * This function is used by incoming frame handlers to inspect incoming frames.
-	 * One should use incoming_frame_length() to determine the length of the next incoming
-	 * frame and limit peek() requests accordingly.
-	 */
-	uint8_t peek(uint8_t);
 };
 
 #endif /* INCOMINGDATALINK_H_ */
