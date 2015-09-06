@@ -57,15 +57,3 @@ void IncomingDataLink::schedule() {
 uint8_t IncomingDataLink::peek(uint8_t position) {
 	return incomingFrames[0][position];
 }
-
-bool IncomingDataLink::have_incoming_frame() {
-	return incomingFrames.hasFrame();
-}
-
-uint8_t IncomingDataLink::incoming_frame_length() {
-	return incomingFrames[0].getLength();
-}
-
-void IncomingDataLink::next_incoming_frame() {
-	incomingFrames.removeFrame();
-}

@@ -46,7 +46,7 @@ BOOST_AUTO_TEST_CASE( datalink_have_incoming_frame ) {
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
 	FrameBuffer<64,4> incomingFrames; IncomingDataLink datalink(hardware, incomingFrames);
 
-	BOOST_CHECK( !datalink.have_incoming_frame() );
+	BOOST_CHECK( !incomingFrames.hasFrame() );
 
 	uint16_t crc = 0xFFFF;
 	hardware.incoming_bytes.put(0x00);
@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE( datalink_have_incoming_frame ) {
 	datalink.schedule();
 	datalink.schedule();
 
-	BOOST_CHECK( datalink.have_incoming_frame() );
+	BOOST_CHECK( incomingFrames.hasFrame() );
 }
 
 BOOST_AUTO_TEST_CASE( datalink_incoming_frame_length ) {
@@ -81,7 +81,7 @@ BOOST_AUTO_TEST_CASE( datalink_incoming_frame_length ) {
 	datalink.schedule();
 	datalink.schedule();
 
-	BOOST_CHECK( 1 == datalink.incoming_frame_length() );
+	BOOST_CHECK( 1 == incomingFrames[0].getLength() );
 }
 
 BOOST_AUTO_TEST_CASE( datalink_next_incoming_frame ) {
@@ -113,9 +113,9 @@ BOOST_AUTO_TEST_CASE( datalink_next_incoming_frame ) {
 	datalink.schedule();
 	datalink.schedule();
 
-	datalink.next_incoming_frame();
+	incomingFrames.removeFrame();
 
-	BOOST_CHECK( datalink.have_incoming_frame() );
+	BOOST_CHECK( incomingFrames.hasFrame() );
 	BOOST_CHECK( 0x01 == datalink.peek(0) );
 }
 
@@ -148,10 +148,10 @@ BOOST_AUTO_TEST_CASE( datalink_corrupt_incoming_frame ) {
 	datalink.schedule();
 	datalink.schedule();
 
-	BOOST_CHECK( datalink.have_incoming_frame() );
+	BOOST_CHECK( incomingFrames.hasFrame() );
 	BOOST_CHECK( 0x01 == datalink.peek(0) );
-	datalink.next_incoming_frame();
-	BOOST_CHECK( !datalink.have_incoming_frame() );
+	incomingFrames.removeFrame();
+	BOOST_CHECK( !incomingFrames.hasFrame() );
 }
 
 BOOST_AUTO_TEST_CASE( datalink_outgoing_frame ) {
@@ -254,10 +254,10 @@ BOOST_AUTO_TEST_CASE( datalink_ping ) {
 		datalink_b.schedule();
 	}
 
-	BOOST_CHECK(datalink_b.have_incoming_frame());
-	BOOST_CHECK(2 == datalink_b.incoming_frame_length());
+	BOOST_CHECK(incomingFrames.hasFrame());
+	BOOST_CHECK(2 == incomingFrames[0].getLength());
 	BOOST_CHECK(0x00 == datalink_b.peek(0));
 	BOOST_CHECK(0x01 == datalink_b.peek(1));
-	datalink_b.next_incoming_frame();
-	BOOST_CHECK(!datalink_b.have_incoming_frame());
+	incomingFrames.removeFrame();
+	BOOST_CHECK(!incomingFrames.hasFrame());
 }

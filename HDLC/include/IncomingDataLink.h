@@ -53,18 +53,6 @@ public:
 	 * frame and limit peek() requests accordingly.
 	 */
 	uint8_t peek(uint8_t);
-
-	/** Returns true if there is an incoming frame available. */
-	bool have_incoming_frame();
-
-	/** Returns the length of the next incoming frame (if one exists).
-	 *
-	 * The return value of this function is undefined if have_incoming_frame() is false.
-	 */
-	uint8_t incoming_frame_length();
-
-	/** Advance to the next incoming frame. */
-	void next_incoming_frame();
 };
 
 #endif /* INCOMINGDATALINK_H_ */

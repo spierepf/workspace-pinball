@@ -18,11 +18,11 @@ AbstractEndPoint::~AbstractEndPoint() {
 PT_THREAD(AbstractEndPoint::run()) {
 	PT_BEGIN(&pt);
 	for(;;) {
-		PT_WAIT_UNTIL(&pt, incomingDatalink.have_incoming_frame());
+		PT_WAIT_UNTIL(&pt, incomingFrames.hasFrame());
 
 		handleIncomingFrame();
 
-		incomingDatalink.next_incoming_frame();
+		incomingFrames.removeFrame();
 	}
 	PT_END(&pt);
 }

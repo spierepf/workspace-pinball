@@ -99,10 +99,10 @@ void EndPoint::handleIncomingFrame() {
 		outgoingDatalink.end_outgoing_frame();
 	} else if(incomingDatalink.peek(0) == OpCode::LOG) { // log
 		char buf[32];
-		for(int i = 1; i < incomingDatalink.incoming_frame_length(); i++) {
+		for(int i = 1; i < incomingFrames[0].getLength(); i++) {
 			buf[i-1] = (char)incomingDatalink.peek(i);
 		}
-		buf[incomingDatalink.incoming_frame_length() - 1] = '\0';
+		buf[incomingFrames[0].getLength() - 1] = '\0';
 		LOG(INFO) << "From " << id << ": " << buf;
 	} else if(incomingDatalink.peek(0) == OpCode::MY_ID) {
 		id = incomingDatalink.peek(1);
@@ -118,10 +118,10 @@ void EndPoint::handleIncomingFrame() {
 		LOG(INFO) << "Switch Inactive: " << id << ":"  << (int)incomingDatalink.peek(1);
 	} else if(incomingDatalink.peek(0) == OpCode::SR_CONFIG) {
 		uint8_t i = 1;
-		if(incomingDatalink.incoming_frame_length() >= i+sizeof(Stimulus)) {
+		if(incomingFrames[0].getLength() >= i+sizeof(Stimulus)) {
 			Stimulus stimulus;
 			stimulus.read_from(incomingDatalink, i);
-			if(incomingDatalink.incoming_frame_length() >= i+sizeof(SolenoidAction)) {
+			if(incomingFrames[0].getLength() >= i+sizeof(SolenoidAction)) {
 				SolenoidAction action;
 				action.read_from(incomingDatalink, i);
 				solenoidActionControllers[stimulus.pin][stimulus.newState]->set(action);

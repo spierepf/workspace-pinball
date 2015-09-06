@@ -44,10 +44,10 @@ void EndPoint::handleIncomingFrame() {
 		stimulusResponse.enable();
 	} else if(incomingDatalink.peek(0) == OpCode::SR_CONFIG) {
 		uint8_t i = 1;
-		if(incomingDatalink.incoming_frame_length() >= i+sizeof(Stimulus)) {
+		if(incomingFrames[0].getLength() >= i+sizeof(Stimulus)) {
 			Stimulus stimulus;
 			stimulus.read_from(incomingDatalink, i);
-			if(incomingDatalink.incoming_frame_length() >= i+sizeof(SolenoidAction)) {
+			if(incomingFrames[0].getLength() >= i+sizeof(SolenoidAction)) {
 				SolenoidAction action;
 				action.read_from(incomingDatalink, i);
 				stimulusResponse[stimulus] = action;
