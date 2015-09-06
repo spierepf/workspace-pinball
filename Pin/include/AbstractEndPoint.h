@@ -19,10 +19,12 @@ class AbstractEndPoint {
 protected:
 	IncomingDataLink &incomingDatalink;
 	OutgoingDataLink &outgoingDatalink;
+	FrameBuffer<64, 4> &incomingFrames;
+
 	virtual void handleIncomingFrame() = 0;
 
 public:
-	AbstractEndPoint(IncomingDataLink&, OutgoingDataLink&);
+	AbstractEndPoint(IncomingDataLink&, OutgoingDataLink&, FrameBuffer<64, 4>&);
 	virtual ~AbstractEndPoint();
 
 	void schedule();

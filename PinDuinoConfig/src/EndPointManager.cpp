@@ -54,7 +54,7 @@ bool EndPointManager::loop() {
 			FrameBuffer<64, 4>* incomingFrames = new FrameBuffer<64, 4>();
 			IncomingDataLink* incomingDatalink = new IncomingDataLink(*hardware, *incomingFrames);
 			OutgoingDataLink* outgoingDatalink = new OutgoingDataLink(*hardware);
-			endPoints.push_back(new EndPoint(notebook, s, hardware, incomingDatalink, outgoingDatalink));
+			endPoints.push_back(new EndPoint(notebook, s, hardware, incomingDatalink, outgoingDatalink, incomingFrames));
 			LOG(INFO) << "Pending connection to " << s;
 		} catch(SerialPort::OpenFailed& e) {
 			LOG(ERROR) << "While opening " << s << " : " << e.what();

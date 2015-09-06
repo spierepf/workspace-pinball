@@ -52,7 +52,7 @@ protected:
 	void handleIncomingFrame();
 
 public:
-	EndPoint(Gtk::Notebook* notebook, string, Hardware*, IncomingDataLink*, OutgoingDataLink*);
+	EndPoint(Gtk::Notebook* notebook, string, Hardware*, IncomingDataLink*, OutgoingDataLink*, FrameBuffer<64, 4>*);
 	virtual ~EndPoint();
 };
 

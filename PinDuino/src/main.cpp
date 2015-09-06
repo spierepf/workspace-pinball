@@ -72,7 +72,7 @@ SolenoidBank solenoidBankB(solenoids, dirtyListB);
 
 StimulusResponse stimulusResponse;
 
-EndPoint endPoint(incomingDataLink, outgoingDataLink, pingPong);
+EndPoint endPoint(incomingDataLink, outgoingDataLink, incomingFrames, pingPong);
 Blinker blinker(outgoingDataLink);
 
 uint8_t dirtyListC = 0b00111111;
