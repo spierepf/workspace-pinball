@@ -24,6 +24,7 @@ class OutgoingDataLink {
 
 	struct pt outgoing;
 	Hardware& hardware;
+	uint8_t sequenceNumber;
 	uint16_t outgoingCRC;
 	FrameBuffer<64, 4>::Frame currentFrame;
 	uint8_t position;

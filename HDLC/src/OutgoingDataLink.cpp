@@ -9,7 +9,7 @@
 
 #include <crc.h>
 
-OutgoingDataLink::OutgoingDataLink(Hardware& hardware, FrameBuffer<64, 4>& outgoingFrames) : hardware(hardware), outgoingCRC(0xFFFF), position(0), data(0), outgoingFrames(outgoingFrames) {
+OutgoingDataLink::OutgoingDataLink(Hardware& hardware, FrameBuffer<64, 4>& outgoingFrames) : hardware(hardware), sequenceNumber(0), outgoingCRC(0xFFFF), position(0), data(0), outgoingFrames(outgoingFrames) {
 	PT_INIT(&outgoing);
 }
 
@@ -26,6 +26,8 @@ PT_THREAD(OutgoingDataLink::outgoing_thread()) {
 		currentFrame = outgoingFrames[0];
 		outgoingCRC = 0xFFFF;
 		WRITE_HARDWARE(FLAG);
+		crc_ccitt_update(outgoingCRC, sequenceNumber); // sequence number
+		WRITE_HARDWARE(sequenceNumber);
 		for(position = 0; position < currentFrame.getLength(); position++) {
 			data = currentFrame[position];
 			crc_ccitt_update(outgoingCRC, data);
@@ -52,6 +54,7 @@ PT_THREAD(OutgoingDataLink::outgoing_thread()) {
 		WRITE_HARDWARE(FLAG);
 
 		outgoingFrames.removeFrame();
+		sequenceNumber++;
 	}
 	PT_END(&outgoing);
 }

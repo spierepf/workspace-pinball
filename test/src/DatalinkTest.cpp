@@ -19,8 +19,10 @@ BOOST_AUTO_TEST_CASE( datalink_get ) {
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
 	FrameBuffer<64,4> incomingFrames; IncomingDataLink datalink(hardware, incomingFrames);
 
+	hardware.incoming_bytes.put(0); // sequence number
 	hardware.incoming_bytes.put(0);
 
+	datalink.schedule();
 	datalink.schedule();
 
 	BOOST_CHECK( 0 == incomingFrames[0][0] );
@@ -32,9 +34,11 @@ BOOST_AUTO_TEST_CASE( datalink_get_escape ) {
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
 	FrameBuffer<64,4> incomingFrames; IncomingDataLink datalink(hardware, incomingFrames);
 
+	hardware.incoming_bytes.put(0); // sequence number
 	hardware.incoming_bytes.put(0x7d);
 	hardware.incoming_bytes.put(0x11 ^ 0x20);
 
+	datalink.schedule();
 	datalink.schedule();
 
 	BOOST_CHECK( 0x11 == incomingFrames[0][0] );
@@ -70,12 +74,15 @@ BOOST_AUTO_TEST_CASE( datalink_incoming_frame_length ) {
 	FrameBuffer<64,4> incomingFrames; IncomingDataLink datalink(hardware, incomingFrames);
 
 	uint16_t crc = 0xFFFF;
+	hardware.incoming_bytes.put(0x00); // sequence number
+	crc_ccitt_update(crc, 0x00);
 	hardware.incoming_bytes.put(0x00);
 	crc_ccitt_update(crc, 0x00);
 	hardware.incoming_bytes.put(crc >> 8);
 	hardware.incoming_bytes.put(crc & 0xFF);
 	hardware.incoming_bytes.put(0x7e);
 
+	datalink.schedule();
 	datalink.schedule();
 	datalink.schedule();
 	datalink.schedule();
@@ -91,6 +98,8 @@ BOOST_AUTO_TEST_CASE( datalink_next_incoming_frame ) {
 	FrameBuffer<64,4> incomingFrames; IncomingDataLink datalink(hardware, incomingFrames);
 
 	uint16_t crc = 0xFFFF;
+	hardware.incoming_bytes.put(0x00); // sequence number
+	crc_ccitt_update(crc, 0x00);
 	hardware.incoming_bytes.put(0x00);
 	crc_ccitt_update(crc, 0x00);
 	hardware.incoming_bytes.put(crc >> 8);
@@ -98,12 +107,16 @@ BOOST_AUTO_TEST_CASE( datalink_next_incoming_frame ) {
 	hardware.incoming_bytes.put(0x7e);
 
 	crc = 0xFFFF;
+	hardware.incoming_bytes.put(0x01); // sequence number
+	crc_ccitt_update(crc, 0x01);
 	hardware.incoming_bytes.put(0x01);
 	crc_ccitt_update(crc, 0x01);
 	hardware.incoming_bytes.put(crc >> 8);
 	hardware.incoming_bytes.put(crc & 0xFF);
 	hardware.incoming_bytes.put(0x7e);
 
+	datalink.schedule();
+	datalink.schedule();
 	datalink.schedule();
 	datalink.schedule();
 	datalink.schedule();
@@ -126,6 +139,8 @@ BOOST_AUTO_TEST_CASE( datalink_corrupt_incoming_frame ) {
 	FrameBuffer<64,4> incomingFrames; IncomingDataLink datalink(hardware, incomingFrames);
 
 	uint16_t crc = 0xFFFF;
+	hardware.incoming_bytes.put(0x00); // sequence number
+	crc_ccitt_update(crc, 0x00);
 	hardware.incoming_bytes.put(0x00);
 	crc_ccitt_update(crc, 0x00);
 	hardware.incoming_bytes.put(crc >> 8);
@@ -133,12 +148,16 @@ BOOST_AUTO_TEST_CASE( datalink_corrupt_incoming_frame ) {
 	hardware.incoming_bytes.put(0x7e);
 
 	crc = 0xFFFF;
+	hardware.incoming_bytes.put(0x01); // sequence number
+	crc_ccitt_update(crc, 0x01);
 	hardware.incoming_bytes.put(0x01);
 	crc_ccitt_update(crc, 0x01);
 	hardware.incoming_bytes.put(crc >> 8);
 	hardware.incoming_bytes.put(crc & 0xFF);
 	hardware.incoming_bytes.put(0x7e);
 
+	datalink.schedule();
+	datalink.schedule();
 	datalink.schedule();
 	datalink.schedule();
 	datalink.schedule();
@@ -168,10 +187,12 @@ BOOST_AUTO_TEST_CASE( datalink_outgoing_frame ) {
 	outgoingFrames.put(0x03);
 	outgoingFrames.endFrame();
 
-	for(int i = 0; i < 12; i++) datalink.schedule();
+	for(int i = 0; i < 14; i++) datalink.schedule();
 
 	uint16_t crc = 0xFFFF;
 	BOOST_CHECK( 0x7e == hardware.outgoing_bytes.get() );
+	BOOST_CHECK( 0x00 == hardware.outgoing_bytes.get() ); // sequence number
+	crc_ccitt_update(crc, 0x00);
 	BOOST_CHECK( 0x00 == hardware.outgoing_bytes.get() );
 	crc_ccitt_update(crc, 0x00);
 	BOOST_CHECK( 0x01 == hardware.outgoing_bytes.get() );
@@ -182,6 +203,8 @@ BOOST_AUTO_TEST_CASE( datalink_outgoing_frame ) {
 	crc = 0xFFFF;
 	BOOST_CHECK( 0x7e == hardware.outgoing_bytes.get() );
 	BOOST_CHECK( 0x7e == hardware.outgoing_bytes.get() );
+	BOOST_CHECK( 0x01 == hardware.outgoing_bytes.get() ); // sequence number
+	crc_ccitt_update(crc, 0x01);
 	BOOST_CHECK( 0x02 == hardware.outgoing_bytes.get() );
 	crc_ccitt_update(crc, 0x02);
 	BOOST_CHECK( 0x03 == hardware.outgoing_bytes.get() );
@@ -207,6 +230,7 @@ BOOST_AUTO_TEST_CASE( datalink_outgoing_frame_escape ) {
 	for(int i = 0; i < 12; i++) datalink.schedule();
 
 	BOOST_CHECK( 0x7e == hardware.outgoing_bytes.get() );
+	BOOST_CHECK( 0x00 == hardware.outgoing_bytes.get() ); // sequence number
 	BOOST_CHECK( 0x7d == hardware.outgoing_bytes.get() );
 	BOOST_CHECK( (0x11 ^ 0x20) == hardware.outgoing_bytes.get() );
 	BOOST_CHECK( 0x7d == hardware.outgoing_bytes.get() );

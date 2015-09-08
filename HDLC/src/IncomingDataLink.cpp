@@ -41,7 +41,11 @@ PT_THREAD(IncomingDataLink::incoming_thread()) {
 				READ_HARDWARE();
 				b ^= MASK;
 			}
-			incomingFrames.put(b);
+			if(current_frame_length == 0) {
+				// ignore sequence number
+			} else {
+				incomingFrames.put(b);
+			}
 			crc_ccitt_update(incomingCRC, b);
 			current_frame_length++;
 		}
