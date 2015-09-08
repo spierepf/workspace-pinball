@@ -17,6 +17,7 @@
 
 class SolenoidActionController {
 	OutgoingDataLink& datalink;
+	FrameBuffer<64, 4>& outgoingFrames;
 	Stimulus stimulus;
 	SolenoidAction action;
 	bool initialized;
@@ -31,7 +32,7 @@ class SolenoidActionController {
 	Gtk::Image *applyImage;
 
 public:
-	SolenoidActionController(OutgoingDataLink&, Stimulus, Gtk::Grid*, int, int);
+	SolenoidActionController(OutgoingDataLink&, FrameBuffer<64, 4>&, Stimulus, Gtk::Grid*, int, int);
 	virtual ~SolenoidActionController();
 
 	void update();

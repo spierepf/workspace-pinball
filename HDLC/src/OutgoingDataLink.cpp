@@ -60,15 +60,3 @@ PT_THREAD(OutgoingDataLink::outgoing_thread()) {
 void OutgoingDataLink::schedule() {
 	PT_SCHEDULE(outgoing_thread());
 }
-
-void OutgoingDataLink::begin_outgoing_frame(uint8_t opcode) {
-	outgoingFrames.put(opcode);
-}
-
-void OutgoingDataLink::append_payload(uint8_t payload) {
-	outgoingFrames.put(payload);
-}
-
-void OutgoingDataLink::end_outgoing_frame() {
-	outgoingFrames.endFrame();
-}

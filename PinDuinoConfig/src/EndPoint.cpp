@@ -58,8 +58,8 @@ EndPoint::EndPoint(Gtk::Notebook* notebook, string device, Hardware* hardware, I
 	for(int i = 0; i < 12; i++) {
 		rowLabels[i] = new Gtk::Label(labels[i]);
 		grid->attach(*rowLabels[i], 0, i+2, 1, 1);
-		solenoidActionControllers[i][0] = new SolenoidActionController(*outgoingDatalink, Stimulus(i, false), grid, 1, i+2);
-		solenoidActionControllers[i][1] = new SolenoidActionController(*outgoingDatalink, Stimulus(i, true), grid, 7, i+2);
+		solenoidActionControllers[i][0] = new SolenoidActionController(*outgoingDatalink, *outgoingFrames, Stimulus(i, false), grid, 1, i+2);
+		solenoidActionControllers[i][1] = new SolenoidActionController(*outgoingDatalink, *outgoingFrames, Stimulus(i, true), grid, 7, i+2);
 	}
 
 	notebook -> append_page(*grid, *label);
@@ -94,9 +94,9 @@ EndPoint::~EndPoint() {
 
 void EndPoint::handleIncomingFrame() {
 	if(incomingFrames[0][0] == OpCode::PING) { // ping
-		outgoingDatalink.begin_outgoing_frame(OpCode::PONG); // pong
-		outgoingDatalink.append_payload(incomingFrames[0][1]); // return the payload of the ping
-		outgoingDatalink.end_outgoing_frame();
+		outgoingFrames.put(OpCode::PONG); // pong
+		outgoingFrames.put(incomingFrames[0][1]); // return the payload of the ping
+		outgoingFrames.endFrame();
 	} else if(incomingFrames[0][0] == OpCode::LOG) { // log
 		char buf[32];
 		for(int i = 1; i < incomingFrames[0].getLength(); i++) {
@@ -107,8 +107,8 @@ void EndPoint::handleIncomingFrame() {
 	} else if(incomingFrames[0][0] == OpCode::MY_ID) {
 		id = incomingFrames[0][1];
 		LOG(INFO) << "Device " << device << " registered id: " << (int)id;
-		outgoingDatalink.begin_outgoing_frame(OpCode::SR_ENABLE);
-		outgoingDatalink.end_outgoing_frame();
+		outgoingFrames.put(OpCode::SR_ENABLE);
+		outgoingFrames.endFrame();
 		ostringstream convert;
 		convert << id;
 		label->set_text(convert.str());

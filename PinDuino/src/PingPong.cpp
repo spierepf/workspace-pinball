@@ -12,7 +12,7 @@
 
 #define N 128
 
-PingPong::PingPong(OutgoingPinDuinoDataLink& outgoingDatalink) : outgoingDatalink(outgoingDatalink), total_latency(0), counter(0), pongAccepted(false), missedPings(0) {
+PingPong::PingPong(OutgoingPinDuinoDataLink& outgoingDatalink, FrameBuffer<64, 4>& outgoingFrames) : outgoingDatalink(outgoingDatalink), outgoingFrames(outgoingFrames), total_latency(0), counter(0), pongAccepted(false), missedPings(0) {
 	PT_INIT(&pt);
 }
 
@@ -46,9 +46,9 @@ PT_THREAD(PingPong::run()) {
 
 void PingPong::sendPing() {
 	pongAccepted = false;
-	outgoingDatalink.begin_outgoing_frame(OpCode::PING); // ping
-	outgoingDatalink.append_payload(counter);
-	outgoingDatalink.end_outgoing_frame();
+	outgoingFrames.put(OpCode::PING); // ping
+	outgoingFrames.put(counter);
+	outgoingFrames.endFrame();
 }
 
 void PingPong::acceptPong(uint8_t id) {

@@ -29,12 +29,12 @@ struct SolenoidAction {
 		*((uint32_t*)this) = src;
 	}
 
-	void write_to(OutgoingDataLink& datalink) {
+	void write_to(FrameBuffer<64, 4>& frameBuffer) {
 		uint8_t *p = (uint8_t*)this;
-		datalink.append_payload(*p++);
-		datalink.append_payload(*p++);
-		datalink.append_payload(*p++);
-		datalink.append_payload(*p++);
+		frameBuffer.put(*p++);
+		frameBuffer.put(*p++);
+		frameBuffer.put(*p++);
+		frameBuffer.put(*p++);
 	}
 
 	void read_from(FrameBuffer<64, 4>::Frame frame, uint8_t& i) {

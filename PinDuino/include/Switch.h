@@ -16,6 +16,7 @@ class Switch : public Item {
 	friend class SwitchBank;
 
 	OutgoingPinDuinoDataLink& outgoingDatalink;
+	FrameBuffer<64, 4>& outgoingFrames;
 	uint8_t id;
 	uint8_t history = 1;
 	bool state;
@@ -23,7 +24,7 @@ class Switch : public Item {
 	void pinChange(bool);
 
 public:
-	Switch(OutgoingPinDuinoDataLink&, uint8_t, uint8_t, uint8_t&);
+	Switch(OutgoingPinDuinoDataLink&, FrameBuffer<64, 4>&, uint8_t, uint8_t, uint8_t&);
 	virtual ~Switch();
 
 	void update(uint8_t);

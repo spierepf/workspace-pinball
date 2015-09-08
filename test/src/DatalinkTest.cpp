@@ -160,13 +160,13 @@ BOOST_AUTO_TEST_CASE( datalink_outgoing_frame ) {
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
 	FrameBuffer<64, 4> outgoingFrames; OutgoingDataLink datalink(hardware, outgoingFrames);
 
-	datalink.begin_outgoing_frame(0x00);
-	datalink.append_payload(0x01);
-	datalink.end_outgoing_frame();
+	outgoingFrames.put(0x00);
+	outgoingFrames.put(0x01);
+	outgoingFrames.endFrame();
 
-	datalink.begin_outgoing_frame(0x02);
-	datalink.append_payload(0x03);
-	datalink.end_outgoing_frame();
+	outgoingFrames.put(0x02);
+	outgoingFrames.put(0x03);
+	outgoingFrames.endFrame();
 
 	for(int i = 0; i < 12; i++) datalink.schedule();
 
@@ -198,11 +198,11 @@ BOOST_AUTO_TEST_CASE( datalink_outgoing_frame_escape ) {
 	MockHardware hardware(incoming_bytes, outgoing_bytes);
 	FrameBuffer<64, 4> outgoingFrames; OutgoingDataLink datalink(hardware, outgoingFrames);
 
-	datalink.begin_outgoing_frame(0x11);
-	datalink.append_payload(0x13);
-	datalink.append_payload(0x7d);
-	datalink.append_payload(0x7e);
-	datalink.end_outgoing_frame();
+	outgoingFrames.put(0x11);
+	outgoingFrames.put(0x13);
+	outgoingFrames.put(0x7d);
+	outgoingFrames.put(0x7e);
+	outgoingFrames.endFrame();
 
 	for(int i = 0; i < 12; i++) datalink.schedule();
 
@@ -246,9 +246,9 @@ BOOST_AUTO_TEST_CASE( datalink_ping ) {
 	FrameBuffer<64, 4> incomingFrames;
 	IncomingDataLink datalink_b(hardware_b, incomingFrames);
 
-	datalink_a.begin_outgoing_frame(0x00);
-	datalink_a.append_payload(0x01);
-	datalink_a.end_outgoing_frame();
+	outgoingFrames.put(0x00);
+	outgoingFrames.put(0x01);
+	outgoingFrames.endFrame();
 
 	for(int i = 0; i < 100; i++) {
 		datalink_a.schedule();

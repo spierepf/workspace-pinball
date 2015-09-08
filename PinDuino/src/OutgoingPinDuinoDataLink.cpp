@@ -36,9 +36,9 @@ void OutgoingPinDuinoDataLink::log(const char *fmt, ...)
 	va_end(ap);
 	s[f.len] = 0;
 
-	begin_outgoing_frame(OpCode::LOG); // log
+	outgoingFrames.put(OpCode::LOG); // log
 	for(size_t i = 0; i < strlen(s); i++) {
-		append_payload(s[i]);
+		outgoingFrames.put(s[i]);
 	}
-	end_outgoing_frame();
+	outgoingFrames.endFrame();
 }

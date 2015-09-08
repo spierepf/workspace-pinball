@@ -18,6 +18,7 @@ class PingPong {
 	PT_THREAD(run());
 
 	OutgoingPinDuinoDataLink& outgoingDatalink;
+	FrameBuffer<64, 4>& outgoingFrames;
 	Timer<unsigned long> timer;
 	unsigned long total_latency;
 	uint8_t counter;
@@ -27,7 +28,7 @@ class PingPong {
 	void sendPing();
 
 public:
-	PingPong(OutgoingPinDuinoDataLink&);
+	PingPong(OutgoingPinDuinoDataLink&, FrameBuffer<64, 4>&);
 	virtual ~PingPong();
 
 	void schedule();

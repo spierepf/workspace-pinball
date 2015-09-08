@@ -54,7 +54,7 @@ PinBank pinBankB3(PinBank::B, _BV(3));
 PinBank pinBankB4(PinBank::B, _BV(4));
 PinBank pinBankB5(PinBank::B, _BV(5));
 
-PingPong pingPong(outgoingDataLink);
+PingPong pingPong(outgoingDataLink, outgoingFrames);
 
 uint8_t dirtyListB = 0;
 
@@ -83,12 +83,12 @@ PinBank pinBankC(PinBank::C, dirtyListC);
 PinBank pinBankD(PinBank::D, dirtyListD);
 
 Item *switchesC[] = {
-		new Switch(outgoingDataLink, 0, 0, dirtyListC),
-		new Switch(outgoingDataLink, 1, 1, dirtyListC),
-		new Switch(outgoingDataLink, 2, 2, dirtyListC),
-		new Switch(outgoingDataLink, 3, 3, dirtyListC),
-		new Switch(outgoingDataLink, 4, 4, dirtyListC),
-		new Switch(outgoingDataLink, 5, 5, dirtyListC),
+		new Switch(outgoingDataLink, outgoingFrames, 0, 0, dirtyListC),
+		new Switch(outgoingDataLink, outgoingFrames, 1, 1, dirtyListC),
+		new Switch(outgoingDataLink, outgoingFrames, 2, 2, dirtyListC),
+		new Switch(outgoingDataLink, outgoingFrames, 3, 3, dirtyListC),
+		new Switch(outgoingDataLink, outgoingFrames, 4, 4, dirtyListC),
+		new Switch(outgoingDataLink, outgoingFrames, 5, 5, dirtyListC),
 		NULL,
 		NULL
 };
@@ -96,12 +96,12 @@ Item *switchesC[] = {
 Item *switchesD[] = {
 		NULL,
 		NULL,
-		new Switch(outgoingDataLink, 2, 6, dirtyListD),
-		new Switch(outgoingDataLink, 3, 7, dirtyListD),
-		new Switch(outgoingDataLink, 4, 8, dirtyListD),
-		new Switch(outgoingDataLink, 5, 9, dirtyListD),
-		new Switch(outgoingDataLink, 6, 10, dirtyListD),
-		new Switch(outgoingDataLink, 7, 11, dirtyListD)
+		new Switch(outgoingDataLink, outgoingFrames, 2, 6, dirtyListD),
+		new Switch(outgoingDataLink, outgoingFrames, 3, 7, dirtyListD),
+		new Switch(outgoingDataLink, outgoingFrames, 4, 8, dirtyListD),
+		new Switch(outgoingDataLink, outgoingFrames, 5, 9, dirtyListD),
+		new Switch(outgoingDataLink, outgoingFrames, 6, 10, dirtyListD),
+		new Switch(outgoingDataLink, outgoingFrames, 7, 11, dirtyListD)
 };
 
 SwitchBank switchBankC = SwitchBank(switchesC, pinBankC, dirtyListC);

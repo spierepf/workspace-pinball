@@ -11,7 +11,7 @@
 
 #include <easylogging++.h>
 
-SolenoidActionController::SolenoidActionController(OutgoingDataLink& datalink, Stimulus stimulus, Gtk::Grid* child, int left, int top) : datalink(datalink), stimulus(stimulus), initialized(false) {
+SolenoidActionController::SolenoidActionController(OutgoingDataLink& datalink, FrameBuffer<64, 4>& outgoingFrames, Stimulus stimulus, Gtk::Grid* child, int left, int top) : datalink(datalink), outgoingFrames(outgoingFrames), stimulus(stimulus), initialized(false) {
 	enable = new Gtk::CheckButton();
 	enable->signal_clicked().connect(sigc::mem_fun(this, &SolenoidActionController::update));
 	child->attach(*enable, left, top, 1, 1);
@@ -82,9 +82,9 @@ void SolenoidActionController::update() {
 }
 
 void SolenoidActionController::onResetClicked() {
-	datalink.begin_outgoing_frame(OpCode::SR_CONFIG);
-	stimulus.write_to(datalink);
-	datalink.end_outgoing_frame();
+	outgoingFrames.put(OpCode::SR_CONFIG);
+	stimulus.write_to(outgoingFrames);
+	outgoingFrames.endFrame();
 }
 
 void SolenoidActionController::onApplyClicked() {
@@ -93,10 +93,10 @@ void SolenoidActionController::onApplyClicked() {
 	action.attack = attack->get_value();
 	action.sustain = sustain->get_value();
 
-	datalink.begin_outgoing_frame(OpCode::SR_CONFIG);
-	stimulus.write_to(datalink);
-	action.write_to(datalink);
-	datalink.end_outgoing_frame();
+	outgoingFrames.put(OpCode::SR_CONFIG);
+	stimulus.write_to(outgoingFrames);
+	action.write_to(outgoingFrames);
+	outgoingFrames.endFrame();
 
 	update();
 }

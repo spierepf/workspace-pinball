@@ -13,7 +13,7 @@
 
 #include "Switch.h"
 
-Switch::Switch(OutgoingPinDuinoDataLink& outgoingDatalink, uint8_t index, uint8_t id, uint8_t& dirtyList) : Item(_BV(index), dirtyList), outgoingDatalink(outgoingDatalink), id(id), history(0xff), state(true) {
+Switch::Switch(OutgoingPinDuinoDataLink& outgoingDatalink, FrameBuffer<64, 4>& outgoingFrameBuffer, uint8_t index, uint8_t id, uint8_t& dirtyList) : Item(_BV(index), dirtyList), outgoingDatalink(outgoingDatalink), outgoingFrames(outgoingFrames), id(id), history(0xff), state(true) {
 }
 
 Switch::~Switch() {
@@ -22,9 +22,9 @@ Switch::~Switch() {
 
 void Switch::pinChange(bool newState) {
 	state = newState;
-	outgoingDatalink.begin_outgoing_frame(newState ? OpCode::SWITCH_INACTIVE : OpCode::SWITCH_ACTIVE);
-	outgoingDatalink.append_payload(id);
-	outgoingDatalink.end_outgoing_frame();
+	outgoingFrames.put(newState ? OpCode::SWITCH_INACTIVE : OpCode::SWITCH_ACTIVE);
+	outgoingFrames.put(id);
+	outgoingFrames.endFrame();
 	stimulusResponse.trigger(Stimulus(id, newState));
 }
 

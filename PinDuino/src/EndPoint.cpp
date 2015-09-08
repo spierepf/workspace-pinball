@@ -15,9 +15,9 @@ extern Solenoid *solenoids[];
 
 EndPoint::EndPoint(IncomingDataLink& _incomingDatalink, OutgoingPinDuinoDataLink& _outgoingDatalink, FrameBuffer<64, 4>& _incomingFrames, FrameBuffer<64, 4>& _outgoingFrames, PingPong &pingPong) : AbstractEndPoint(_incomingDatalink, _outgoingDatalink, _incomingFrames, _outgoingFrames), pingPong(pingPong), logger(_outgoingDatalink) {
 	eeprom_busy_wait();
-	outgoingDatalink.begin_outgoing_frame(OpCode::MY_ID);
-	outgoingDatalink.append_payload(eeprom_read_byte(&eeprom_id));
-	outgoingDatalink.end_outgoing_frame();
+	outgoingFrames.put(OpCode::MY_ID);
+	outgoingFrames.put(eeprom_read_byte(&eeprom_id));
+	outgoingFrames.endFrame();
 }
 
 EndPoint::~EndPoint() {
@@ -52,10 +52,10 @@ void EndPoint::handleIncomingFrame() {
 				action.read_from(incomingFrames[0], i);
 				stimulusResponse[stimulus] = action;
 			} else {
-				outgoingDatalink.begin_outgoing_frame(OpCode::SR_CONFIG);
-				stimulus.write_to(outgoingDatalink);
-				stimulusResponse[stimulus].write_to(outgoingDatalink);
-				outgoingDatalink.end_outgoing_frame();
+				outgoingFrames.put(OpCode::SR_CONFIG);
+				stimulus.write_to(outgoingFrames);
+				stimulusResponse[stimulus].write_to(outgoingFrames);
+				outgoingFrames.endFrame();
 			}
 		}
 	}

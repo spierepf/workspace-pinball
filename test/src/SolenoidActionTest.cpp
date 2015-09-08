@@ -41,9 +41,9 @@ BOOST_AUTO_TEST_CASE( read_write_solenoid_action_through_datalink ) {
 	FrameBuffer<64, 4> incomingFrames;
 	IncomingDataLink datalink_b(hardware_b, incomingFrames);
 
-	datalink_a.begin_outgoing_frame(0x00);
-	action.write_to(datalink_a);
-	datalink_a.end_outgoing_frame();
+	outgoingFrames.put(0x00);
+	action.write_to(outgoingFrames);
+	outgoingFrames.endFrame();
 
 	for(int i = 0; i < 100; i++) {
 		datalink_a.schedule();
