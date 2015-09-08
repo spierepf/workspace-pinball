@@ -27,8 +27,8 @@ BOOST_AUTO_TEST_CASE( read_write_stimulus_through_datalink ) {
 	BOOST_CHECK( 1 == sizeof(Stimulus) );
 	Stimulus stimulus(4, true);
 
-	RingBuffer<16> a_to_b;
-	RingBuffer<16> b_to_a;
+	RingBuffer<32> a_to_b;
+	RingBuffer<32> b_to_a;
 
 	MockHardware hardware_a(b_to_a, a_to_b);
 	MockHardware hardware_b(a_to_b, b_to_a);

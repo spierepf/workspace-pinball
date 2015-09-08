@@ -14,10 +14,10 @@
 
 class MockHardware: public Hardware {
 public:
-	RingBuffer<16>& incoming_bytes;
-	RingBuffer<16>& outgoing_bytes;
+	RingBuffer<32>& incoming_bytes;
+	RingBuffer<32>& outgoing_bytes;
 
-	MockHardware(RingBuffer<16> &incoming_bytes, RingBuffer<16> &outgoing_bytes) : incoming_bytes(incoming_bytes), outgoing_bytes(outgoing_bytes) {
+	MockHardware(RingBuffer<32> &incoming_bytes, RingBuffer<32> &outgoing_bytes) : incoming_bytes(incoming_bytes), outgoing_bytes(outgoing_bytes) {
 	}
 
 	virtual ~MockHardware() {
