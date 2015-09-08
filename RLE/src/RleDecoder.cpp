@@ -10,7 +10,7 @@
 #define MASK1(bit_position) (0x80 >> (bit_position))
 #define MASK0(bit_position) ~MASK1(bit_position)
 
-RleDecoder::RleDecoder(uint8_t *dst) : dst(dst) {
+RleDecoder::RleDecoder(uint8_t *dst) : dst(dst), byte_position(0), bit_position(0), bit(1) {
 	// TODO Auto-generated constructor stub
 
 }

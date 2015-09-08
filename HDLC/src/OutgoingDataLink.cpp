@@ -9,7 +9,7 @@
 
 #include <crc.h>
 
-OutgoingDataLink::OutgoingDataLink(Hardware& hardware, FrameBuffer<64, 4>& outgoingFrames) : hardware(hardware), outgoingFrames(outgoingFrames) {
+OutgoingDataLink::OutgoingDataLink(Hardware& hardware, FrameBuffer<64, 4>& outgoingFrames) : hardware(hardware), outgoingCRC(0xFFFF), position(0), data(0), outgoingFrames(outgoingFrames) {
 	PT_INIT(&outgoing);
 }
 

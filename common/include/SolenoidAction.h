@@ -25,10 +25,6 @@ struct SolenoidAction {
 	SolenoidAction(bool enabled, uint8_t solenoidIndex, uint16_t attack, uint8_t sustain) : enabled(enabled), solenoidIndex(solenoidIndex), sustain(sustain), attack(attack) {
 	}
 
-	SolenoidAction(uint32_t src) {
-		*((uint32_t*)this) = src;
-	}
-
 	void write_to(FrameBuffer<64, 4>& frameBuffer) {
 		uint8_t *p = (uint8_t*)this;
 		frameBuffer.put(*p++);

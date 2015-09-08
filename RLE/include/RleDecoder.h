@@ -15,9 +15,9 @@ class RleDecoder {
 private:
 	uint8_t* dst;
 
-	size_t byte_position = 0;
-	size_t bit_position = 0;
-	uint8_t bit = 1;
+	size_t byte_position;
+	size_t bit_position;
+	uint8_t bit;
 
 public:
 	RleDecoder(uint8_t*);

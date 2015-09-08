@@ -21,7 +21,7 @@ extern Gtk::Notebook* notebook;
 
 #define FIFO_NAME "/tmp/american_maid"
 
-EndPointManager::EndPointManager() {
+EndPointManager::EndPointManager() : fifo(NULL) {
 	// TODO Auto-generated constructor stub
 
 }
