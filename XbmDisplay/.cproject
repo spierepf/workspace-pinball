@@ -36,7 +36,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/u8glib/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Pin/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/common/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pt/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pt}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/HDLC/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ArduinoCore/include}&quot;"/>
 								</option>
@@ -56,7 +56,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/u8glib/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Pin/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/common/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pt/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pt}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/HDLC/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ArduinoCore/include}&quot;"/>
 								</option>
