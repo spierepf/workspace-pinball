@@ -3,6 +3,7 @@
 	<name>HDLC</name>
 	<comment></comment>
 	<projects>
+		<project>pt</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
