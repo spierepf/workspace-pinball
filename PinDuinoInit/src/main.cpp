@@ -9,9 +9,6 @@
 
 #include <eeprom.h>
 
-#include <IncomingDataLink.h>
-#include <OutgoingDataLink.h>
-
 const uint8_t id = 5;
 
 void setup() {
