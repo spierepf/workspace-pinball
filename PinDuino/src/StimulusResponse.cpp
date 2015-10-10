@@ -11,8 +11,6 @@
 
 #include <stdlib.h>
 
-extern Solenoid *solenoids[];
-
 StimulusResponse::StimulusResponse() : enabled(true) {
 }
 

@@ -8,10 +8,9 @@
 #ifndef STIMULUSRESPONSE_H_
 #define STIMULUSRESPONSE_H_
 
-#include <stdint.h>
+#include <extern.h>
 
-#include <IncomingDataLink.h>
-#include <OutgoingDataLink.h>
+#include <stdint.h>
 
 #include <Stimulus.h>
 #include <Solenoid.h>
@@ -30,7 +29,5 @@ public:
 	void inhibit();
 	void enable();
 };
-
-extern StimulusResponse stimulusResponse;
 
 #endif /* STIMULUSRESPONSE_H_ */

@@ -10,14 +10,11 @@
 
 #include <gtkmm.h>
 
-#include <IncomingDataLink.h>
-#include <OutgoingDataLink.h>
 #include <Stimulus.h>
 #include <SolenoidAction.h>
 
 class SolenoidActionController {
-	OutgoingDataLink& datalink;
-	FrameBuffer<64, 4>& outgoingFrames;
+	hdlc::FrameBuffer& outgoingFrameBuffer;
 	Stimulus stimulus;
 	SolenoidAction action;
 	bool initialized;
@@ -32,7 +29,7 @@ class SolenoidActionController {
 	Gtk::Image *applyImage;
 
 public:
-	SolenoidActionController(OutgoingDataLink&, FrameBuffer<64, 4>&, Stimulus, Gtk::Grid*, int, int);
+	SolenoidActionController(hdlc::FrameBuffer&, Stimulus, Gtk::Grid*, int, int);
 	virtual ~SolenoidActionController();
 
 	void update();

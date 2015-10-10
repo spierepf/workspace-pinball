@@ -7,13 +7,12 @@
 
 #include <Arduino.h>
 
-#include <OutgoingPinDuinoDataLink.h>
 #include <StimulusResponse.h>
 #include <OpCode.h>
 
 #include "Switch.h"
 
-Switch::Switch(OutgoingPinDuinoDataLink& outgoingDatalink, FrameBuffer<64, 4>& outgoingFrames, uint8_t index, uint8_t id, uint8_t& dirtyList) : Item(_BV(index), dirtyList), outgoingDatalink(outgoingDatalink), outgoingFrames(outgoingFrames), id(id), history(0xff), state(true) {
+Switch::Switch(uint8_t index, uint8_t id, uint8_t& dirtyList) : Item(_BV(index), dirtyList), id(id), history(0xff), state(true) {
 }
 
 Switch::~Switch() {
@@ -22,9 +21,9 @@ Switch::~Switch() {
 
 void Switch::pinChange(bool newState) {
 	state = newState;
-	outgoingFrames.put(newState ? OpCode::SWITCH_INACTIVE : OpCode::SWITCH_ACTIVE);
-	outgoingFrames.put(id);
-	outgoingFrames.endFrame();
+	outgoingFrameBuffer.put(newState ? OpCode::SWITCH_INACTIVE : OpCode::SWITCH_ACTIVE);
+	outgoingFrameBuffer.put(id);
+	outgoingFrameBuffer.endFrame();
 	stimulusResponse.trigger(Stimulus(id, newState));
 }
 

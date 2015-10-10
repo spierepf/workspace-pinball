@@ -5,10 +5,14 @@
  *      Author: peter
  */
 
+#include <extern.h>
+
 #include <Blinker.h>
 #include <Arduino.h>
 
-Blinker::Blinker(OutgoingPinDuinoDataLink& outgoingDatalink) : outgoingDatalink(outgoingDatalink), led(PinBank::B, _BV(5)), count(0) {
+#include <log.h>
+
+Blinker::Blinker() : count(0) {
 	led.dataLow();
 	led.dirOut();
 	PT_INIT(&pt);
@@ -27,8 +31,10 @@ PT_THREAD(Blinker::run()) {
 	PT_BEGIN(&pt);
 	for(;;) {
 		PT_YIELD(&pt);
-		if(count++ == 0xFFFF) {
-			outgoingDatalink.log("Loop time: %lu", timer.elapsed(micros()));
+		if(!(++count)) {
+			float t = timer.elapsed(micros());
+			t /= 65536.0;
+			LOG("Loop time: %4.2f us", t);
 			timer.set(micros());
 			led.toggle();
 		}

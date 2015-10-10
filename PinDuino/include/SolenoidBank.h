@@ -19,7 +19,7 @@ class SolenoidBank : public ItemBank {
 	}
 
 public:
-	SolenoidBank(Item** solenoids, uint8_t& dirtyList) : ItemBank(solenoids, dirtyList) {}
+	SolenoidBank(Solenoid** solenoids, uint8_t& dirtyList) : ItemBank((Item**)solenoids, dirtyList) {}
 	virtual ~SolenoidBank() {}
 };
 

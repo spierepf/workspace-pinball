@@ -12,13 +12,13 @@
 
 #include <list>
 
-#include <EndPoint.h>
+#include <EndPointWrapper.h>
 
 using namespace std;
 
 class EndPointManager {
 	FILE* fifo;
-	list<EndPoint*> endPoints;
+	list<EndPointWrapper*> endPoints;
 
 public:
 	EndPointManager();

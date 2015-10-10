@@ -10,9 +10,11 @@
 #include <PingPong.h>
 #include <OpCode.h>
 
+#include <log.h>
+
 #define N 128
 
-PingPong::PingPong(OutgoingPinDuinoDataLink& outgoingDatalink, FrameBuffer<64, 4>& outgoingFrames) : outgoingDatalink(outgoingDatalink), outgoingFrames(outgoingFrames), total_latency(0), counter(0), pongAccepted(false), missedPings(0) {
+PingPong::PingPong() : total_latency(0), counter(0), pongAccepted(false), missedPings(0) {
 	PT_INIT(&pt);
 }
 
@@ -30,14 +32,14 @@ PT_THREAD(PingPong::run()) {
 		for(counter = 0; counter < N; counter++) {
 			timer.set(micros());
 			sendPing();
-			PT_WAIT_UNTIL(&pt, pongAccepted || timer.elapsed(micros()) > 100000);
+			PT_WAIT_UNTIL(&pt, pongAccepted/* || timer.elapsed(micros()) > 200000*/);
 			if(!pongAccepted) missedPings++;
 			total_latency += timer.elapsed(micros());
 			PT_WAIT_UNTIL(&pt, timer.elapsed(micros()) > 100000);
 		}
 
-		outgoingDatalink.log("Average Latency: %lu us", total_latency / N);
-		if(missedPings > 0) outgoingDatalink.log("\tMissed Pings: %u", missedPings);
+		LOG("Average Latency: %lu us", total_latency / N);
+		if(missedPings > 0) LOG("\tMissed Pings: %u", missedPings);
 		missedPings = 0;
 		total_latency = 0;
 	}
@@ -46,9 +48,9 @@ PT_THREAD(PingPong::run()) {
 
 void PingPong::sendPing() {
 	pongAccepted = false;
-	outgoingFrames.put(OpCode::PING); // ping
-	outgoingFrames.put(counter);
-	outgoingFrames.endFrame();
+	outgoingFrameBuffer.put(OpCode::PING); // ping
+	outgoingFrameBuffer.put(counter);
+	outgoingFrameBuffer.endFrame();
 }
 
 void PingPong::acceptPong(uint8_t id) {

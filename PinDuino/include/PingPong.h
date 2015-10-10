@@ -8,17 +8,17 @@
 #ifndef PINGPONG_H_
 #define PINGPONG_H_
 
+#include <extern.h>
+
 #include <pt.h>
 
-#include <OutgoingPinDuinoDataLink.h>
 #include <Timer.h>
+
 
 class PingPong {
 	struct pt pt;
 	PT_THREAD(run());
 
-	OutgoingPinDuinoDataLink& outgoingDatalink;
-	FrameBuffer<64, 4>& outgoingFrames;
 	Timer<unsigned long> timer;
 	unsigned long total_latency;
 	uint8_t counter;
@@ -28,7 +28,7 @@ class PingPong {
 	void sendPing();
 
 public:
-	PingPong(OutgoingPinDuinoDataLink&, FrameBuffer<64, 4>&);
+	PingPong();
 	virtual ~PingPong();
 
 	void schedule();

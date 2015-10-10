@@ -10,7 +10,6 @@
 
 #include <pt.h>
 
-#include <OutgoingPinDuinoDataLink.h>
 #include <Timer.h>
 
 #include <PinBank.h>
@@ -19,14 +18,12 @@ class Blinker {
 	struct pt pt;
 	PT_THREAD(run());
 
-	OutgoingPinDuinoDataLink& outgoingDatalink;
 	Timer<unsigned long> timer;
 
-	PinBank led;
 	uint16_t count;
 
 public:
-	Blinker(OutgoingPinDuinoDataLink&);
+	Blinker();
 	virtual ~Blinker();
 
 	void schedule();

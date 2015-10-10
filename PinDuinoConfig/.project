@@ -4,7 +4,6 @@
 	<comment></comment>
 	<projects>
 		<project>HDLC</project>
-		<project>Pin</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

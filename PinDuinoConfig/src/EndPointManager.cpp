@@ -7,9 +7,6 @@
 
 #include "EndPointManager.h"
 
-#include "IncomingDataLink.h"
-#include "OutgoingDataLink.h"
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -17,6 +14,9 @@
 
 #include <gtkmm.h>
 #include <easylogging++.h>
+
+#include <SerialPort.h>
+
 extern Gtk::Notebook* notebook;
 
 #define FIFO_NAME "/tmp/american_maid"
@@ -41,7 +41,7 @@ void EndPointManager::setup() {
 bool EndPointManager::loop() {
 	char s[300];
 
-	for(list<EndPoint*>::iterator i=endPoints.begin(); i != endPoints.end(); ++i)
+	for(list<EndPointWrapper*>::iterator i=endPoints.begin(); i != endPoints.end(); ++i)
 		(*i) -> schedule();
 
 	if(fgets(s, sizeof(s), fifo) != NULL) {
@@ -50,12 +50,7 @@ bool EndPointManager::loop() {
 		*(end+1) = 0;
 
 		try {
-			Tty* hardware = new Tty(s);
-			FrameBuffer<64, 4>* incomingFrames = new FrameBuffer<64, 4>();
-			FrameBuffer<64, 4>* outgoingFrames = new FrameBuffer<64, 4>();
-			IncomingDataLink* incomingDatalink = new IncomingDataLink(*hardware, *incomingFrames);
-			OutgoingDataLink* outgoingDatalink = new OutgoingDataLink(*hardware, *outgoingFrames);
-			endPoints.push_back(new EndPoint(notebook, s, hardware, incomingDatalink, outgoingDatalink, incomingFrames, outgoingFrames));
+			endPoints.push_back(new EndPointWrapper(notebook, s));
 			LOG(INFO) << "Pending connection to " << s;
 		} catch(SerialPort::OpenFailed& e) {
 			LOG(ERROR) << "While opening " << s << " : " << e.what();

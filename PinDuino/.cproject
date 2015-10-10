@@ -69,6 +69,7 @@
 								</option>
 								<option id="de.innot.avreclipse.cpplinker.option.libs.1478521722" name="Libraries (-l)" superClass="de.innot.avreclipse.cpplinker.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="m"/>
+									<listOptionValue builtIn="false" value="printf_flt"/>
 									<listOptionValue builtIn="false" value="ArduinoCore"/>
 								</option>
 								<option id="de.innot.avreclipse.cpplinker.option.otherlinkargs.945120917" name="Other Arguments" superClass="de.innot.avreclipse.cpplinker.option.otherlinkargs" value="-Os -Wl,--gc-sections" valueType="string"/>

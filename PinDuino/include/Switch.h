@@ -8,15 +8,13 @@
 #ifndef SWITCH_H_
 #define SWITCH_H_
 
-#include <Item.h>
+#include <extern.h>
 
-#include <OutgoingPinDuinoDataLink.h>
+#include <Item.h>
 
 class Switch : public Item {
 	friend class SwitchBank;
 
-	OutgoingPinDuinoDataLink& outgoingDatalink;
-	FrameBuffer<64, 4>& outgoingFrames;
 	uint8_t id;
 	uint8_t history;
 	bool state;
@@ -24,7 +22,7 @@ class Switch : public Item {
 	void pinChange(bool);
 
 public:
-	Switch(OutgoingPinDuinoDataLink&, FrameBuffer<64, 4>&, uint8_t, uint8_t, uint8_t&);
+	Switch(uint8_t, uint8_t, uint8_t&);
 	virtual ~Switch();
 
 	void update(uint8_t);

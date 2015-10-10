@@ -10,6 +10,8 @@
 
 #include <stdint.h>
 
+#include <FrameBuffer.h>
+
 #pragma pack(push)  /* push current alignment to stack */
 #pragma pack(1)     /* set alignment to 1 byte boundary */
 
@@ -25,7 +27,7 @@ struct SolenoidAction {
 	SolenoidAction(bool enabled, uint8_t solenoidIndex, uint16_t attack, uint8_t sustain) : enabled(enabled), solenoidIndex(solenoidIndex), sustain(sustain), attack(attack) {
 	}
 
-	void write_to(FrameBuffer<64, 4>& frameBuffer) {
+	void write_to(hdlc::FrameBuffer& frameBuffer) {
 		uint8_t *p = (uint8_t*)this;
 		frameBuffer.put(*p++);
 		frameBuffer.put(*p++);
@@ -33,7 +35,7 @@ struct SolenoidAction {
 		frameBuffer.put(*p++);
 	}
 
-	void read_from(FrameBuffer<64, 4>::Frame frame, uint8_t& i) {
+	void read_from(const uint8_t* frame, uint8_t& i) {
 		uint8_t *p = (uint8_t*)this;
 		*p++=frame[i++];
 		*p++=frame[i++];
