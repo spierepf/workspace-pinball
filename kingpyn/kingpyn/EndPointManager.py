@@ -4,15 +4,16 @@ Created on Jun 10, 2015
 @author: peter
 '''
 from collections import deque
-from hdlc.Tty import Tty
-from kingpyn.EndPoint import EndPoint
-from kingpyn.IncomingFrameHandler import IncomingFrameHandler
-from hdlc.IncomingDataLink import IncomingDataLink
-from kingpyn.OutgoingFrameHandler import OutgoingFrameHandler
-from hdlc.OutgoingDataLink import OutgoingDataLink
+from hdlc.TtySource import TtySource
+from hdlc.TtySink import TtySink
 from kingpyn.SolenoidAction import SolenoidAction
+from serial import Serial
+from hdlc.EndPoint import EndPoint
+from hdlc.EscapingSource import EscapingSource
 
 import glob
+from hdlc.FrameReceiver import FrameReceiver
+from kingpyn.EndPointWrapper import EndPointWrapper
 
 class EndPointManager(object):
     '''
@@ -28,12 +29,9 @@ class EndPointManager(object):
         self.switchEventQueue = deque()
         
     def addDevice(self, device):
-        tty = Tty(device)
-        endPoint = EndPoint(IncomingFrameHandler(IncomingDataLink(tty)),
-                            OutgoingFrameHandler(OutgoingDataLink(tty)),
-                            self.switchEventQueue)
-        endPoint.ensureID()
-        self.endPoints[endPoint.id] = endPoint
+        endPointWrapper = EndPointWrapper(Serial(device, 115200), self.switchEventQueue)
+        endPointWrapper.ensureID()
+        self.endPoints[endPointWrapper.id] = endPointWrapper
     
     def addDevices(self):
         for name in glob.glob('/dev/ttyUSB*'):
