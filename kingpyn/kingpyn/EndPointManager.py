@@ -29,7 +29,7 @@ class EndPointManager(object):
         self.switchEventQueue = deque()
         
     def addDevice(self, device):
-        endPointWrapper = EndPointWrapper(Serial(device, 115200), self.switchEventQueue)
+        endPointWrapper = EndPointWrapper(Serial(device, 9600), self.switchEventQueue)
         endPointWrapper.ensureID()
         self.endPoints[endPointWrapper.id] = endPointWrapper
     
