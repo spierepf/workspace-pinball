@@ -19,4 +19,4 @@ class PingPong(object):
         
     def update(self, observable, frame):
         if frame[0] == OpCode.PING():
-            self.outgoingFrameHandler.postFrame(OpCode.PONG(), frame[1])
+            self.outgoingFrameHandler += [[OpCode.PONG(), frame[1][0]]]

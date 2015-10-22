@@ -11,24 +11,15 @@ class IncomingFrameHandler(object):
     '''
 
 
-    def __init__(self, incomingDatalink):
+    def __init__(self):
         '''
         Constructor
         '''
-        self.incomingDatalink = incomingDatalink
         self.frameNotifier = self.FrameNotifier(self)
 
-    def schedule(self):
-        self.incomingDatalink.schedule()
-        if self.incomingDatalink.haveIncomingFrame():
-            self.frameNotifier.setChanged()
-            opcode = self.incomingDatalink.peek(0)
-            payload = []
-            for i in range(1, self.incomingDatalink.incomingFrameLength()):
-                payload.append(self.incomingDatalink.peek(i)) 
-            self.frameNotifier.notifyObservers((opcode, payload))
-            self.incomingDatalink.nextIncomingFrame()
-
+    def handle(self, header, payload):
+        self.frameNotifier.setChanged()
+        self.frameNotifier.notifyObservers((payload[0], payload[1:]))
                 
     class FrameNotifier(Observable):
         def __init__(self, outer):

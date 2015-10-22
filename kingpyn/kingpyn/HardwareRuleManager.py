@@ -26,8 +26,8 @@ class HardwareRuleManager(object):
     def sendRule(self, rule = None):
         if rule == None:
             rule = self.rules[list(self.dirty)[0]]
-        self.outgoingFrameHandler.postFrame(OpCode.SR_CONFIG(), rule.toByteArray())
-        self.outgoingFrameHandler.postFrame(OpCode.SR_CONFIG(), rule.stimulus.toByteArray())
+        self.outgoingFrameHandler += [[OpCode.SR_CONFIG()] + rule.toByteArray()]
+        self.outgoingFrameHandler += [[OpCode.SR_CONFIG()] + rule.stimulus.toByteArray()]
         
     def addRule(self, rule):
         alreadyDirty = self.isDirty()
