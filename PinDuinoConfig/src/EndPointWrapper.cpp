@@ -37,7 +37,7 @@ EndPointWrapper::EndPointWrapper(Gtk::Notebook* notebook, char* device) :
 	frameTransmitter(escapingSink),
 	endPoint(escapingSource, frameReceiver, *this, outgoingFrameBuffer, frameTransmitter, escapingSink)
 {
-	serialPort.Open(SerialPort::BAUD_9600);
+	serialPort.Open(SerialPort::BAUD_115200);
 	frameReceiver.setFrameHandler(&endPoint);
 
 	grid = new Gtk::Grid();

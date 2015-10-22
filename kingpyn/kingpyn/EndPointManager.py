@@ -29,7 +29,9 @@ class EndPointManager(object):
         self.switchEventQueue = deque()
         
     def addDevice(self, device):
-        endPointWrapper = EndPointWrapper(Serial(device, 9600), self.switchEventQueue)
+        tty = Serial(device)
+        tty.setBaudrate(115200)
+        endPointWrapper = EndPointWrapper(tty, self.switchEventQueue)
         endPointWrapper.ensureID()
         self.endPoints[endPointWrapper.id] = endPointWrapper
     
