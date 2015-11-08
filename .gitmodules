@@ -1,6 +1,3 @@
-[submodule "pt"]
-	path = pt
-	url = https://github.com/spierepf/pt.git
 [submodule "HDLC"]
 	path = HDLC
 	url = https://github.com/spierepf/HDLC.git
