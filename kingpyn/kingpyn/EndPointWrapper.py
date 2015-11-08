@@ -36,20 +36,20 @@ class EndPointWrapper(object):
 
         escapingSink = EscapingSink(TtySink(tty))
         escapingSource = EscapingSource(TtySource(tty))
-        outgoingFrameBuffer = deque()
+        self.outgoingFrameBuffer = deque()
         frameTransmitter = FrameTransmitter(escapingSink)
         frameReceiver = FrameReceiver(escapingSource)
         
         self.incomingFrameHandler = IncomingFrameHandler()
-        self.endPoint = EndPoint(escapingSource, frameReceiver, self.incomingFrameHandler, outgoingFrameBuffer, frameTransmitter, escapingSink)
+        self.endPoint = EndPoint(escapingSource, frameReceiver, self.incomingFrameHandler, self.outgoingFrameBuffer, frameTransmitter, escapingSink)
         frameReceiver.setFrameHandler(self.endPoint)
         
         self.incomingFrameHandler.frameNotifier.addObserver(self)
         
-        self.pingPong = PingPong(outgoingFrameBuffer)
+        self.pingPong = PingPong(self.outgoingFrameBuffer)
         self.incomingFrameHandler.frameNotifier.addObserver(self.pingPong)
         
-        self.hardwareRuleManager = HardwareRuleManager(outgoingFrameBuffer)
+        self.hardwareRuleManager = HardwareRuleManager(self.outgoingFrameBuffer)
         self.incomingFrameHandler.frameNotifier.addObserver(self.hardwareRuleManager)
 
     def update(self, observable, frame):
@@ -77,4 +77,4 @@ class EndPointWrapper(object):
         self.hardwareRuleManager.addRule(HardwareRule(Stimulus(switchId, activity), SolenoidAction(True, solenoidId, attack, sustain)))
 
     def pulseSolenoid(self, activity):
-        self.outgoingFrameHandler += [[OpCode.PULSE_COIL()] + activity.toByteArray()]
+        self.outgoingFrameBuffer += [[OpCode.PULSE_COIL()] + activity.toByteArray()]
