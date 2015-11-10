@@ -1,9 +1,12 @@
 [submodule "HDLC"]
 	path = HDLC
 	url = https://github.com/spierepf/HDLC.git
+	branch = master
 [submodule "pt"]
 	path = pt
 	url = https://github.com/spierepf/pt.git
+	branch = master
 [submodule "mpf"]
 	path = mpf
 	url = https://github.com/spierepf/mpf.git
+	branch = master
