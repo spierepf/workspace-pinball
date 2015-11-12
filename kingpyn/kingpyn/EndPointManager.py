@@ -15,6 +15,8 @@ import glob
 from hdlc.FrameReceiver import FrameReceiver
 from kingpyn.EndPointWrapper import EndPointWrapper
 
+import logging
+
 class EndPointManager(object):
     '''
     classdocs
@@ -27,6 +29,7 @@ class EndPointManager(object):
         '''
         self.endPoints = {}
         self.switchEventQueue = deque()
+        self.log = logging.getLogger("EndPointManager")
         
     def addDevice(self, device):
         tty = Serial(device)
@@ -46,7 +49,13 @@ class EndPointManager(object):
             endPoint.schedule()
 
     def addHardwareRule(self, endPointId, switchId, activity, solenoidId, attack, sustain):
-        self.endPoints[endPointId].addHardwareRule(switchId, activity, solenoidId, attack, sustain)
+        if endPointId in self.endPoints:
+            self.endPoints[endPointId].addHardwareRule(switchId, activity, solenoidId, attack, sustain)
+        else:
+            self.log.error("Dropping hardware rule for nonexistant endpoint: {}".format(endPointId))
 
     def pulseSolenoid(self, endPointId, solenoidId, milliseconds):
-        self.endPoints[endPointId].pulseSolenoid(SolenoidAction(True, solenoidId, milliseconds * 1000, 0))
+        if endPointId in self.endPoints:
+            self.endPoints[endPointId].pulseSolenoid(SolenoidAction(True, solenoidId, milliseconds * 1000, 0))
+        else:
+            self.log.error("Dropping pulse for nonexistant endpoint: {}".format(endPointId))
