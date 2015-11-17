@@ -9,4 +9,4 @@
 [submodule "mpf"]
 	path = mpf
 	url = https://github.com/spierepf/mpf.git
-	branch = master
+	branch = dev
