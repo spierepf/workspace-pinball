@@ -32,7 +32,6 @@
 								<option id="de.innot.avreclipse.compiler.option.optimize.378847109" name="Optimization Level" superClass="de.innot.avreclipse.compiler.option.optimize" value="de.innot.avreclipse.compiler.optimize.size" valueType="enumerated"/>
 								<option id="de.innot.avreclipse.compiler.option.incpath.1360771068" name="Include Paths (-I)" superClass="de.innot.avreclipse.compiler.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Pin/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/common/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pt}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/HDLC/include}&quot;"/>
@@ -50,7 +49,6 @@
 								<option id="de.innot.avreclipse.cppcompiler.option.optimize.1650393989" name="Optimization Level" superClass="de.innot.avreclipse.cppcompiler.option.optimize" value="de.innot.avreclipse.cppcompiler.optimize.size" valueType="enumerated"/>
 								<option id="de.innot.avreclipse.cppcompiler.option.incpath.1111753119" name="Include Paths (-I)" superClass="de.innot.avreclipse.cppcompiler.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Pin/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/common/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pt}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/HDLC/include}&quot;"/>
