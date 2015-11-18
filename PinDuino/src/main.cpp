@@ -1,3 +1,34 @@
+/*/
+                                  +-----+
+                 +----[PWR]-------------------| USB |--+
+                 |                            +-----+  |
+                 |         GND/RST2  [ ][ ]            |
+                 |       MOSI2/SCK2  [ ][ ]  A5/SCL[ ] |   C5
+                 |          5V/MISO2 [ ][ ]  A4/SDA[ ] |   C4
+                 |                             AREF[ ] |
+                 |                              GND[ ] |
+                 | [ ]N/C                    SCK/13[ ] |   B5   LED (Driver 5)
+                 | [ ]v.ref                 MISO/12[ ] |   .    Driver 4
+                 | [ ]RST                   MOSI/11[ ]~|   .    Driver 3
+                 | [ ]3V3    +---+               10[ ]~|   .    Driver 2
+                 | [ ]5v     | A |                9[ ]~|   .    Driver 1
+                 | [ ]GND   -| R |-               8[ ] |   B0   Driver 0
+                 | [ ]GND   -| D |-                    |
+                 | [ ]Vin   -| U |-               7[ ] |   D7   Switch 11
+                 |          -| I |-               6[ ]~|   .    Switch 10
+ Switch 0        | [ ]A0    -| N |-               5[ ]~|   .    Switch 9
+ Switch 1        | [ ]A1    -| O |-               4[ ] |   .    Switch 8
+ Switch 2        | [ ]A2     +---+           INT1/3[ ]~|   .    Switch 7
+ Switch 3        | [ ]A3                     INT0/2[ ] |   .    Switch 6
+ Switch 4        | [ ]A4/SDA  RST SCK MISO     TX>1[ ] |   .
+ Switch 5        | [ ]A5/SCL  [ ] [ ] [ ]      RX<0[ ] |   D0
+                 |            [ ] [ ] [ ]              |
+                 |  UNO_R3    GND MOSI 5V  ____________/
+                  \_______________________/
+
+                  http://busyducks.com/ascii-art-arduinos
+/*/
+
 #include <Arduino.h>
 
 #include <Source.h>
@@ -42,14 +73,14 @@ void uart_init(void) {
 
 class UartSource : public hdlc::Source<uint8_t> {
 public:
-	bool isReady() { return bit_is_set(UCSR0A, RXC0); }
-	uint8_t read() { return UDR0; }
+    bool isReady() { return bit_is_set(UCSR0A, RXC0); }
+    uint8_t read() { return UDR0; }
 };
 
 class UartSink : public hdlc::Sink<uint8_t> {
 public:
-	bool isReady() { return bit_is_set(UCSR0A, UDRE0); }
-	void write(const uint8_t& octet) { UDR0 = octet; }
+    bool isReady() { return bit_is_set(UCSR0A, UDRE0); }
+    void write(const uint8_t& octet) { UDR0 = octet; }
 };
 
 UartSource ttySource;
@@ -81,14 +112,14 @@ PinBank pinBankB4(PinBank::B, _BV(4));
 PinBank led(PinBank::B, _BV(5));
 
 Solenoid *solenoids[] = {
-		new Solenoid(pinBankB0, TCCR0A, 0, 0, OCR0A, _BV(0), dirtyListB),
-		new Solenoid(pinBankB1, TCCR1A, _BV(COM1A1) | _BV(COM1A0), _BV(COM1A1), OCR1AL, _BV(1), dirtyListB),
-		new Solenoid(pinBankB2, TCCR1A, _BV(COM1B1) | _BV(COM1B0), _BV(COM1B1), OCR1BL, _BV(2), dirtyListB),
-		new Solenoid(pinBankB3, TCCR2A, _BV(COM2A1) | _BV(COM2A0), _BV(COM2A1), OCR2A, _BV(3), dirtyListB),
-		new Solenoid(pinBankB4, TCCR0A, 0, 0, OCR0A, _BV(4), dirtyListB),
-		new Solenoid(led, TCCR0A, 0, 0, OCR0A, _BV(5), dirtyListB),
-		NULL,
-		NULL
+        new Solenoid(pinBankB0, TCCR0A, 0, 0, OCR0A, _BV(0), dirtyListB),
+        new Solenoid(pinBankB1, TCCR1A, _BV(COM1A1) | _BV(COM1A0), _BV(COM1A1), OCR1AL, _BV(1), dirtyListB),
+        new Solenoid(pinBankB2, TCCR1A, _BV(COM1B1) | _BV(COM1B0), _BV(COM1B1), OCR1BL, _BV(2), dirtyListB),
+        new Solenoid(pinBankB3, TCCR2A, _BV(COM2A1) | _BV(COM2A0), _BV(COM2A1), OCR2A, _BV(3), dirtyListB),
+        new Solenoid(pinBankB4, TCCR0A, 0, 0, OCR0A, _BV(4), dirtyListB),
+        new Solenoid(led, TCCR0A, 0, 0, OCR0A, _BV(5), dirtyListB),
+        NULL,
+        NULL
 };
 
 SolenoidBank solenoidBankB(solenoids, dirtyListB);
@@ -102,25 +133,25 @@ PinBank pinBankC(PinBank::C, dirtyListC);
 PinBank pinBankD(PinBank::D, dirtyListD);
 
 Item *switchesC[] = {
-		new Switch(0, 0, dirtyListC),
-		new Switch(1, 1, dirtyListC),
-		new Switch(2, 2, dirtyListC),
-		new Switch(3, 3, dirtyListC),
-		new Switch(4, 4, dirtyListC),
-		new Switch(5, 5, dirtyListC),
-		NULL,
-		NULL
+        new Switch(0, 0, dirtyListC),
+        new Switch(1, 1, dirtyListC),
+        new Switch(2, 2, dirtyListC),
+        new Switch(3, 3, dirtyListC),
+        new Switch(4, 4, dirtyListC),
+        new Switch(5, 5, dirtyListC),
+        NULL,
+        NULL
 };
 
 Item *switchesD[] = {
-		NULL,
-		NULL,
-		new Switch(2, 6, dirtyListD),
-		new Switch(3, 7, dirtyListD),
-		new Switch(4, 8, dirtyListD),
-		new Switch(5, 9, dirtyListD),
-		new Switch(6, 10, dirtyListD),
-		new Switch(7, 11, dirtyListD)
+        NULL,
+        NULL,
+        new Switch(2, 6, dirtyListD),
+        new Switch(3, 7, dirtyListD),
+        new Switch(4, 8, dirtyListD),
+        new Switch(5, 9, dirtyListD),
+        new Switch(6, 10, dirtyListD),
+        new Switch(7, 11, dirtyListD)
 };
 
 SwitchBank switchBankC = SwitchBank(switchesC, pinBankC, dirtyListC);
@@ -133,34 +164,34 @@ StimulusResponse stimulusResponse;
 /******************************************************************************************************/
 
 void setup() {
-	pinBankC.dataLow();
-	pinBankC.dirIn();
-	pinBankC.dataHigh();
-	pinBankD.dataLow();
-	pinBankD.dirIn();
-	pinBankD.dataHigh();
+    pinBankC.dataLow();
+    pinBankC.dirIn();
+    pinBankC.dataHigh();
+    pinBankD.dataLow();
+    pinBankD.dirIn();
+    pinBankD.dataHigh();
 
-	receiver.setFrameHandler(&endPoint);
-	uart_init();
-	endPoint.connect();
-	while(!endPoint.isConnected()) endPoint.schedule();
+    receiver.setFrameHandler(&endPoint);
+    uart_init();
+    endPoint.connect();
+    while(!endPoint.isConnected()) endPoint.schedule();
 
-	eeprom_busy_wait();
-	outgoingFrameBuffer.put(OpCode::MY_ID);
-	outgoingFrameBuffer.put(eeprom_read_byte(&eeprom_id));
-	outgoingFrameBuffer.endFrame();
+    eeprom_busy_wait();
+    outgoingFrameBuffer.put(OpCode::MY_ID);
+    outgoingFrameBuffer.put(eeprom_read_byte(&eeprom_id));
+    outgoingFrameBuffer.endFrame();
 
-	wdt_enable(WDTO_15MS);
+    wdt_enable(WDTO_15MS);
 }
 
 void loop() {
-	while(sizeof(SolenoidAction)!=4);
-	while(sizeof(Stimulus)!=1);
-	endPoint.schedule();
-	pingPong.schedule();
-	blinker.schedule();
-	switchBankC.schedule();
-	switchBankD.schedule();
-	solenoidBankB.schedule();
-	wdt_reset();
+    while(sizeof(SolenoidAction)!=4);
+    while(sizeof(Stimulus)!=1);
+    endPoint.schedule();
+    pingPong.schedule();
+    blinker.schedule();
+    switchBankC.schedule();
+    switchBankD.schedule();
+    solenoidBankB.schedule();
+    wdt_reset();
 }
