@@ -53,6 +53,7 @@ class EndPointManager(object):
             self.log.error("Dropping hardware rule for nonexistant endpoint: {}".format(endPointId))
 
     def pulseSolenoid(self, endPointId, solenoidId, milliseconds):
+        self.log.debug("Triggering driver {}-{} for {}ms".format(endPointId, solenoidId, milliseconds))
         if endPointId in self.endPoints:
             self.endPoints[endPointId].pulseSolenoid(SolenoidAction(True, solenoidId, milliseconds * 1000, 0))
         else:
