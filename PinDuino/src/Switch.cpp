@@ -12,7 +12,7 @@
 
 #include "Switch.h"
 
-Switch::Switch(uint8_t index, uint8_t id, uint8_t& dirtyList) : Item(_BV(index), dirtyList), id(id), history(0xff), state(true) {
+Switch::Switch(uint8_t index, uint8_t id, uint8_t& dirtyList) : Item(_BV(index), dirtyList), id(id), state(true), debounceThreshold(500>>2) {
 }
 
 Switch::~Switch() {
@@ -27,13 +27,20 @@ void Switch::pinChange(bool newState) {
 	stimulusResponse.trigger(Stimulus(id, newState));
 }
 
-void Switch::update(uint8_t read) {
-	history = (history << 1) | ((read & mask) == 0 ? 0 : 1);
-	if(history == 0x00) {
+void Switch::update(uint8_t last, uint8_t current) {
+	bool newState = current & mask;
+
+	if(state == newState) {
 		clean();
-		if(state) pinChange(false);
-	} else if(history == 0xff) {
+		return;
+	}
+
+	if((mask & last) != (mask & current)) {
+		debounceTimer.set(micros());
+	}
+
+	if(debounceTimer.elapsed(micros()) >= (debounceThreshold << 2)) {
 		clean();
-		if(!state) pinChange(true);
+		pinChange(newState);
 	}
 }

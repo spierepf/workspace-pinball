@@ -25,7 +25,7 @@ class SwitchBank : public ItemBank {
 	}
 
 	virtual void updateItem(Item* item) {
-		((Switch*)item)->update(current);
+		((Switch*)item)->update(last, current);
 	}
 
 public:

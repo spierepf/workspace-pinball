@@ -16,8 +16,10 @@ class Switch : public Item {
 	friend class SwitchBank;
 
 	uint8_t id;
-	uint8_t history;
 	bool state;
+
+	Timer<uint32_t> debounceTimer;
+	uint16_t debounceThreshold;
 
 	void pinChange(bool);
 
@@ -25,7 +27,7 @@ public:
 	Switch(uint8_t, uint8_t, uint8_t&);
 	virtual ~Switch();
 
-	void update(uint8_t);
+	void update(uint8_t, uint8_t);
 };
 
 #endif /* SWITCH_H_ */
