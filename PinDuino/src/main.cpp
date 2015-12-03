@@ -49,6 +49,7 @@
 #include <OpCode.h>
 #include <eeprom.h>
 #include <PinDuinoFrameHandler.h>
+#include <SwitchListenerImpl.h>
 
 #ifndef BAUD
 #define BAUD 115200
@@ -132,13 +133,15 @@ uint8_t dirtyListD = 0b11111100;
 PinBank pinBankC(PinBank::C, dirtyListC);
 PinBank pinBankD(PinBank::D, dirtyListD);
 
+SwitchListenerImpl switchListener;
+
 Item *switchesC[] = {
-        new Switch(0, 0, dirtyListC),
-        new Switch(1, 1, dirtyListC),
-        new Switch(2, 2, dirtyListC),
-        new Switch(3, 3, dirtyListC),
-        new Switch(4, 4, dirtyListC),
-        new Switch(5, 5, dirtyListC),
+        new Switch(switchListener, 0, 0, dirtyListC),
+        new Switch(switchListener, 1, 1, dirtyListC),
+        new Switch(switchListener, 2, 2, dirtyListC),
+        new Switch(switchListener, 3, 3, dirtyListC),
+        new Switch(switchListener, 4, 4, dirtyListC),
+        new Switch(switchListener, 5, 5, dirtyListC),
         NULL,
         NULL
 };
@@ -146,12 +149,12 @@ Item *switchesC[] = {
 Item *switchesD[] = {
         NULL,
         NULL,
-        new Switch(2, 6, dirtyListD),
-        new Switch(3, 7, dirtyListD),
-        new Switch(4, 8, dirtyListD),
-        new Switch(5, 9, dirtyListD),
-        new Switch(6, 10, dirtyListD),
-        new Switch(7, 11, dirtyListD)
+        new Switch(switchListener, 2, 6, dirtyListD),
+        new Switch(switchListener, 3, 7, dirtyListD),
+        new Switch(switchListener, 4, 8, dirtyListD),
+        new Switch(switchListener, 5, 9, dirtyListD),
+        new Switch(switchListener, 6, 10, dirtyListD),
+        new Switch(switchListener, 7, 11, dirtyListD)
 };
 
 SwitchBank switchBankC = SwitchBank(switchesC, pinBankC, dirtyListC);

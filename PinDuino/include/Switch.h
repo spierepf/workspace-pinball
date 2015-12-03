@@ -8,13 +8,12 @@
 #ifndef SWITCH_H_
 #define SWITCH_H_
 
-#include <extern.h>
-
 #include <Item.h>
+#include <SwitchListener.h>
+#include <Timer.h>
 
 class Switch : public Item {
-	friend class SwitchBank;
-
+	const SwitchListener& switchListener;
 	uint8_t id;
 	bool state;
 
@@ -24,10 +23,10 @@ class Switch : public Item {
 	void pinChange(bool);
 
 public:
-	Switch(uint8_t, uint8_t, uint8_t&);
+	Switch(const SwitchListener&, uint8_t, uint8_t, uint8_t&);
 	virtual ~Switch();
 
-	void update(uint8_t, uint8_t);
+	void update(uint32_t, uint8_t, uint8_t);
 };
 
 #endif /* SWITCH_H_ */

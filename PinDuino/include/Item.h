@@ -11,18 +11,16 @@
 #include <stdint.h>
 
 class Item {
-	friend class ItemBank;
-
 	uint8_t& dirtyList;
 
 protected:
-	const uint8_t mask;
-
 	void dirty() { dirtyList |= mask; }
 	void clean() { dirtyList &= ~mask; }
 	bool isDirty() { return dirtyList & mask; }
 
 public:
+	const uint8_t mask;
+
 	Item(const uint8_t mask, uint8_t& dirtyList) : dirtyList(dirtyList), mask(mask) {}
 	virtual ~Item() {};
 };

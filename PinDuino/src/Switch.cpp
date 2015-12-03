@@ -5,14 +5,9 @@
  *      Author: peter
  */
 
-#include <Arduino.h>
-
-#include <StimulusResponse.h>
-#include <OpCode.h>
-
 #include "Switch.h"
 
-Switch::Switch(uint8_t index, uint8_t id, uint8_t& dirtyList) : Item(_BV(index), dirtyList), id(id), state(true), debounceThreshold(500>>2) {
+Switch::Switch(const SwitchListener& switchListener, uint8_t index, uint8_t id, uint8_t& dirtyList) : Item((1 << index), dirtyList), switchListener(switchListener), id(id), state(true), debounceThreshold(500>>2) {
 }
 
 Switch::~Switch() {
@@ -21,13 +16,10 @@ Switch::~Switch() {
 
 void Switch::pinChange(bool newState) {
 	state = newState;
-	outgoingFrameBuffer.put(newState ? OpCode::SWITCH_INACTIVE : OpCode::SWITCH_ACTIVE);
-	outgoingFrameBuffer.put(id);
-	outgoingFrameBuffer.endFrame();
-	stimulusResponse.trigger(Stimulus(id, newState));
+	switchListener.switchChange(id, newState);
 }
 
-void Switch::update(uint8_t last, uint8_t current) {
+void Switch::update(uint32_t usec, uint8_t last, uint8_t current) {
 	bool newState = current & mask;
 
 	if(state == newState) {
@@ -36,10 +28,10 @@ void Switch::update(uint8_t last, uint8_t current) {
 	}
 
 	if((mask & last) != (mask & current)) {
-		debounceTimer.set(micros());
+		debounceTimer.set(usec);
 	}
 
-	if(debounceTimer.elapsed(micros()) >= (debounceThreshold << 2)) {
+	if(debounceTimer.elapsed(usec) >= (debounceThreshold << 2)) {
 		clean();
 		pinChange(newState);
 	}
