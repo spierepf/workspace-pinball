@@ -8,23 +8,21 @@
 #ifndef MOCKHARDWARE_H_
 #define MOCKHARDWARE_H_
 
-#include <Hardware.h>
-
 #include <RingBuffer.h>
 
-class MockHardware: public Hardware {
+class MockHardware {
 public:
-	RingBuffer<32>& incoming_bytes;
-	RingBuffer<32>& outgoing_bytes;
+	hdlc::RingBuffer<32>& incoming_bytes;
+	hdlc::RingBuffer<32>& outgoing_bytes;
 
-	MockHardware(RingBuffer<32> &incoming_bytes, RingBuffer<32> &outgoing_bytes) : incoming_bytes(incoming_bytes), outgoing_bytes(outgoing_bytes) {
+	MockHardware(hdlc::RingBuffer<32> &incoming_bytes, hdlc::RingBuffer<32> &outgoing_bytes) : incoming_bytes(incoming_bytes), outgoing_bytes(outgoing_bytes) {
 	}
 
 	virtual ~MockHardware() {
 	}
 
 	virtual bool getReady() {
-		return !incoming_bytes.empty();
+		return !incoming_bytes.isEmpty();
 	}
 
 	virtual uint8_t get() {
@@ -32,7 +30,7 @@ public:
 	}
 
 	virtual bool putReady() {
-		return !outgoing_bytes.full();
+		return !outgoing_bytes.isFull();
 	}
 
 	virtual void put(uint8_t b) {

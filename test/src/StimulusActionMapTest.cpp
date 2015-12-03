@@ -8,9 +8,6 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include <IncomingDataLink.h>
-#include <OutgoingDataLink.h>
-
 #include <StimulusActionMap.h>
 
 BOOST_AUTO_TEST_CASE( stimulus_action_map_test ) {

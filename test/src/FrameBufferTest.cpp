@@ -11,52 +11,52 @@
 #include <FrameBuffer.h>
 
 BOOST_AUTO_TEST_CASE( constructed_framebuffer_has_no_frame ) {
-	FrameBuffer<8, 4> framebuffer;
+	hdlc::FrameBuffer framebuffer;
 
-	BOOST_CHECK(!framebuffer.hasFrame());
-	BOOST_CHECK(framebuffer.getFrameCount() == 0);
+	BOOST_CHECK(!(framebuffer.size() > 0));
+	BOOST_CHECK(framebuffer.size() == 0);
 }
 
 BOOST_AUTO_TEST_CASE( framebuffer_with_ended_frame_has_one_frame ) {
-	FrameBuffer<8, 4> framebuffer;
+	hdlc::FrameBuffer framebuffer;
 
 	framebuffer.endFrame();
-	BOOST_CHECK(framebuffer.hasFrame());
-	BOOST_CHECK(framebuffer.getFrameCount() == 1);
+	BOOST_CHECK(framebuffer.size() > 0);
+	BOOST_CHECK(framebuffer.size() == 1);
 }
 
 BOOST_AUTO_TEST_CASE( framebuffer_with_removed_frame_has_no_frame ) {
-	FrameBuffer<8, 4> framebuffer;
+	hdlc::FrameBuffer framebuffer;
 
 	framebuffer.endFrame();
 	framebuffer.removeFrame();
-	BOOST_CHECK(!framebuffer.hasFrame());
-	BOOST_CHECK(framebuffer.getFrameCount() == 0);
+	BOOST_CHECK(!(framebuffer.size() > 0));
+	BOOST_CHECK(framebuffer.size() == 0);
 }
 
 BOOST_AUTO_TEST_CASE( framebuffer_with_two_ended_and_one_removed_frame_has_one_frame ) {
-	FrameBuffer<8, 4> framebuffer;
+	hdlc::FrameBuffer framebuffer;
 
 	framebuffer.endFrame();
 	framebuffer.endFrame();
 	framebuffer.removeFrame();
-	BOOST_CHECK(framebuffer.hasFrame());
-	BOOST_CHECK(framebuffer.getFrameCount() == 1);
+	BOOST_CHECK(framebuffer.size() > 0);
+	BOOST_CHECK(framebuffer.size() == 1);
 }
 
 BOOST_AUTO_TEST_CASE( framebuffer_frame_length ) {
-	FrameBuffer<8, 4> framebuffer;
+	hdlc::FrameBuffer framebuffer;
 
 	framebuffer.endFrame();
 	framebuffer.put(0);
 	framebuffer.endFrame();
 
-	BOOST_CHECK(framebuffer[0].getLength() == 0);
-	BOOST_CHECK(framebuffer[1].getLength() == 1);
+	BOOST_CHECK(framebuffer[0].size() == 0);
+	BOOST_CHECK(framebuffer[1].size() == 1);
 }
 
 BOOST_AUTO_TEST_CASE( framebuffer_frame_data ) {
-	FrameBuffer<8, 4> framebuffer;
+	hdlc::FrameBuffer framebuffer;
 
 	framebuffer.put(31);
 	framebuffer.endFrame();
@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE( framebuffer_frame_data ) {
 }
 
 BOOST_AUTO_TEST_CASE( framebuffer_put_wraparound ) {
-	FrameBuffer<8, 4> framebuffer;
+	hdlc::FrameBuffer framebuffer;
 
 	framebuffer.put(0);
 	framebuffer.put(1);
@@ -90,7 +90,7 @@ BOOST_AUTO_TEST_CASE( framebuffer_put_wraparound ) {
 	framebuffer.put(13);
 	framebuffer.endFrame();
 
-	BOOST_CHECK(framebuffer[0].getLength() == 7);
+	BOOST_CHECK(framebuffer[0].size() == 7);
 	BOOST_CHECK(framebuffer[0][0] == 7);
 	BOOST_CHECK(framebuffer[0][1] == 8);
 	BOOST_CHECK(framebuffer[0][2] == 9);
@@ -100,19 +100,19 @@ BOOST_AUTO_TEST_CASE( framebuffer_put_wraparound ) {
 	BOOST_CHECK(framebuffer[0][6] == 13);
 }
 
-BOOST_AUTO_TEST_CASE( framebuffer_revert_frame ) {
-	FrameBuffer<8, 4> framebuffer;
+BOOST_AUTO_TEST_CASE( framebuffer_revert_incomplete_frame ) {
+	hdlc::FrameBuffer framebuffer;
 
 	framebuffer.put(0);
 	framebuffer.endFrame();
 	framebuffer.put(1);
 	framebuffer.put(2);
-	framebuffer.revertFrame();
+	framebuffer.revertIncompleteFrame();
 	framebuffer.put(3);
 	framebuffer.endFrame();
 
-	BOOST_CHECK(framebuffer[0].getLength() == 1);
+	BOOST_CHECK(framebuffer[0].size() == 1);
 	BOOST_CHECK(framebuffer[0][0] == 0);
-	BOOST_CHECK(framebuffer[1].getLength() == 1);
+	BOOST_CHECK(framebuffer[1].size() == 1);
 	BOOST_CHECK(framebuffer[1][0] == 3);
 }
