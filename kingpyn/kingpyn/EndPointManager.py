@@ -30,6 +30,7 @@ class EndPointManager(object):
         self.endPoints = {}
         self.switchEventQueue = deque()
         self.log = logging.getLogger("EndPointManager")
+        self.log.setLevel(logging.INFO)
         
     def addDevice(self, device):
         tty = Serial(device)
@@ -58,3 +59,11 @@ class EndPointManager(object):
             self.endPoints[endPointId].pulseSolenoid(SolenoidAction(True, solenoidId, milliseconds * 1000, 0))
         else:
             self.log.error("Dropping pulse for nonexistant endpoint: {}".format(endPointId))
+
+    def setSwitchDebounceThreshold(self, endPointId, switchId, activity, milliseconds):
+        if endPointId in self.endPoints:
+            self.log.info("Setting switch debounce threshold for {}-{} to {}ms on {}".format(endPointId, switchId, milliseconds, activity))
+            self.endPoints[endPointId].setSwitchDebounceThreshold(switchId, milliseconds * 1000, activity)
+        else:
+            self.log.error("Dropping switch debounce threshold for nonexistant endpoint: {}".format(endPointId))
+        

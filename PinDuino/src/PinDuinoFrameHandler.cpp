@@ -15,8 +15,11 @@
 #include <Stimulus.h>
 #include <Solenoid.h>
 #include <StimulusResponse.h>
+#include <Switch.h>
 
 extern Solenoid *solenoids[];
+extern Switch *switchesC[];
+extern Switch *switchesD[];
 
 PinDuinoFrameHandler::PinDuinoFrameHandler() {
 }
@@ -58,6 +61,21 @@ void PinDuinoFrameHandler::handle(const uint8_t header, const uint8_t* payload, 
 				stimulusResponse[stimulus].write_to(outgoingFrameBuffer);
 				outgoingFrameBuffer.endFrame();
 			}
+		}
+	} else if(payload[0] == OpCode::SWITCH_DEBOUNCE_CONFIG) {
+		uint8_t i = 1;
+		if(payloadSize >= i+sizeof(uint8_t)+sizeof(bool)+sizeof(uint32_t)) {
+			uint8_t switchId = payload[i++];
+			bool newState = payload[i++] ? true : false;
+			uint32_t usec;
+			uint8_t *p = (uint8_t*)&usec;
+			*p++ = payload[i++];
+			*p++ = payload[i++];
+			*p++ = payload[i++];
+			*p++ = payload[i++];
+
+			Switch* s = (switchId < 6 ? switchesC : switchesD)[switchId % 6 + (switchId < 6 ? 0 : 2)];
+			s->setDebounceThreshold(newState, usec);
 		}
 	}
 

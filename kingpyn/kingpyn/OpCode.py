@@ -34,6 +34,10 @@ class OpCode(object):
         return 0x11
 
     @staticmethod
+    def SWITCH_DEBOUNCE_CONFIG():
+        return 0x12
+
+    @staticmethod
     def SR_INHIBIT():
         return 0x20
 

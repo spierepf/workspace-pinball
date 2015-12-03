@@ -78,3 +78,7 @@ class EndPointWrapper(object):
 
     def pulseSolenoid(self, activity):
         self.outgoingFrameBuffer += [[OpCode.PULSE_COIL()] + activity.toByteArray()]
+
+    def setSwitchDebounceThreshold(self, switchId, microseconds, activity):
+        self.outgoingFrameBuffer += [[OpCode.SWITCH_DEBOUNCE_CONFIG()] + [switchId] + [1 if activity else 0] + [microseconds & 255, (microseconds >> 8) & 255, (microseconds >> 16) & 255, microseconds >> 24]]
+        pass
