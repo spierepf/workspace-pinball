@@ -105,7 +105,8 @@ BOOST_AUTO_TEST_CASE( setDebounceThreshold ) {
 
 	Switch s(switchListener, 0, 0, dirtyList);
 
-	s.setDebounceThreshold(262140);
+	s.setDebounceThreshold(false, 262140);
+	s.setDebounceThreshold(true, 262140);
 
 	dirtyList = 1;						// dirty the switch
 	s.update(0, 1, 0); 					// @ t=0 the pin goes from high to low
@@ -121,5 +122,49 @@ BOOST_AUTO_TEST_CASE( setDebounceThreshold ) {
 	s.update(262140, 0, 0); 			// @ t=262140 the pin is still low
 
 	BOOST_CHECK(currentState == false);	// the current state is now low
+	BOOST_CHECK(dirtyList == 0);		// the switch is clean
+}
+
+BOOST_AUTO_TEST_CASE( setDebounceThreshold_with_different_thresholds ) {
+	currentState = true;
+
+	SwitchListenerImpl switchListener;
+	uint8_t dirtyList = 0;
+
+	Switch s(switchListener, 0, 0, dirtyList);
+
+	s.setDebounceThreshold(false, 248);
+	s.setDebounceThreshold(true, 752);
+
+	dirtyList = 1;						// dirty the switch
+	s.update(0, 1, 0); 					// @ t=0 the pin goes from high to low
+
+	BOOST_CHECK(currentState == true);	// the current state is still high
+	BOOST_CHECK(dirtyList != 0);		// the switch is still dirty
+
+	s.update(247, 0, 0); 				// @ t=247 the pin is still low
+
+	BOOST_CHECK(currentState == true);	// the current state is still high
+	BOOST_CHECK(dirtyList != 0);		// the switch is still dirty
+
+	s.update(248, 0, 0); 				// @ t=248 the pin is still low
+
+	BOOST_CHECK(currentState == false);	// the current state is now low
+	BOOST_CHECK(dirtyList == 0);		// the switch is clean
+
+	dirtyList = 1;						// dirty the switch
+	s.update(1000, 0, 1);				// @ t=1000 the pin goes from low to high
+
+	BOOST_CHECK(currentState == false);	// the current state is still low
+	BOOST_CHECK(dirtyList != 0);		// the switch is dirty
+
+	s.update(1751, 1, 1);				// @ t=1751 the pin is still high
+
+	BOOST_CHECK(currentState == false);	// the current state is still low
+	BOOST_CHECK(dirtyList != 0);		// the switch is still dirty
+
+	s.update(1752, 1, 1);				// @ t=1752 the pin is still high
+
+	BOOST_CHECK(currentState == true);	// the current state is now high
 	BOOST_CHECK(dirtyList == 0);		// the switch is clean
 }

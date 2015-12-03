@@ -18,7 +18,7 @@ class Switch : public Item {
 	bool state;
 
 	Timer<uint32_t> debounceTimer;
-	uint16_t debounceThreshold;
+	uint16_t debounceThreshold[2];
 
 	void pinChange(bool);
 
@@ -28,7 +28,7 @@ public:
 
 	void update(uint32_t, uint8_t, uint8_t);
 
-	void setDebounceThreshold(uint32_t);
+	void setDebounceThreshold(bool, uint32_t);
 };
 
 #endif /* SWITCH_H_ */

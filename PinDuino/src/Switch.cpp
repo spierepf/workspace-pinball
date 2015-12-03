@@ -7,7 +7,8 @@
 
 #include "Switch.h"
 
-Switch::Switch(const SwitchListener& switchListener, uint8_t index, uint8_t id, uint8_t& dirtyList) : Item((1 << index), dirtyList), switchListener(switchListener), id(id), state(true), debounceThreshold(500>>2) {
+Switch::Switch(const SwitchListener& switchListener, uint8_t index, uint8_t id, uint8_t& dirtyList) : Item((1 << index), dirtyList), switchListener(switchListener), id(id), state(true) {
+	debounceThreshold[0] = debounceThreshold[1] = (500>>2);
 }
 
 Switch::~Switch() {
@@ -31,12 +32,12 @@ void Switch::update(uint32_t usec, uint8_t last, uint8_t current) {
 		debounceTimer.set(usec);
 	}
 
-	if(debounceTimer.elapsed(usec) >= (debounceThreshold << 2)) {
+	if(debounceTimer.elapsed(usec) >= (debounceThreshold[newState ? 1 : 0] << 2)) {
 		clean();
 		pinChange(newState);
 	}
 }
 
-void Switch::setDebounceThreshold(uint32_t usec) {
-	debounceThreshold = usec >> 2;
+void Switch::setDebounceThreshold(bool newState, uint32_t usec) {
+	debounceThreshold[newState ? 1 : 0] = usec >> 2;
 }
