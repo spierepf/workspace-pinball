@@ -27,6 +27,8 @@ public:
 	virtual ~Switch();
 
 	void update(uint32_t, uint8_t, uint8_t);
+
+	void setDebounceThreshold(uint32_t);
 };
 
 #endif /* SWITCH_H_ */

@@ -36,3 +36,7 @@ void Switch::update(uint32_t usec, uint8_t last, uint8_t current) {
 		pinChange(newState);
 	}
 }
+
+void Switch::setDebounceThreshold(uint32_t usec) {
+	debounceThreshold = usec >> 2;
+}
