@@ -29,14 +29,15 @@ void PingPong::schedule() {
 PT_THREAD(PingPong::run()) {
 	PT_BEGIN(&pt);
 	for(;;) {
-		for(counter = 0; counter < N; counter++) {
+		counter = N;
+		do {
 			timer.set(micros());
 			sendPing();
 			PT_WAIT_UNTIL(&pt, pongAccepted/* || timer.elapsed(micros()) > 200000*/);
 			if(!pongAccepted) missedPings++;
 			total_latency += timer.elapsed(micros());
 			PT_WAIT_UNTIL(&pt, timer.elapsed(micros()) > 100000);
-		}
+		} while(counter--);
 
 		LOG("Average Latency: %lu us", total_latency / N);
 		if(missedPings > 0) LOG("\tMissed Pings: %u", missedPings);
