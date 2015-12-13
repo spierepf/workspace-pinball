@@ -42,7 +42,8 @@ class HardwareRuleManager(object):
             rule = HardwareRule.fromByteArray(frame[1])
             existingRule = self.rules[rule.stimulus] 
             if existingRule == rule:
-                self.dirty.remove(rule.stimulus)
+                if rule.stimulus in self.dirty:
+                    self.dirty.remove(rule.stimulus)
                 if self.isDirty():
                     self.sendRule()
             else:
