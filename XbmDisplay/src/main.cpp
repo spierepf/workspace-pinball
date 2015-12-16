@@ -36,8 +36,7 @@
  * CS		10
  */
 
-u8g_t u8g_cs_7;
-u8g_t u8g_cs_10;
+u8g_t u8g[3];
 
 const unsigned char* bitmaps[] = {
 		H_rle_data,
@@ -92,17 +91,18 @@ void update_display(u8g_t* display) {
 
 int main(void)
 {
-	int i = 0;
+	uint8_t cs[3] = {
+			PN(3, 5),
+			PN(3, 6),
+			PN(3, 7),
+	};
 
-	uint8_t cs_7 = PN(3, 7);
-	uint8_t cs_10 = PN(1, 2);
 	uint8_t reset = PN(1, 0);
 
-	u8g_SetPinOutput(cs_7);
-	u8g_SetPinOutput(cs_10);
-
-	u8g_SetPinLevel(cs_7, 1);
-	u8g_SetPinLevel(cs_10, 1);
+	for(int i = 0; i < 3; i++) {
+		u8g_SetPinOutput(cs[i]);
+		u8g_SetPinLevel(cs[i], 1);
+	}
 
 	u8g_SetPinOutput(reset);
 	u8g_SetPinLevel(reset, 0);
@@ -113,19 +113,27 @@ int main(void)
 	SCK: PORTB, Bit 5 --> PN(1,5)
 	MOSI: PORTB, Bit 3 --> PN(1,3)
 	*/
-	u8g_InitSPI(&u8g_cs_10, &u8g_dev_ssd1306_128x64_2x_hw_spi, PN(1, 5), PN(1, 3), cs_10, PN(1, 1), 0);
-	u8g_InitSPI(&u8g_cs_7, &u8g_dev_ssd1306_128x64_2x_hw_spi, PN(1, 5), PN(1, 3), cs_7, PN(1, 1), 0);
+
+	for(int i = 0; i < 3; i++) {
+		u8g_InitSPI(&(u8g[i]), &u8g_dev_ssd1306_128x64_2x_hw_spi, PN(1, 5), PN(1, 3), cs[i], PN(1, 1), U8G_PIN_NONE);
+	}
+
+	int image = 0;
+	int display = 0;
 
 	for(;;) {
 		RleDecoder decoder(image_buffer);
-		for(size_t j = 0; j < lengths[i]; j++) {
-			decoder.write(pgm_read_byte(bitmaps[i] + j));
+		for(size_t j = 0; j < lengths[image]; j++) {
+			decoder.write(pgm_read_byte(bitmaps[image] + j));
 		}
 
-		update_display(i % 2 ? &u8g_cs_10 : &u8g_cs_7);
+		u8g_SetPinLevel(cs[display], 0);
+		update_display(&(u8g[display]));
+		u8g_SetPinLevel(cs[display], 1);
 
-		u8g_Delay(500);
+		//u8g_Delay(500);
 
-		i = (i + 1) % 18;
+		image = (image + 1) % 18;
+		display = (display + 1) % 3;
 	}
 }
