@@ -8,7 +8,7 @@
 #include "Switch.h"
 
 Switch::Switch(const SwitchListener& switchListener, uint8_t index, uint8_t id, uint8_t& dirtyList) : Item((1 << index), dirtyList), switchListener(switchListener), id(id), state(true) {
-	debounceThreshold[0] = debounceThreshold[1] = (500>>2);
+	debounceThreshold[0] = debounceThreshold[1] = (30000>>2);
 }
 
 Switch::~Switch() {
