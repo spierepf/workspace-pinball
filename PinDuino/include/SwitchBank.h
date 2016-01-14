@@ -29,7 +29,7 @@ class SwitchBank : public ItemBank {
 	}
 
 public:
-	SwitchBank(Item** switches, PinBank& pinBank, uint8_t& dirtyList) : ItemBank(switches, dirtyList), pinBank(pinBank), last(0), current(0) {}
+	SwitchBank(Switch** switches, PinBank& pinBank, uint8_t& dirtyList) : ItemBank((Item**)switches, dirtyList), pinBank(pinBank), last(0), current(0) {}
 	virtual ~SwitchBank() {}
 };
 

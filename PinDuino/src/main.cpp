@@ -135,7 +135,7 @@ PinBank pinBankD(PinBank::D, dirtyListD);
 
 SwitchListenerImpl switchListener;
 
-Item *switchesC[] = {
+Switch *switchesC[] = {
         new Switch(switchListener, 0, 0, dirtyListC),
         new Switch(switchListener, 1, 1, dirtyListC),
         new Switch(switchListener, 2, 2, dirtyListC),
@@ -146,7 +146,7 @@ Item *switchesC[] = {
         NULL
 };
 
-Item *switchesD[] = {
+Switch *switchesD[] = {
         NULL,
         NULL,
         new Switch(switchListener, 2, 6, dirtyListD),
