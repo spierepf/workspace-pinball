@@ -12,15 +12,15 @@
 
 #include "Solenoid.h"
 
-class SolenoidBank : public ItemBank {
-	virtual void updateSelf() {}
-	virtual void updateItem(Item* item) {
+class SolenoidBank : public ItemBank<SolenoidBank> {
+public:
+	SolenoidBank(Solenoid** solenoids, uint8_t& dirtyList) : ItemBank<SolenoidBank>((Item**)solenoids, dirtyList) {}
+	~SolenoidBank() {}
+
+	void updateSelf_impl() {}
+	void updateItem_impl(Item* item) {
 		((Solenoid*)item) -> update();
 	}
-
-public:
-	SolenoidBank(Solenoid** solenoids, uint8_t& dirtyList) : ItemBank((Item**)solenoids, dirtyList) {}
-	virtual ~SolenoidBank() {}
 };
 
 #endif /* SOLENOIDBANK_H_ */

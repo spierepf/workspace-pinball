@@ -13,24 +13,24 @@
 #include <Switch.h>
 #include <PinBank.h>
 
-class SwitchBank : public ItemBank {
+class SwitchBank : public ItemBank<SwitchBank> {
 	PinBank& pinBank;
 	uint8_t last;
 	uint8_t current;
 
-	virtual void updateSelf() {
+public:
+	SwitchBank(Switch** switches, PinBank& pinBank, uint8_t& dirtyList) : ItemBank<SwitchBank>((Item**)switches, dirtyList), pinBank(pinBank), last(0), current(0) {}
+	~SwitchBank() {}
+
+	void updateSelf_impl() {
 		last = current;
 		current = pinBank.read();
 		dirtyList |= last ^ current;
 	}
 
-	virtual void updateItem(Item* item) {
+	void updateItem_impl(Item* item) {
 		((Switch*)item)->update(micros(), last, current);
 	}
-
-public:
-	SwitchBank(Switch** switches, PinBank& pinBank, uint8_t& dirtyList) : ItemBank((Item**)switches, dirtyList), pinBank(pinBank), last(0), current(0) {}
-	virtual ~SwitchBank() {}
 };
 
 #endif /* SWITCHBANK_H_ */

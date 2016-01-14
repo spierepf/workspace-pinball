@@ -13,6 +13,7 @@
 #include <pt.h>
 #include <stdlib.h>
 
+template<class Derived>
 class ItemBank {
 	struct pt pt;
 
@@ -37,12 +38,14 @@ class ItemBank {
 protected:
 	uint8_t& dirtyList;
 
-	virtual void updateSelf() = 0;
-	virtual void updateItem(Item*) = 0;
+	void updateSelf() { static_cast<Derived*>(this)->updateSelf_impl(); }
+	void updateItem(Item* item) { static_cast<Derived*>(this)->updateItem_impl(item); }
+
+	// making this protected prevents deleting an ItemBank* directly
+	~ItemBank() {}
 
 public:
 	ItemBank(Item** items, uint8_t& dirtyList) : items(items), dirtyList(dirtyList) { PT_INIT(&pt); }
-	virtual ~ItemBank() {}
 
 	void schedule() { PT_SCHEDULE(run()); }
 };
