@@ -18,11 +18,13 @@ protected:
 	void clean() { dirtyList &= ~mask; }
 	bool isDirty() { return dirtyList & mask; }
 
+	// making this protected prevents deleting an Item* directly
+	~Item() {};
+
 public:
 	const uint8_t mask;
 
 	Item(const uint8_t mask, uint8_t& dirtyList) : dirtyList(dirtyList), mask(mask) {}
-	virtual ~Item() {};
 };
 
 #endif /* ITEM_H_ */

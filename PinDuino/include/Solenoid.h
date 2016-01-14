@@ -38,7 +38,7 @@ class Solenoid : public Item {
 
 public:
 	Solenoid(PinBank&, volatile uint8_t&, uint8_t, uint8_t, volatile uint8_t&, uint8_t, uint8_t&);
-	virtual ~Solenoid();
+	~Solenoid();
 
 	void trigger(uint16_t, uint8_t);
 	void release();
