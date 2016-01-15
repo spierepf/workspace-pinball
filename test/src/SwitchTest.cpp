@@ -29,6 +29,8 @@ BOOST_AUTO_TEST_CASE( switch_no_bounce ) {
 	uint8_t dirtyList = 0;
 
 	Switch s(switchListener, 0, 0, dirtyList);
+	s.setDebounceThreshold(false, 500);
+	s.setDebounceThreshold(true, 500);
 
 	dirtyList = 1;						// dirty the switch
 	s.update(0, 1, 0); 					// @ t=0 the pin goes from high to low
@@ -77,6 +79,8 @@ BOOST_AUTO_TEST_CASE( switch_bounce ) {
 	uint8_t dirtyList = 0;
 
 	Switch s(switchListener, 0, 0, dirtyList);
+	s.setDebounceThreshold(false, 500);
+	s.setDebounceThreshold(true, 500);
 
 	dirtyList = 1;						// dirty the switch
 	s.update(0, 1, 0); 					// @ t=0 the pin goes from high to low
