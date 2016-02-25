@@ -13,3 +13,6 @@
 [submodule "easyloggingpp"]
 	path = easyloggingpp
 	url = https://github.com/easylogging/easyloggingpp.git
+[submodule "HDLC_test"]
+	path = HDLC_test
+	url = https://github.com/spierepf/HDLC_test.git
