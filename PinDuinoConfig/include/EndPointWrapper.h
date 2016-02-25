@@ -56,7 +56,7 @@ public:
 	}
 };
 
-class EndPointWrapper: public hdlc::Thread, public hdlc::FrameHandler {
+class EndPointWrapper: public hdlc::Thread<EndPointWrapper>, public hdlc::FrameHandler {
 	std::string device;
 	SerialPort serialPort;
 	SerialSource serialSource;
@@ -92,11 +92,12 @@ class EndPointWrapper: public hdlc::Thread, public hdlc::FrameHandler {
 	Gtk::Label *rowLabels[12];
 
 protected:
-	virtual PT_THREAD(run());
 
 public:
 	EndPointWrapper(Gtk::Notebook*, char*);
 	virtual ~EndPointWrapper();
+
+	PT_THREAD(run());
 
 	virtual void handle(const uint8_t, const uint8_t*, const uint8_t);
 };
