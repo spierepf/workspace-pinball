@@ -27,7 +27,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Pin/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/common/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/easylogging++/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/easyloggingpp/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pt}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/HDLC/include}&quot;"/>
 								</option>

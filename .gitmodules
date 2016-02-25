@@ -10,3 +10,6 @@
 	path = mpf
 	url = https://github.com/spierepf/mpf.git
 	branch = dev
+[submodule "easyloggingpp"]
+	path = easyloggingpp
+	url = https://github.com/easylogging/easyloggingpp.git
