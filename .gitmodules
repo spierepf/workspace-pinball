@@ -18,3 +18,6 @@
 [submodule "mpf"]
 	path = mpf
 	url = https://github.com/missionpinball/mpf.git
+[submodule "nelson"]
+	path = nelson
+	url = https://github.com/spierepf/nelson.git
