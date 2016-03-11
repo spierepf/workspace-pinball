@@ -6,10 +6,6 @@
 	path = pt
 	url = https://github.com/spierepf/pt.git
 	branch = master
-[submodule "mpf"]
-	path = mpf
-	url = https://github.com/spierepf/mpf.git
-	branch = dev
 [submodule "easyloggingpp"]
 	path = easyloggingpp
 	url = https://github.com/easylogging/easyloggingpp.git
@@ -19,3 +15,6 @@
 [submodule "fadecandy"]
 	path = fadecandy
 	url = https://github.com/scanlime/fadecandy.git
+[submodule "mpf"]
+	path = mpf
+	url = https://github.com/missionpinball/mpf.git
