@@ -16,3 +16,6 @@
 [submodule "HDLC_test"]
 	path = HDLC_test
 	url = https://github.com/spierepf/HDLC_test.git
+[submodule "fadecandy"]
+	path = fadecandy
+	url = https://github.com/scanlime/fadecandy.git
