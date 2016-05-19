@@ -130,8 +130,8 @@ class HardwarePlatform(Platform):
         return VirtualDMD(self.machine)
     '''
     def write_hw_rule(self, *args, **kwargs):
-        self.log.error(args)
-        self.log.error(kwargs)
+        self.log.info(args)
+        self.log.info(kwargs)
         switch_obj = args[0]
         sw_activity = args[1]
         driver_obj = args[2]
