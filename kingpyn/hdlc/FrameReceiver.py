@@ -48,7 +48,7 @@ class FrameReceiver(object):
         self.frameHandler = frameHandler
         
     def schedule(self):
-        if self.source.isReady():
+        while self.source.isReady():
             if self.source.isFlag():
                 if len(self.frame) != 0:
                     if self.incomingCRC == 0:
