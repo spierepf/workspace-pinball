@@ -70,5 +70,6 @@ class EndPointManager(object):
     def setSwitchPullup(self, endPointId, switchId, enablePullup):
         if endPointId in self.endPoints:
             self.log.info("Setting internal pullup for switch {}-{} to {}".format(endPointId, switchId, enablePullup))
+            self.endPoints[endPointId].setSwitchPullup(switchId, enablePullup)
         else:
             self.log.error("Dropping internal pullup config for nonexistant endpoint: {}".format(endPointId))

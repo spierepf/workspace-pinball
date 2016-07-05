@@ -81,4 +81,6 @@ class EndPointWrapper(object):
 
     def setSwitchDebounceThreshold(self, switchId, microseconds, activity):
         self.outgoingFrameBuffer += [[OpCode.SWITCH_DEBOUNCE_CONFIG()] + [switchId] + [1 if activity else 0] + [microseconds & 255, (microseconds >> 8) & 255, (microseconds >> 16) & 255, microseconds >> 24]]
-        pass
+
+    def setSwitchPullup(self, switchId, pullup):
+        self.outgoingFrameBuffer += [[OpCode.SWITCH_PULLUP_CONFIG()] + [switchId] + [1 if pullup else 0]]

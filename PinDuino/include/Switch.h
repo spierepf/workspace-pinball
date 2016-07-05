@@ -14,6 +14,7 @@
 
 class Switch : public Item {
 	const SwitchListener& switchListener;
+	uint8_t port;
 	uint8_t id;
 	bool state;
 
@@ -23,12 +24,13 @@ class Switch : public Item {
 	void pinChange(bool);
 
 public:
-	Switch(const SwitchListener&, uint8_t, uint8_t, uint8_t&);
+	Switch(const SwitchListener&, uint8_t, uint8_t, uint8_t, uint8_t&);
 	~Switch();
 
 	void update(uint32_t, uint8_t, uint8_t);
 
 	void setDebounceThreshold(bool, uint32_t);
+	void setPullup(bool);
 };
 
 #endif /* SWITCH_H_ */

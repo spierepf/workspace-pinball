@@ -136,12 +136,12 @@ PinBank pinBankD(PinBank::D, dirtyListD);
 SwitchListenerImpl switchListener;
 
 Switch *switchesC[] = {
-        new Switch(switchListener, 0, 0, dirtyListC),
-        new Switch(switchListener, 1, 1, dirtyListC),
-        new Switch(switchListener, 2, 2, dirtyListC),
-        new Switch(switchListener, 3, 3, dirtyListC),
-        new Switch(switchListener, 4, 4, dirtyListC),
-        new Switch(switchListener, 5, 5, dirtyListC),
+        new Switch(switchListener, PinBank::C, 0, 0, dirtyListC),
+        new Switch(switchListener, PinBank::C, 1, 1, dirtyListC),
+        new Switch(switchListener, PinBank::C, 2, 2, dirtyListC),
+        new Switch(switchListener, PinBank::C, 3, 3, dirtyListC),
+        new Switch(switchListener, PinBank::C, 4, 4, dirtyListC),
+        new Switch(switchListener, PinBank::C, 5, 5, dirtyListC),
         NULL,
         NULL
 };
@@ -149,12 +149,12 @@ Switch *switchesC[] = {
 Switch *switchesD[] = {
         NULL,
         NULL,
-        new Switch(switchListener, 2, 6, dirtyListD),
-        new Switch(switchListener, 3, 7, dirtyListD),
-        new Switch(switchListener, 4, 8, dirtyListD),
-        new Switch(switchListener, 5, 9, dirtyListD),
-        new Switch(switchListener, 6, 10, dirtyListD),
-        new Switch(switchListener, 7, 11, dirtyListD)
+        new Switch(switchListener, PinBank::D, 2, 6, dirtyListD),
+        new Switch(switchListener, PinBank::D, 3, 7, dirtyListD),
+        new Switch(switchListener, PinBank::D, 4, 8, dirtyListD),
+        new Switch(switchListener, PinBank::D, 5, 9, dirtyListD),
+        new Switch(switchListener, PinBank::D, 6, 10, dirtyListD),
+        new Switch(switchListener, PinBank::D, 7, 11, dirtyListD)
 };
 
 SwitchBank switchBankC = SwitchBank(switchesC, pinBankC, dirtyListC);
