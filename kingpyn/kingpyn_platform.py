@@ -88,7 +88,7 @@ class HardwarePlatform(Platform):
         switch = KingpynSwitch(self, config['number'],
                                debounce_open=config['debounce_open'],
                                debounce_close=config['debounce_close'],
-                               disable_pullup="kingpyn_disable_pullup" in config['tags'])
+                               enable_pullup=not "kingpyn_disable_pullup" in config['tags'])
 
         switch.driver_settings = config
 
@@ -178,7 +178,7 @@ class HardwarePlatform(Platform):
 
 class KingpynSwitch(object):
     """Represents a switch in a pinball machine used with virtual hardware."""
-    def __init__(self, outer, number, debounce_open, debounce_close, disable_pullup):
+    def __init__(self, outer, number, debounce_open, debounce_close, enable_pullup):
         self.log = logging.getLogger('KingpynSwitch')
         self.outer = outer
         self.number = number
@@ -190,8 +190,8 @@ class KingpynSwitch(object):
             self.outer.endPointManager.setSwitchDebounceThreshold(endPointId, switchId, True, debounce_open)
         if debounce_close != None:
             self.outer.endPointManager.setSwitchDebounceThreshold(endPointId, switchId, False, debounce_close)
-        if disable_pullup:
-            self.outer.endPointManager.disablePullup(endPointId, switchId, disable_pullup)
+        if enable_pullup == False:
+            self.outer.endPointManager.setSwitchPullup(endPointId, switchId, enable_pullup)
 
 '''
 class VirtualMatrixLight(object):

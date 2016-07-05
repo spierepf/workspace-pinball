@@ -67,8 +67,8 @@ class EndPointManager(object):
         else:
             self.log.error("Dropping switch debounce threshold for nonexistant endpoint: {}".format(endPointId))
         
-    def disablePullup(self, endPointId, switchId, disablePullup):
+    def setSwitchPullup(self, endPointId, switchId, enablePullup):
         if endPointId in self.endPoints:
-            self.log.info("Setting internal pullup for switch {}-{} to {}".format(endPointId, switchId, disablePullup))
+            self.log.info("Setting internal pullup for switch {}-{} to {}".format(endPointId, switchId, enablePullup))
         else:
             self.log.error("Dropping internal pullup config for nonexistant endpoint: {}".format(endPointId))
