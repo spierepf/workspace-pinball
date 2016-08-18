@@ -33,8 +33,7 @@ class EndPointManager(object):
         self.log.setLevel(logging.INFO)
         
     def addDevice(self, device):
-        tty = Serial(device)
-        tty.setBaudrate(115200)
+        tty = Serial(device, baudrate=115200)
         endPointWrapper = EndPointWrapper(tty, self.switchEventQueue)
         endPointWrapper.ensureID()
         self.endPoints[endPointWrapper.id] = endPointWrapper
