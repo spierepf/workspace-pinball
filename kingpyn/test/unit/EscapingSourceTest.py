@@ -51,6 +51,7 @@ class Test(unittest.TestCase):
         escapingSource.schedule()
         self.assertFalse(escapingSource.isFlag())
         self.assertTrue(EscapingSource.FLAG() == escapingSource.read())
+        escapingSource.next()
         escapingSource.schedule()
         escapingSource.schedule()
         self.assertFalse(escapingSource.isFlag())
@@ -72,6 +73,22 @@ class Test(unittest.TestCase):
         escapingSource.schedule()
         self.assertFalse(escapingSource.isFlag())
         self.assertTrue(0x42 == escapingSource.read())
+
+    def testEscapingSourceCanBecomeReadyAfterCallToNext(self):
+        mock = MockSource(deque([0x42, 0x43]))
+        escapingSource = EscapingSource(mock)
+        escapingSource.schedule()
+        escapingSource.next()
+        self.assertTrue(escapingSource.isReady())
+        self.assertTrue(escapingSource.read() == 0x43)
+
+    def testEscapingSourceCanBecomeReadyAfterCallToNextWithEscapeSequence(self):
+        mock = MockSource(deque([0x42, EscapingSource.ESCAPE(), 0x43 ^ EscapingSource.MASK()]))
+        escapingSource = EscapingSource(mock)
+        escapingSource.schedule()
+        escapingSource.next()
+        self.assertTrue(escapingSource.isReady())
+        self.assertTrue(escapingSource.read() == 0x43)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

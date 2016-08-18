@@ -34,7 +34,7 @@ class EscapingSource(object):
         return self.octet != None or self.flag
 
     def schedule(self):
-        if self.source.isReady():
+        if self.source.isReady() and not self.isReady():
             tmp = self.source.read()
             if self.escape:
                 self.octet = tmp ^ EscapingSource.MASK()
@@ -42,6 +42,7 @@ class EscapingSource(object):
                 self.escape = False
             elif tmp == EscapingSource.ESCAPE():
                 self.escape = True
+                self.schedule()
             elif tmp == EscapingSource.FLAG():
                 self.flag = True
             else:
@@ -51,6 +52,7 @@ class EscapingSource(object):
     def next(self):
         self.octet = None
         self.flag = False
+        self.schedule()
     
     def isFlag(self):
         return self.flag
