@@ -1,0 +1,20 @@
+--- mpf.sh	2016-08-29 12:13:54.389641747 -0300
++++ mpf.sh	2016-08-29 12:32:01.026572888 -0300
+@@ -10,8 +10,8 @@
+ # This code will launch mc in a new window and require you to switch windows
+ # and Ctrl-C out of each
+ 
+-x-terminal-emulator -e bash -c "python mc.py $@"
+-python mpf.py "$@"
++#x-terminal-emulator -e bash -c "python mc.py $@"
++#python mpf.py "$@"
+ 
+ # The line below will launch both processes in the same terminal window
+ # with the output of BOTH processes going to the same window
+@@ -20,5 +20,5 @@
+ # the prompt. To use, comment out the two commands above and uncomment the 
+ # line below.
+ 
+-#python mc.py "$@" & python mpf.py "$@" && echo "Killed both processes"
++python mc.py "$@" & sleep 5 && python mpf.py "$@" && echo "Killed both processes"
+ 
