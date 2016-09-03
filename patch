@@ -16,5 +16,5 @@
  # line below.
  
 -#python mc.py "$@" & python mpf.py "$@" && echo "Killed both processes"
-+python mc.py "$@" & sleep 5 && pypy mpf.py "$@" && echo "Killed both processes"
++python mc.py "$@" & sleep 5 ; rm logs/*.log ; python mpf.py "$@" && echo "Killed both processes"
  
