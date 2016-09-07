@@ -1,6 +1,6 @@
 #!/bin/bash
 
-git submodule update --init --recursive
+while ! git submodule update --init --recursive ; do echo ; done
 
 pushd fadecandy/server
 make
