@@ -1,5 +1,7 @@
---- mpf.sh	2016-08-29 12:13:54.389641747 -0300
-+++ mpf.sh	2016-08-29 12:32:01.026572888 -0300
+diff --git a/mpf.sh b/mpf.sh
+index 6d0a9dc..4775f9e 100755
+--- a/mpf.sh
++++ b/mpf.sh
 @@ -10,8 +10,8 @@
  # This code will launch mc in a new window and require you to switch windows
  # and Ctrl-C out of each
@@ -11,10 +13,13 @@
  
  # The line below will launch both processes in the same terminal window
  # with the output of BOTH processes going to the same window
-@@ -20,5 +20,5 @@
+@@ -20,5 +20,8 @@ python mpf.py "$@"
  # the prompt. To use, comment out the two commands above and uncomment the 
  # line below.
  
 -#python mc.py "$@" & python mpf.py "$@" && echo "Killed both processes"
-+python mc.py "$@" & sleep 5 ; rm logs/*.log ; python mpf.py "$@" && echo "Killed both processes"
++export PYTHONPATH=/home/hms/workspace-pinball/kingpyn
++export PYTHONPATH=$PYTHONPATH:/usr/lib/python2.7/dist-packages
++
++python mc.py "$@" & sleep 5 ; rm logs/*.log ; pypy mpf.py "$@" && echo "Killed both processes"
  
