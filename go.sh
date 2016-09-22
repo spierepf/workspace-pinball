@@ -16,5 +16,5 @@ ln -s ../../../kingpyn/kingpyn_platform.py .
 popd
 
 pushd mpf
-patch -p0 <../patch
+patch -p1 <../patch
 popd
