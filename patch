@@ -23,6 +23,19 @@ index 6d0a9dc..4775f9e 100755
 +
 +python mc.py "$@" & sleep 5 ; rm logs/*.log ; pypy mpf.py "$@" && echo "Killed both processes"
  
+diff --git a/mpf/platform/openpixel.py b/mpf/platform/openpixel.py
+index f9ac06f..6791c78 100644
+--- a/mpf/platform/openpixel.py
++++ b/mpf/platform/openpixel.py
+@@ -72,7 +72,7 @@ class OpenPixelLED(object):
+         self.opc_client.add_pixel(self.channel, self.led)
+ 
+     def color(self, color):
+-        self.log.debug("Setting color: %s", color)
++        #self.log.debug("Setting color: %s", color)
+         self.opc_client.set_pixel_color(self.channel, self.led, color)
+ 
+ 
 diff --git a/mpf/system/events.py b/mpf/system/events.py
 index 8dbf70f..3bdd3c4 100644
 --- a/mpf/system/events.py
