@@ -6,7 +6,7 @@ pushd fadecandy/server
 make
 popd
 
-pushd nelson
+pushd nelson2
 git checkout master
 python generate_shows.py
 popd

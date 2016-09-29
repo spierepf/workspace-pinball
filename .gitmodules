@@ -21,3 +21,6 @@
 [submodule "nelson"]
 	path = nelson
 	url = https://github.com/spierepf/nelson.git
+[submodule "nelson2"]
+	path = nelson2
+	url = https://github.com/spierepf/nelson2
