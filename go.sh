@@ -7,14 +7,20 @@ make
 popd
 
 pushd nelson2
-git checkout master
-python generate_shows.py
+  git checkout master
+  git checkout .
+  python generate_shows.py
+  pushd sounds
+    for i in */*.ogg ; do normalize-ogg "$i" ; done
+  popd
 popd
 
 pushd mpf/mpf/platform
+rm -f kingpyn_platform.py
 ln -s ../../../kingpyn/kingpyn_platform.py .
 popd
 
 pushd mpf
+git checkout .
 patch -p1 <../patch
 popd
