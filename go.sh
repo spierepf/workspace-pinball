@@ -11,6 +11,8 @@ pushd nelson2
   git checkout .
   python generate_shows.py
   pushd sounds
+    git checkout master
+    git checkout .
     for i in */*.ogg ; do normalize-ogg "$i" ; done
   popd
 popd
