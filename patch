@@ -1,5 +1,5 @@
 diff --git a/mpf.sh b/mpf.sh
-index 6d0a9dc..4775f9e 100755
+index 6d0a9dc..7d8fca3 100755
 --- a/mpf.sh
 +++ b/mpf.sh
 @@ -10,8 +10,8 @@
@@ -13,7 +13,7 @@ index 6d0a9dc..4775f9e 100755
  
  # The line below will launch both processes in the same terminal window
  # with the output of BOTH processes going to the same window
-@@ -20,5 +20,8 @@ python mpf.py "$@"
+@@ -20,5 +20,17 @@ python mpf.py "$@"
  # the prompt. To use, comment out the two commands above and uncomment the 
  # line below.
  
@@ -21,7 +21,16 @@ index 6d0a9dc..4775f9e 100755
 +export PYTHONPATH=/home/hms/workspace-pinball/kingpyn
 +export PYTHONPATH=$PYTHONPATH:/usr/lib/python2.7/dist-packages
 +
-+python mc.py "$@" & sleep 5 ; rm logs/*.log ; pypy mpf.py "$@" && echo "Killed both processes"
++pushd logs
++rm mc-last.log
++ln -s `ls *mc* | sort | tail -1` mc-last.log
++rm mpf-last.log
++ln -s -f `ls *mpf* | sort | tail -1` mpf-last.log
++popd
++
++python mc.py "$@" &
++sleep 5
++pypy mpf.py "$@" && echo "Killed both processes"
  
 diff --git a/mpf/platform/openpixel.py b/mpf/platform/openpixel.py
 index f9ac06f..6791c78 100644
