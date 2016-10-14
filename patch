@@ -72,3 +72,19 @@ index 8dbf70f..3bdd3c4 100644
  
          if callback and ev_type != 'queue':
              # For event types other than queue, we'll handle the callback here.
+diff --git a/mpf/system/light_controller.py b/mpf/system/light_controller.py
+index 8e18950..80e4a7d 100755
+--- a/mpf/system/light_controller.py
++++ b/mpf/system/light_controller.py
+@@ -142,7 +142,10 @@ class LightController(object):
+         if show in self.machine.shows:
+             self.machine.shows[show].play(priority=priority, **kwargs)
+         else:  # assume it's a show object?
+-            show.play(priority=priority, **kwargs)
++            if isinstance(show, basestring):
++                self.log.error("Missing show: {}".format(show))
++            else:
++                show.play(priority=priority, **kwargs)
+ 
+         try:
+             self.running_show_keys[kwargs['key']] = show
