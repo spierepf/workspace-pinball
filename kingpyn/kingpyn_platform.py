@@ -166,6 +166,13 @@ class HardwarePlatform(Platform):
                     self.machine.switches.number(sw_num).name):
                 del self.hw_switch_rules[entry]
 
+        switch_obj = self.machine.switches[sw_name]
+        endPointId = int(switch_obj.number.split("-")[0])
+        switchId = int(switch_obj.number.split("-")[1])
+
+        self.endPointManager.addHardwareRule(endPointId, switchId, 0, 0, 0, 0)
+        self.endPointManager.addHardwareRule(endPointId, switchId, 1, 0, 0, 0)
+
     def tick(self):
         Platform.tick(self)
         self.endPointManager.schedule()
